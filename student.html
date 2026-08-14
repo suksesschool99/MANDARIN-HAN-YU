@@ -12,9 +12,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Nunito:wght@400;600;700;800;900&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
 
   <style>
-    /* ==========================================================================
-       STUDENT CLASSROOM EMBEDDED STYLES (DINOSAUR ADVENTURE THEME)
-       ========================================================================== */
     :root {
       --dino-forest-dark: #143628;
       --dino-forest-deep: #1b4332;
@@ -64,7 +61,7 @@
       min-height: 100vh;
     }
 
-    /* TOP STUDENT NAVBAR */
+    /* TOP NAVBAR */
     .dino-navbar {
       background: linear-gradient(135deg, var(--dino-forest-deep), var(--dino-forest-mid));
       color: white;
@@ -127,9 +124,7 @@
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
     }
 
-    .dino-btn:active {
-      transform: translateY(2px);
-    }
+    .dino-btn:active { transform: translateY(2px); }
 
     .dino-btn.primary {
       background: linear-gradient(135deg, var(--dino-amber), #d65a31);
@@ -836,23 +831,32 @@
     <p style="font-size: 0.85rem; color: #a7f3d0; margin-top: 4px;">Disesuaikan dengan Materi Kurikulum Sekolah Dasar Beijing Chinese Language & Culture College</p>
   </footer>
 
-  <!-- Scripts -->
+  <!-- =========================================================================
+       INLINE SELF-CONTAINED JAVASCRIPT FOR STUDENT PORTAL
+       ========================================================================= -->
   <script src="js/data-curriculum.js"></script>
   <script src="js/audio-engine.js"></script>
   <script src="js/stroke-writer.js"></script>
   <script src="js/matching-game.js"></script>
   <script src="js/quiz-engine.js"></script>
   <script src="js/student-portal.js"></script>
+
   <script>
-    function startStudentPortal() {
-      if (typeof studentPortal !== 'undefined' && studentPortal.init) {
-        studentPortal.init();
+    // Inisialisasi Student Portal Langsung
+    function bootStudentApp() {
+      try {
+        if (typeof studentPortal !== 'undefined') {
+          studentPortal.init();
+        }
+      } catch (err) {
+        console.error("Student boot error:", err);
       }
     }
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', startStudentPortal);
+      document.addEventListener('DOMContentLoaded', bootStudentApp);
     } else {
-      startStudentPortal();
+      bootStudentApp();
     }
   </script>
 </body>

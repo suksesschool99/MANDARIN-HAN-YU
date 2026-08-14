@@ -12,9 +12,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Nunito:wght@400;600;700;800;900&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
 
   <style>
-    /* ==========================================================================
-       EMBEDDED DINOSAUR THEME DESIGN SYSTEM (GUARANTEED TO LOAD EVERYWHERE)
-       ========================================================================== */
     :root {
       --dino-forest-dark: #143628;
       --dino-forest-deep: #1b4332;
@@ -51,11 +48,7 @@
       --font-chinese: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'Microsoft YaHei', serif;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: var(--font-family);
@@ -419,6 +412,38 @@
       margin-top: 4px;
     }
 
+    /* UNIT SELECTION BAR */
+    .unit-selection-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .unit-tab-pill {
+      background: var(--dino-sand);
+      border: 2px solid var(--dino-mint);
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: var(--dino-forest-dark);
+      transition: all 0.2s;
+    }
+
+    .unit-tab-pill:hover {
+      background: var(--dino-pale-moss);
+      transform: translateY(-2px);
+    }
+
+    .unit-tab-pill.active {
+      background: var(--dino-forest-mid);
+      color: white;
+      border-color: var(--dino-forest-dark);
+      box-shadow: 0 4px 12px rgba(45, 106, 79, 0.3);
+    }
+
     /* WORKSPACE */
     .workspace-wrapper {
       background: white;
@@ -573,9 +598,7 @@
       flex-shrink: 0;
     }
 
-    .sentence-text-block {
-      flex: 1;
-    }
+    .sentence-text-block { flex: 1; }
 
     .sent-pinyin {
       font-size: 1rem;
@@ -620,7 +643,7 @@
       background: var(--dino-pale-moss);
     }
 
-    /* STROKE CANVAS & PRACTICE */
+    /* STROKE CANVAS */
     .stroke-practice-layout {
       display: grid;
       grid-template-columns: 1fr 1.3fr;
@@ -670,9 +693,7 @@
       box-shadow: 0 4px 12px rgba(231, 111, 81, 0.35);
     }
 
-    .vocab-nav-pill.active .pill-pinyin {
-      color: #fff3bf;
-    }
+    .vocab-nav-pill.active .pill-pinyin { color: #fff3bf; }
 
     .pill-hanzi {
       font-family: var(--font-chinese);
@@ -715,10 +736,7 @@
       font-weight: 700;
     }
 
-    .stroke-steps-box {
-      margin-top: 16px;
-    }
-
+    .stroke-steps-box { margin-top: 16px; }
     .stroke-steps-box h5 {
       font-size: 0.9rem;
       font-weight: 800;
@@ -726,11 +744,7 @@
       margin-bottom: 8px;
     }
 
-    .stroke-steps-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .stroke-steps-list { display: flex; flex-wrap: wrap; gap: 6px; }
 
     .stroke-step-pill {
       background: white;
@@ -1289,16 +1303,23 @@
     <!-- LEVEL EXPLORER (Buku Han Yu 1 - 12) -->
     <section class="section-headline">
       <h2>Pilih Tingkat Buku Han Yu 1 sampai Han Yu 12</h2>
-      <p>Klik salah satu buku untuk memuat materi bab, cerita narasi, kosakata guratan, game gambar, dan latihan soal</p>
+      <p>Klik salah satu kartu buku di bawah ini untuk memuat seluruh unit materi, cerita narasi, kosakata guratan, game gambar, dan latihan soal:</p>
     </section>
 
-    <div class="books-grid" id="books-overview-grid">
-      <!-- Diisi oleh app.js -->
-    </div>
+    <!-- 12 Kartu Buku Han Yu 1 - 12 -->
+    <div class="books-grid" id="books-overview-grid"></div>
 
     <!-- WORKSPACE INTERAKTIF UNIT YANG DIPILIH -->
     <section class="workspace-wrapper" id="curriculum-workspace">
       
+      <!-- Unit Selection Bar (Tombol Pilihan Unit 1, Unit 2, Unit 3) -->
+      <div style="margin-bottom: 22px;">
+        <p style="font-size: 0.95rem; font-weight: 800; color: var(--dino-forest-deep); margin-bottom: 10px;">
+          🌿 Pilih Unit Pada Buku yang Sedang Dibuka:
+        </p>
+        <div class="unit-selection-bar" id="portal-unit-tab-buttons"></div>
+      </div>
+
       <!-- Unit Banner -->
       <div class="unit-banner-info">
         <h2 id="curriculum-header-title">Memuat Materi...</h2>
@@ -1432,24 +1453,1845 @@
     <p style="font-size: 0.9rem; color: var(--dino-pale-moss);">Disesuaikan secara lengkap dengan materi PDF Han Yu 1 sampai Han Yu 12 • Tema Dinosaurus Ceria Anak SD</p>
   </footer>
 
-  <!-- Scripts -->
-  <script src="js/data-curriculum.js"></script>
-  <script src="js/audio-engine.js"></script>
-  <script src="js/stroke-writer.js"></script>
-  <script src="js/matching-game.js"></script>
-  <script src="js/quiz-engine.js"></script>
-  <script src="js/app.js"></script>
+  <!-- =========================================================================
+       INLINE SELF-CONTAINED JAVASCRIPT BUNDLE (ZERO EXTERNAL DEPENDENCY)
+       ========================================================================= -->
   <script>
-    function startApp() {
-      if (typeof dinoApp !== 'undefined' && dinoApp.init) {
-        dinoApp.init();
+    // 1. DATA KURIKULUM HAN YU 1 - 12
+    const HAN_YU_CURRICULUM = {
+      books: [
+        // HAN YU 1
+        {
+          id: 1,
+          title: "Han Yu 1 (第一册)",
+          level: "Tingkat 1 - Dasar Pemula",
+          dinoGuide: { name: "Rexy Junior", species: "Baby T-Rex", avatar: "🦖", desc: "Halo teman-teman! Yuk belajar sapaan, keluarga, dan lingkungan sekolah bersamaku!" },
+          units: [
+            {
+              id: 1,
+              unitNumber: 1,
+              title: "Unit 1: Sapaan & Keluargaku (问候与家庭)",
+              lessons: ["第1课 你好", "第2课 我爱爸爸妈妈", "第3课 爸爸是老师", "第4课 你叫什么名字", "第5课 我爱我家"],
+              story: {
+                title: "Petualangan Dino Rexy Bertemu Teman Baru (小霸王龙交朋友)",
+                hanzi: "今天，小霸王龙来到华文学校。他看见老师，说：“老师好！”老师笑着说：“你好！”下课了，小华和小红一起做游戏。小华说：“谢谢你！”小红说：“不客气！再见！”小霸王龙高兴极了，他爱学校，也爱新朋友！",
+                pinyin: "Jīntiān, xiǎo bàwánglóng lái dào Huáwén xuéxiào. Tā kànjiàn lǎoshī, shuō: “Lǎoshī hǎo!” Lǎoshī xiàozhe shuō: “Nǐ hǎo!” Xiàkè le, Xiǎohuá hé Xiǎohóng yìqǐ zuò yóuxì. Xiǎohuá shuō: “Xièxie nǐ!” Xiǎohóng shuō: “Bú kèqi! Zàijiàn!” Xiǎo bàwánglóng gāoxìng jí le, tā ài xuéxiào, yě ài xīn péngyou!",
+                indonesian: "Hari ini, Rexy si T-Rex kecil datang ke Sekolah Mandarin. Dia melihat guru lalu menyapa: 'Halo Guru!' Guru tersenyum berkata: 'Halo!' Setelah kelas usai, Xiaohua dan Xiaohong bermain bersama. Xiaohua berkata: 'Terima kasih!' Xiaohong menjawab: 'Sama-sama! Sampai jumpa!' Rexy sangat gembira, dia mencintai sekolah dan teman-teman barunya!",
+                sentences: [
+                  { hanzi: "今天，小霸王龙来到华文学校。", pinyin: "Jīntiān, xiǎo bàwánglóng lái dào Huáwén xuéxiào.", indonesian: "Hari ini, Rexy si T-Rex kecil datang ke Sekolah Mandarin." },
+                  { hanzi: "他看见老师，说：“老师好！”", pinyin: "Tā kànjiàn lǎoshī, shuō: “Lǎoshī hǎo!”", indonesian: "Dia melihat guru lalu menyapa: 'Halo Guru!'" },
+                  { hanzi: "老师笑着说：“你好！”", pinyin: "Lǎoshī xiàozhe shuō: “Nǐ hǎo!”", indonesian: "Guru tersenyum berkata: 'Halo!'" },
+                  { hanzi: "下课了，小华和小红一起做游戏。", pinyin: "Xiàkè le, Xiǎohuá hé Xiǎohóng yìqǐ zuò yóuxì.", indonesian: "Setelah selesai kelas, Xiaohua dan Xiaohong bermain bersama." },
+                  { hanzi: "小华说：“谢谢你！”", pinyin: "Xiǎohuá shuō: “Xièxie nǐ!”", indonesian: "Xiaohua berkata: 'Terima kasih!'" },
+                  { hanzi: "小红说：“不客气！再见！”", pinyin: "Xiǎohóng shuō: “Bú kèqi! Zàijiàn!”", indonesian: "Xiaohong menjawab: 'Sama-sama! Sampai jumpa!'" },
+                  { hanzi: "小霸王龙高兴极了，他爱学校，也爱新朋友！", pinyin: "Xiǎo bàwánglóng gāoxìng jí le, tā ài xuéxiào, yě ài xīn péngyou!", indonesian: "Rexy sangat gembira, dia mencintai sekolah dan teman-teman barunya!" }
+                ]
+              },
+              vocab: [
+                { hanzi: "你", pinyin: "nǐ", meaning: "kamu", strokes: 7, strokeOrder: ["撇", "竖", "撇", "横撇", "竖钩", "撇", "点"], example: "你好 (Halo)", radical: "亻" },
+                { hanzi: "好", pinyin: "hǎo", meaning: "baik / bagus", strokes: 6, strokeOrder: ["撇点", "撇", "提", "横撇", "竖钩", "横"], example: "很好 (Sangat baik)", radical: "女" },
+                { hanzi: "我", pinyin: "wǒ", meaning: "saya / aku", strokes: 7, strokeOrder: ["撇", "横", "竖钩", "提", "斜钩", "撇", "点"], example: "我们 (Kita/Kami)", radical: "戈" },
+                { hanzi: "爸爸", pinyin: "bàba", meaning: "ayah / papa", strokes: 8, strokeOrder: ["撇", "点", "撇", "捺", "横折", "竖", "横", "竖弯钩"], example: "我爱爸爸 (Aku sayang ayah)", radical: "父" },
+                { hanzi: "妈妈", pinyin: "māma", meaning: "ibu / mama", strokes: 6, strokeOrder: ["撇点", "撇", "提", "横折", "竖折折钩", "横"], example: "妈妈好 (Ibu baik)", radical: "女" },
+                { hanzi: "老师", pinyin: "lǎoshī", meaning: "guru", strokes: 6, strokeOrder: ["横", "竖", "横", "撇", "竖弯钩", "点"], example: "陈老师 (Guru Chen)", radical: "耂" },
+                { hanzi: "谢谢", pinyin: "xièxie", meaning: "terima kasih", strokes: 12, strokeOrder: ["点", "横折提", "撇", "竖", "横折钩", "横", "横", "撇", "竖", "横折钩", "横", "点"], example: "谢谢老师 (Terima kasih guru)", radical: "讠" },
+                { hanzi: "再见", pinyin: "zàijiàn", meaning: "sampai jumpa", strokes: 6, strokeOrder: ["横", "竖", "横折钩", "竖", "横", "横"], example: "明天再见 (Sampai jumpa besok)", radical: "冂" }
+              ],
+              matchingPairs: [
+                { id: "m1", hanzi: "爸爸", pinyin: "bàba", meaning: "Ayah", icon: "👨‍💼", category: "keluarga" },
+                { id: "m2", hanzi: "妈妈", pinyin: "māma", meaning: "Ibu", icon: "👩‍💼", category: "keluarga" },
+                { id: "m3", hanzi: "老师", pinyin: "lǎoshī", meaning: "Guru", icon: "👩‍🏫", category: "sekolah" },
+                { id: "m4", hanzi: "学生", pinyin: "xuéshēng", meaning: "Murid", icon: "🧑‍🎓", category: "sekolah" },
+                { id: "m5", hanzi: "家", pinyin: "jiā", meaning: "Rumah", icon: "🏡", category: "tempat" },
+                { id: "m6", hanzi: "小恐龙", pinyin: "xiǎo kǒnglóng", meaning: "Dinosaurus Kecil", icon: "🦖", category: "dino" }
+              ],
+              quizQuestions: [
+                {
+                  id: "q1",
+                  type: "meaning",
+                  question: "Apa arti dari kosakata '老师' (lǎoshī)?",
+                  audioText: "Lǎoshī shì shénme yìsi?",
+                  options: ["Ayah", "Guru", "Murid", "Teman"],
+                  correctIndex: 1,
+                  explanation: "'老师' (lǎoshī) berarti Guru."
+                },
+                {
+                  id: "q2",
+                  type: "pinyin",
+                  question: "Manakah bacaan Pinyin yang benar untuk karakter '谢谢'?",
+                  audioText: "Xièxie de pīnyīn shì nǎge?",
+                  options: ["zàijiàn", "nǐ hǎo", "xièxie", "bú kèqi"],
+                  correctIndex: 2,
+                  explanation: "Karakter '谢谢' dibaca 'xièxie' yang berarti terima kasih."
+                },
+                {
+                  id: "q3",
+                  type: "strokes",
+                  question: "Berapakah jumlah goresan (笔画) dari karakter '我' (wǒ)?",
+                  audioText: "“Wǒ” zì yǒu jǐ huà?",
+                  options: ["5 goresan", "6 goresan", "7 goresan", "8 goresan"],
+                  correctIndex: 2,
+                  explanation: "Karakter '我' memiliki 7 goresan (撇, 横, 竖钩, 提, 斜钩, 撇, 点)."
+                },
+                {
+                  id: "q4",
+                  type: "sentence_order",
+                  question: "Susunlah kata-kata berikut menjadi kalimat yang benar: [爱 / 我 / 爸爸妈妈]",
+                  audioText: "Qǐng lián cí chéng jù: ài, wǒ, bàba māma.",
+                  options: [
+                    "爸爸妈妈 我 爱。",
+                    "我 爱 爸爸妈妈。",
+                    "爱 我 爸爸妈妈。",
+                    "爸爸妈妈 爱 我 呢。"
+                  ],
+                  correctIndex: 1,
+                  explanation: "Susunan kalimat Mandarin yang tepat adalah Subjek + Predikat + Objek: '我爱爸爸妈妈。' (Saya sayang ayah dan ibu)."
+                },
+                {
+                  id: "q5",
+                  type: "picture_match",
+                  question: "Pilihlah gambar yang sesuai dengan kalimat '爸爸是老师。' (Ayah adalah seorang guru)!",
+                  audioText: "Bàba shì lǎoshī, nǎge túpiàn shì duì de?",
+                  options: [
+                    "👩‍🏫 Seorang guru di depan kelas papan tulis",
+                    "👨‍🍳 Koki sedang memasak",
+                    "👮 Polisi sedang bertugas",
+                    "👨‍🌾 Petani di kebun"
+                  ],
+                  correctIndex: 0,
+                  explanation: "Kalimat '爸爸是老师' berarti Ayah adalah seorang guru."
+                }
+              ]
+            },
+            {
+              id: 2,
+              unitNumber: 2,
+              title: "Unit 2: Aktivitas Sekolah & Makanan (学校生活与午饭)",
+              lessons: ["第6课 哥哥去学校", "第7课 我们上课吧", "第8课 我们吃午饭", "第9课 小华打球", "第10课 我的一天"],
+              story: {
+                title: "Makan Siang Bersama Brachy si Leher Panjang (长颈龙的美味午饭)",
+                hanzi: "中午十二点，下课铃响了。小华和小明去食堂吃午饭。小华吃面条，小明吃米饭和饺子。长颈龙走过来，大口大口吃绿色的竹子和西瓜。大家都说：“午饭真好吃！多吃蔬菜身体棒！”",
+                pinyin: "Zhōngwǔ shí'èr diǎn, xiàkè líng xiǎng le. Xiǎohuá hé Xiǎomíng qù shítáng chī wǔfàn. Xiǎohuá chī miàntiáo, Xiǎomíng chī mǐfàn hé jiǎozi. Chángjǐnglóng zǒu guòlái, dà kǒu dà kǒu chī lǜsè de zhúzi hé xīguā. Dàjiā dōu shuō: “Wǔfàn zhēn hǎochī! Duō chī shūcài shēntǐ bàng!”",
+                indonesian: "Jam 12 siang, bel istirahat berbunyi. Xiaohua dan Xiaoming pergi ke kantin makan siang. Xiaohua makan mie, Xiaoming makan nasi dan pangsit. Brachy si dinosaurus leher panjang datang makan bambu hijau segar dan semangka lezat. Semua berseru: 'Makan siang enak sekali! Rajin makan sayur membuat tubuh kuat!'",
+                sentences: [
+                  { hanzi: "中午十二点，下课铃响了。", pinyin: "Zhōngwǔ shí'èr diǎn, xiàkè líng xiǎng le.", indonesian: "Jam dua belas siang, bel istirahat berbunyi." },
+                  { hanzi: "小华和小明去食堂吃午饭。", pinyin: "Xiǎohuá hé Xiǎomíng qù shítáng chī wǔfàn.", indonesian: "Xiaohua dan Xiaoming pergi ke kantin makan siang." },
+                  { hanzi: "小华吃面条，小明吃米饭和饺子。", pinyin: "Xiǎohuá chī miàntiáo, Xiǎomíng chī mǐfàn hé jiǎozi.", indonesian: "Xiaohua makan mi, Xiaoming makan nasi dan pangsit." },
+                  { hanzi: "长颈龙大口大口吃绿色的竹子和西瓜。", pinyin: "Chángjǐnglóng dà kǒu dà kǒu chī lǜsè de zhúzi hé xīguā.", indonesian: "Brachy si dinosaurus makan bambu hijau dan semangka lezat." },
+                  { hanzi: "大家都说：“午饭真好吃！多吃蔬菜身体棒！”", pinyin: "Dàjiā dōu shuō: “Wǔfàn zhēn hǎochī! Duō chī shūcài shēntǐ bàng!”", indonesian: "Semua berseru: 'Makan siang enak sekali! Rajin makan sayur membuat tubuh sehat!'" }
+                ]
+              },
+              vocab: [
+                { hanzi: "去", pinyin: "qù", meaning: "pergi", strokes: 5, strokeOrder: ["横", "竖", "横", "撇折", "点"], example: "去学校 (Pergi ke sekolah)", radical: "厶" },
+                { hanzi: "学校", pinyin: "xuéxiào", meaning: "sekolah", strokes: 8, strokeOrder: ["点", "点", "提", "撇", "竖钩", "横撇", "点", "提"], example: "我们的学校 (Sekolah kami)", radical: "木" },
+                { hanzi: "吃", pinyin: "chī", meaning: "makan", strokes: 6, strokeOrder: ["竖", "横折", "横", "撇", "横", "竖弯钩"], example: "吃饭 (Makan nasi)", radical: "口" },
+                { hanzi: "午饭", pinyin: "wǔfàn", meaning: "makan siang", strokes: 4, strokeOrder: ["撇", "横", "横", "竖"], example: "吃午饭 (Makan siang)", radical: "饣" },
+                { hanzi: "面条", pinyin: "miàntiáo", meaning: "mi / bakmi", strokes: 9, strokeOrder: ["横", "撇", "竖", "横折", "竖", "竖", "横", "横", "横"], example: "牛肉面条 (Bakmi sapi)", radical: "面" },
+                { hanzi: "米饭", pinyin: "mǐfàn", meaning: "nasi putih", strokes: 6, strokeOrder: ["点", "撇", "横", "竖", "撇", "捺"], example: "吃米饭 (Makan nasi)", radical: "米" },
+                { hanzi: "打球", pinyin: "dǎqiú", meaning: "bermain bola", strokes: 5, strokeOrder: ["横", "竖钩", "提", "横", "竖钩"], example: "打篮球 (Main basket)", radical: "扌" }
+              ],
+              matchingPairs: [
+                { id: "m21", hanzi: "学校", pinyin: "xuéxiào", meaning: "Sekolah", icon: "🏫", category: "tempat" },
+                { id: "m22", hanzi: "米饭", pinyin: "mǐfàn", meaning: "Nasi", icon: "🍚", category: "makanan" },
+                { id: "m23", hanzi: "面条", pinyin: "miàntiáo", meaning: "Bakmi", icon: "🍜", category: "makanan" },
+                { id: "m24", hanzi: "饺子", pinyin: "jiǎozi", meaning: "Pangsit", icon: "🥟", category: "makanan" },
+                { id: "m25", hanzi: "篮球", pinyin: "lánqiú", meaning: "Bola Basket", icon: "🏀", category: "olahraga" },
+                { id: "m26", hanzi: "足球", pinyin: "zúqiú", meaning: "Sepak Bola", icon: "⚽", category: "olahraga" }
+              ],
+              quizQuestions: [
+                {
+                  id: "q21",
+                  type: "meaning",
+                  question: "Apa arti dari kata '面条' (miàntiáo)?",
+                  audioText: "Miàntiáo shì shénme yìsi?",
+                  options: ["Nasi goreng", "Bakmi / Mi", "Roti", "Sup"],
+                  correctIndex: 1,
+                  explanation: "'面条' (miàntiáo) berarti mi/bakmi."
+                },
+                {
+                  id: "q22",
+                  type: "pinyin",
+                  question: "Pilihlah pinyin yang tepat untuk '去学校':",
+                  audioText: "“Qù xuéxiào” de pīnyīn shì nǎge?",
+                  options: ["qù xuéxiào", "chī wǔfàn", "dǎ lánqiú", "shàng kè ba"],
+                  correctIndex: 0,
+                  explanation: "'去学校' dibaca 'qù xuéxiào' (pergi ke sekolah)."
+                },
+                {
+                  id: "q23",
+                  type: "strokes",
+                  question: "Berapa jumlah goresan karakter '吃' (chī)?",
+                  audioText: "“Chī” zì yǒu jǐ huà?",
+                  options: ["4 goresan", "5 goresan", "6 goresan", "7 goresan"],
+                  correctIndex: 2,
+                  explanation: "Karakter '吃' memiliki 6 goresan: 竖, 横折, 横, 撇, 横, 竖弯钩."
+                },
+                {
+                  id: "q24",
+                  type: "sentence_order",
+                  question: "Susun kalimat: [吃 / 中午 / 我们 / 午饭]",
+                  audioText: "Qǐng lián cí chéng jù: chī, zhōngwǔ, wǒmen, wǔfàn.",
+                  options: [
+                    "我们 吃 中午 午饭。",
+                    "中午 我们 吃 午饭。",
+                    "吃 午饭 中午 我们。",
+                    "午饭 中午 吃 我们。"
+                  ],
+                  correctIndex: 1,
+                  explanation: "Keterangan waktu diletakkan di depan atau setelah subjek: '中午我们吃午饭。' (Siang hari kami makan siang)."
+                },
+                {
+                  id: "q25",
+                  type: "picture_match",
+                  question: "Gambar mana yang menunjukkan '小华打篮球' (Xiaohua bermain bola basket)?",
+                  audioText: "Xiǎohuá dǎ lánqiú, nǎge túpiàn shì duì de?",
+                  options: [
+                    "🏀 Anak sedang mendribel dan memasukkan bola basket",
+                    "⚽ Anak sedang menendang bola sepak di lapangan rumput",
+                    "🏓 Anak sedang bermain tenis meja / pingpong",
+                    "🏊 Anak sedang berenang di kolam"
+                  ],
+                  correctIndex: 0,
+                  explanation: "'打篮球' berarti bermain bola basket."
+                }
+              ]
+            },
+            {
+              id: 3,
+              unitNumber: 3,
+              title: "Unit 3: Perlengkapan Sekolah & Kamarku (文具与我的房间)",
+              lessons: ["第11课 这是我的书", "第12课 我有两本书", "第13课 你家有电脑吗", "第14课 书在书架上", "第15课 我的房间"],
+              story: {
+                title: "Kamar Rapi Si Triceratops Cilik (三角龙整理小房间)",
+                hanzi: "这是三角龙的小房间。书架上有十本书，桌子上有电脑和铅笔。三角龙把书包放在椅子上，把玩具放进盒子里。房间真干净，三角龙高兴地在床上看书！",
+                pinyin: "Zhè shì sānjiǎolóng de xiǎo fángjiān. Shūjià shang yǒu shí běn shū, zhuōzi shang yǒu diànnǎo hé qiānbǐ. Sānjiǎolóng bǎ shūbāo fàng zài yǐzi shang, bǎ wánjù fàng jìn hézi lǐ. Fángjiān zhēn gānjìng, sānjiǎolóng gāoxìng de zài chuáng shang kàn shū!",
+                indonesian: "Ini adalah kamar si Triceratops kecil. Di atas rak buku ada sepuluh buku, di atas meja ada komputer dan pensil. Triceratops menaruh tas di atas kursi, dan merapikan mainan ke dalam kotak. Kamarnya sangat bersih, Triceratops membaca buku di kasur dengan riang!",
+                sentences: [
+                  { hanzi: "这是三角龙的小房间。", pinyin: "Zhè shì sānjiǎolóng de xiǎo fángjiān.", indonesian: "Ini adalah kamar tidur kecil milik si Triceratops." },
+                  { hanzi: "书架上有十本书，桌子上有电脑和铅笔。", pinyin: "Shūjià shang yǒu shí běn shū, zhuōzi shang yǒu diànnǎo hé qiānbǐ.", indonesian: "Di atas rak buku ada 10 buku, di atas meja ada komputer dan pensil." },
+                  { hanzi: "三角龙把书包放在椅子上。", pinyin: "Sānjiǎolóng bǎ shūbāo fàng zài yǐzi shang.", indonesian: "Triceratops meletakkan tas sekolahnya di atas kursi." },
+                  { hanzi: "房间真干净，三角龙高兴地看书！", pinyin: "Fángjiān zhēn gānjìng, sānjiǎolóng gāoxìng de kàn shū!", indonesian: "Kamarnya sangat bersih dan rapi, Triceratops membaca buku dengan gembira!" }
+                ]
+              },
+              vocab: [
+                { hanzi: "书", pinyin: "shū", meaning: "buku", strokes: 4, strokeOrder: ["横折", "横折钩", "竖", "点"], example: "两本书 (Dua buku)", radical: "乙" },
+                { hanzi: "笔", pinyin: "bǐ", meaning: "pensil / pena", strokes: 10, strokeOrder: ["撇", "横", "点", "撇", "横", "点", "撇", "横", "横", "竖弯钩"], example: "铅笔 (Pensil)", radical: "竹" },
+                { hanzi: "书包", pinyin: "shūbāo", meaning: "tas sekolah", strokes: 5, strokeOrder: ["撇", "横折钩", "横折", "横", "竖弯钩"], example: "大书包 (Tas besar)", radical: "勹" },
+                { hanzi: "电脑", pinyin: "diànnǎo", meaning: "komputer", strokes: 5, strokeOrder: ["竖", "横折", "横", "横", "竖弯钩"], example: "一台电脑 (Satu unit komputer)", radical: "田" },
+                { hanzi: "桌子", pinyin: "zhuōzi", meaning: "meja", strokes: 10, strokeOrder: ["竖", "横", "竖", "横折", "横", "横", "横", "竖", "撇", "捺"], example: "圆桌 (Meja bundar)", radical: "木" },
+                { hanzi: "椅子", pinyin: "yǐzi", meaning: "kursi", strokes: 9, strokeOrder: ["横", "竖", "撇", "点", "横折", "横", "竖折", "横", "竖钩"], example: "一把椅子 (Sebuah kursi)", radical: "木" }
+              ],
+              matchingPairs: [
+                { id: "m31", hanzi: "书", pinyin: "shū", meaning: "Buku", icon: "📚", category: "alat_tulis" },
+                { id: "m32", hanzi: "笔", pinyin: "bǐ", meaning: "Pena / Pensil", icon: "✏️", category: "alat_tulis" },
+                { id: "m33", hanzi: "书包", pinyin: "shūbāo", meaning: "Tas Sekolah", icon: "🎒", category: "alat_tulis" },
+                { id: "m34", hanzi: "电脑", pinyin: "diànnǎo", meaning: "Komputer", icon: "💻", category: "elektronik" },
+                { id: "m35", hanzi: "桌子", pinyin: "zhuōzi", meaning: "Meja", icon: "🪑", category: "furnitur" },
+                { id: "m36", hanzi: "床", pinyin: "chuáng", meaning: "Tempat Tidur", icon: "🛏️", category: "furnitur" }
+              ],
+              quizQuestions: [
+                {
+                  id: "q31",
+                  type: "meaning",
+                  question: "Apakah arti dari kata '电脑' (diànnǎo)?",
+                  audioText: "Diànnǎo shì shénme yìsi?",
+                  options: ["Televisi", "Komputer", "Telepon", "Kipas angin"],
+                  correctIndex: 1,
+                  explanation: "'电脑' (diànnǎo) berarti komputer."
+                },
+                {
+                  id: "q32",
+                  type: "pinyin",
+                  question: "Pilihlah bacaan Pinyin yang benar untuk '书包':",
+                  audioText: "“Shūbāo” de pīnyīn shì nǎge?",
+                  options: ["shūbāo", "zhuōzi", "qiānbǐ", "fángjiān"],
+                  correctIndex: 0,
+                  explanation: "'书包' dilafalkan sebagai 'shūbāo' (tas sekolah)."
+                },
+                {
+                  id: "q33",
+                  type: "strokes",
+                  question: "Berapakah jumlah goresan dari karakter '书' (shū)?",
+                  audioText: "“Shū” zì yǒu jǐ huà?",
+                  options: ["3 goresan", "4 goresan", "5 goresan", "6 goresan"],
+                  correctIndex: 1,
+                  explanation: "Karakter '书' terdiri dari 4 goresan: 横折, 横折钩, 竖, 点."
+                },
+                {
+                  id: "q34",
+                  type: "sentence_order",
+                  question: "Susun kalimat: [在 / 书 / 书架上 / 的 / 我]",
+                  audioText: "Qǐng lián cí chéng jù: zài, shū, shūjià shang, de, wǒ.",
+                  options: [
+                    "我的书在书架上。",
+                    "书架上在我的书。",
+                    "书我在书架上的。",
+                    "在书架上我的书。"
+                  ],
+                  correctIndex: 0,
+                  explanation: "Susunan yang tepat adalah: '我的书在书架上。' (Buku saya ada di atas rak buku)."
+                },
+                {
+                  id: "q35",
+                  type: "picture_match",
+                  question: "Gambar manakah yang merupakan '书包' (shūbāo)?",
+                  audioText: "Nǎge túpiàn shì shūbāo?",
+                  options: [
+                    "🎒 Tas punggung sekolah warna biru cerah",
+                    "💻 Layar laptop komputer",
+                    "🛏️ Kasur kamar tidur yang empuk",
+                    "🚪 Pintu kayu kelas sekolah"
+                  ],
+                  correctIndex: 0,
+                  explanation: "'书包' (shūbāo) adalah tas sekolah."
+                }
+              ]
+            }
+          ]
+        },
+
+        // HAN YU 2
+        {
+          id: 2,
+          title: "Han Yu 2 (第二册)",
+          level: "Tingkat 2 - Dasar Lanjutan",
+          dinoGuide: { name: "Trishi", species: "Triceratops Ceria", avatar: "🦏", desc: "Hai! Aku Trishi! Ayo bandingkan ukuran benda, warna baju, dan suasana lingkungan sekitar!" },
+          units: [
+            {
+              id: 1,
+              unitNumber: 1,
+              title: "Unit 1: Perbandingan & Alam Sekitar (比较与大自然)",
+              lessons: ["第1课 西瓜大 苹果小", "第2课 今天的天气很好", "第3课 我们真高兴啊", "第4课 小狗非常可爱", "第5课 这个公园真热闹"],
+              story: {
+                title: "Taman Dinosaurus yang Ramai (热闹的恐龙公园)",
+                hanzi: "今天天气很好，天很蓝，草很绿。三角龙和小恐龙们来到公园。西瓜很大，苹果很小。树上的小鸟在唱歌，草地上的小狗跳来跳去，非常可爱！公园里朋友真多，真热闹啊！",
+                pinyin: "Jīntiān tiānqì hěn hǎo, tiān hěn lán, cǎo hěn lǜ. Sānjiǎolóng hé xiǎo kǒnglóng men lái dào gōngyuán. Xīguā hěn dà, píngguǒ hěn xiǎo. Shù shang de xiǎoniǎo zài chànggē, cǎodì shang de xiǎogǒu tiào lái tiào qù, fēicháng kě'ài! Gōngyuán lǐ péngyou zhēn duō, zhēn rènao a!",
+                indonesian: "Hari ini cuaca sangat bagus, langit biru, rumput hijau. Trishi dan dinosaurus kecil pergi ke taman. Semangka sangat besar, apel sangat kecil. Burung bernyanyi di pohon, anak anjing melompat-lompat dengan lucu! Di taman ada banyak teman, ramai dan meriah sekali!",
+                sentences: [
+                  { hanzi: "今天天气很好，天很蓝，草很绿。", pinyin: "Jīntiān tiānqì hěn hǎo, tiān hěn lán, cǎo hěn lǜ.", indonesian: "Hari ini cuaca sangat bagus, langit sangat biru, rumput sangat hijau." },
+                  { hanzi: "西瓜很大，苹果很小。", pinyin: "Xīguā hěn dà, píngguǒ hěn xiǎo.", indonesian: "Semangka sangat besar, buah apel sangat kecil." },
+                  { hanzi: "草地上的小狗非常可爱！", pinyin: "Cǎodì shang de xiǎogǒu fēicháng kě'ài!", indonesian: "Anak anjing di atas padang rumput sangat lucu menggemaskan!" },
+                  { hanzi: "公园里朋友真多，真热闹啊！", pinyin: "Gōngyuán lǐ péngyou zhēn duō, zhēn rènao a!", indonesian: "Di taman ada begitu banyak sahabat, ramai dan menyenangkan sekali!" }
+                ]
+              },
+              vocab: [
+                { hanzi: "西瓜", pinyin: "xīguā", meaning: "semangka", strokes: 6, strokeOrder: ["横", "竖", "横折", "撇", "竖弯钩", "横"], example: "大西瓜 (Semangka besar)", radical: "瓜" },
+                { hanzi: "苹果", pinyin: "píngguǒ", meaning: "apel", strokes: 8, strokeOrder: ["横", "竖", "竖", "点", "点", "提", "横", "竖"], example: "红苹果 (Apel merah)", radical: "艹" },
+                { hanzi: "天气", pinyin: "tiānqì", meaning: "cuaca", strokes: 4, strokeOrder: ["横", "横", "撇", "捺"], example: "好天气 (Cuaca cerah)", radical: "大" },
+                { hanzi: "可爱", pinyin: "kě'ài", meaning: "lucu / menggemaskan", strokes: 5, strokeOrder: ["横", "竖", "横折", "横", "竖钩"], example: "小狗可爱 (Anak anjing lucu)", radical: "口" },
+                { hanzi: "热闹", pinyin: "rènao", meaning: "ramai / meriah", strokes: 10, strokeOrder: ["横", "竖", "竖", "横", "横", "竖", "横折", "横", "点", "点"], example: "公园真热闹 (Taman sangat ramai)", radical: "灬" }
+              ],
+              matchingPairs: [
+                { id: "m211", hanzi: "西瓜", pinyin: "xīguā", meaning: "Semangka", icon: "🍉", category: "buah" },
+                { id: "m212", hanzi: "苹果", pinyin: "píngguǒ", meaning: "Apel", icon: "🍎", category: "buah" },
+                { id: "m213", hanzi: "小狗", pinyin: "xiǎogǒu", meaning: "Anak Anjing", icon: "🐶", category: "hewan" },
+                { id: "m214", hanzi: "小鸟", pinyin: "xiǎoniǎo", meaning: "Burung Kecil", icon: "🐦", category: "hewan" },
+                { id: "m215", hanzi: "公园", pinyin: "gōngyuán", meaning: "Taman", icon: "🏞️", category: "tempat" },
+                { id: "m216", hanzi: "太阳", pinyin: "tàiyáng", meaning: "Matahari", icon: "☀️", category: "alam" }
+              ],
+              quizQuestions: [
+                {
+                  id: "q201",
+                  type: "meaning",
+                  question: "Apa arti dari pasangan kata '大' dan '小'?",
+                  audioText: "“Dà” hé “xiǎo” shì shénme yìsi?",
+                  options: ["Banyak dan Sedikit", "Besar dan Kecil", "Panjang dan Pendek", "Tinggi dan Rendah"],
+                  correctIndex: 1,
+                  explanation: "'大' (dà) artinya besar, '小' (xiǎo) artinya kecil."
+                },
+                {
+                  id: "q202",
+                  type: "pinyin",
+                  question: "Manakah bacaan Pinyin yang benar untuk '可爱'?",
+                  audioText: "“Kě'ài” de pīnyīn shì nǎge?",
+                  options: ["rènao", "kě'ài", "gāoxìng", "piàoliang"],
+                  correctIndex: 1,
+                  explanation: "'可爱' dibaca 'kě'ài' yang artinya lucu/imut."
+                },
+                {
+                  id: "q203",
+                  type: "strokes",
+                  question: "Berapakah jumlah goresan karakter '大' (dà)?",
+                  audioText: "“Dà” zì yǒu jǐ huà?",
+                  options: ["2 goresan", "3 goresan", "4 goresan", "5 goresan"],
+                  correctIndex: 1,
+                  explanation: "Karakter '大' memiliki 3 goresan: 横, 撇, 捺."
+                },
+                {
+                  id: "q204",
+                  type: "sentence_order",
+                  question: "Susun kalimat: [很好 / 的 / 天气 / 今天]",
+                  audioText: "Qǐng lián cí chéng jù: hěn hǎo, de, tiānqì, jīntiān.",
+                  options: [
+                    "今天的天气很好。",
+                    "很好的天气今天。",
+                    "天气很好的今天。",
+                    "今天很好的天气。"
+                  ],
+                  correctIndex: 0,
+                  explanation: "'今天的天气很好。' artinya Cuaca hari ini sangat baik."
+                },
+                {
+                  id: "q205",
+                  type: "picture_match",
+                  question: "Pilih gambar yang mendeskripsikan '西瓜大，苹果小'!",
+                  audioText: "Xīguā dà, píngguǒ xiǎo, nǎge tú duì?",
+                  options: [
+                    "🍉 Semangka besar di samping apel merah kecil 🍎",
+                    "🚗 Mobil truk besar di samping bus 🚌",
+                    "🦒 Jerapah tinggi di samping singa 🦁",
+                    "🎂 Kue tart ulang tahun besar 🍰"
+                  ],
+                  correctIndex: 0,
+                  explanation: "Semangka (西瓜) berukuran besar dan apel (苹果) berukuran kecil."
+                }
+              ]
+            },
+            {
+              id: 2,
+              unitNumber: 2,
+              title: "Unit 2: Peralatan & Posisi Arah (餐具、衣物与方位)",
+              lessons: ["第6课 这双筷子是我的", "第7课 小华的衣服是红的", "第8课 书包里有什么", "第9课 学校前面是马路", "第10课 我们的教室"],
+              story: {
+                title: "Petualangan Steggy Mencari Sumpit Ajaib (剑龙找筷子)",
+                hanzi: "今天中午，剑龙要在学校吃午饭。他说：“这双红色的筷子是我的，那个蓝色的碗是妹妹的。”学校前面是马路，后面是美丽的大公园。走进宽敞的教室，桌椅整整齐齐，大家一起快乐学习！",
+                pinyin: "Jīntiān zhōngwǔ, jiànlóng yào zài xuéxiào chī wǔfàn. Tā shuō: “Zhè shuāng hóngsè de kuàizi shì wǒ de, nà ge lánsè de wǎn shì mèimei de.” Xuéxiào qiánmiàn shì mǎlù, hòumiàn shì měilì de dà gōngyuán. Zǒu jìn kuānchang de jiàoshì, zhuōyǐ zhěngzhěng qíqí, dàjiā yìqǐ kuàilè xuéxí!",
+                indonesian: "Siang ini Stegosaurus makan siang di sekolah. Dia berkata: 'Sepasang sumpit merah ini milikku, mangkok biru itu milik adik perempuanku.' Di depan sekolah ada jalan raya, di belakang ada taman bunga yang indah. Masuk ke ruang kelas yang luas dan rapi, semua belajar dengan riang!",
+                sentences: [
+                  { hanzi: "这双红色的筷子是我的。", pinyin: "Zhè shuāng hóngsè de kuàizi shì wǒ de.", indonesian: "Sepasang sumpit merah ini adalah milikku." },
+                  { hanzi: "那个蓝色的碗是妹妹的。", pinyin: "Nà ge lánsè de wǎn shì mèimei de.", indonesian: "Mangkok warna biru itu adalah milik adik perempuan." },
+                  { hanzi: "学校前面是马路，后面是公园。", pinyin: "Xuéxiào qiánmiàn shì mǎlù, hòumiàn shì gōngyuán.", indonesian: "Di depan sekolah adalah jalan raya, di belakang adalah taman." },
+                  { hanzi: "我们的教室非常干净整齐！", pinyin: "Wǒmen de jiàoshì fēicháng gānjìng zhěngqí!", indonesian: "Ruang kelas kami sangat bersih dan rapi!" }
+                ]
+              },
+              vocab: [
+                { hanzi: "筷子", pinyin: "kuàizi", meaning: "sumpit", strokes: 13, strokeOrder: ["撇", "横", "点", "撇", "横", "点", "横", "竖", "竖", "横", "撇", "横撇", "捺"], example: "一双筷子 (Sepasang sumpit)", radical: "竹" },
+                { hanzi: "衣服", pinyin: "yīfu", meaning: "pakaian / baju", strokes: 6, strokeOrder: ["点", "横", "撇", "竖提", "撇", "捺"], example: "红衣服 (Baju merah)", radical: "衣" },
+                { hanzi: "前面", pinyin: "qiánmiàn", meaning: "bagian depan", strokes: 9, strokeOrder: ["点", "撇", "横", "竖", "横折钩", "横", "横", "竖", "竖钩"], example: "学校前面 (Depan sekolah)", radical: "刀" },
+                { hanzi: "后面", pinyin: "hòumiàn", meaning: "bagian belakang", strokes: 6, strokeOrder: ["撇", "撇", "横", "竖", "横折", "横"], example: "房子后面 (Belakang rumah)", radical: "口" },
+                { hanzi: "教室", pinyin: "jiàoshì", meaning: "ruang kelas", strokes: 10, strokeOrder: ["点", "点", "横撇", "横", "横", "撇", "捺", "横", "竖", "横"], example: "一年级教室 (Kelas tingkat 1)", radical: "宀" }
+              ],
+              matchingPairs: [
+                { id: "m221", hanzi: "筷子", pinyin: "kuàizi", meaning: "Sumpit", icon: "🥢", category: "alat_makan" },
+                { id: "m222", hanzi: "碗", pinyin: "wǎn", meaning: "Mangkok", icon: "🥣", category: "alat_makan" },
+                { id: "m223", hanzi: "衣服", pinyin: "yīfu", meaning: "Pakaian / Baju", icon: "👕", category: "pakaian" },
+                { id: "m224", hanzi: "裙子", pinyin: "qúnzi", meaning: "Rok", icon: "👗", category: "pakaian" },
+                { id: "m225", hanzi: "马路", pinyin: "mǎlù", meaning: "Jalan Raya", icon: "🛣️", category: "tempat" },
+                { id: "m226", hanzi: "教室", pinyin: "jiàoshì", meaning: "Ruang Kelas", icon: "🏫", category: "tempat" }
+              ],
+              quizQuestions: [
+                {
+                  id: "q221",
+                  type: "meaning",
+                  question: "Kategori benda apakah '筷子' (kuàizi)?",
+                  audioText: "Kuàizi shì shénme yìsi?",
+                  options: ["Alat transportasi", "Alat makan (Sumpit)", "Pakaian olahraga", "Hewan purba"],
+                  correctIndex: 1,
+                  explanation: "'筷子' (kuàizi) berarti sumpit makan."
+                },
+                {
+                  id: "q222",
+                  type: "pinyin",
+                  question: "Pilihlah nada Pinyin yang benar untuk '前面':",
+                  audioText: "“Qiánmiàn” de pīnyīn shì nǎge?",
+                  options: ["qiánmiàn", "hòumiàn", "zuǒbiān", "yòubiān"],
+                  correctIndex: 0,
+                  explanation: "'前面' dilafalkan 'qiánmiàn' (depan)."
+                },
+                {
+                  id: "q223",
+                  type: "strokes",
+                  question: "Berapa jumlah goresan karakter '衣' (yī)?",
+                  audioText: "“Yī” zì yǒu jǐ huà?",
+                  options: ["5 goresan", "6 goresan", "7 goresan", "8 goresan"],
+                  correctIndex: 1,
+                  explanation: "'衣' memiliki 6 goresan (点, 横, 撇, 竖提, 撇, 捺)."
+                },
+                {
+                  id: "q224",
+                  type: "sentence_order",
+                  question: "Susun kalimat: [马路 / 前面 / 学校 / 是]",
+                  audioText: "Qǐng lián cí chéng jù: mǎlù, qiánmiàn, xuéxiào, shì.",
+                  options: [
+                    "学校前面是马路。",
+                    "马路是学校前面。",
+                    "是学校前面马路。",
+                    "前面马路是学校。"
+                  ],
+                  correctIndex: 0,
+                  explanation: "Susunan penunjuk tempat: '学校前面是马路。' (Di depan sekolah adalah jalan raya)."
+                },
+                {
+                  id: "q225",
+                  type: "picture_match",
+                  question: "Manakah gambar '一双筷子和一个碗' (sepasang sumpit dan sebuah mangkok)?",
+                  audioText: "Nǎge túpiàn shì kuàizi hé wǎn?",
+                  options: [
+                    "🥢 Sumpit kayu dan mangkok sup hangat 🥣",
+                    "🎒 Tas sekolah berisi buku cerita 📖",
+                    "🪑 Meja dan kursi belajar 🛋️",
+                    "⚽ Sepatu bola dan seragam merah 👟"
+                  ],
+                  correctIndex: 0,
+                  explanation: "'筷子' (sumpit) dan '碗' (mangkok)."
+                }
+              ]
+            },
+            {
+              id: 3,
+              unitNumber: 3,
+              title: "Unit 3: Teman Sebaya & Rutinitas (好朋友与课后时光)",
+              lessons: ["第11课 小华常去图书馆", "第12课 小红也学中文", "第13课 我们都是学生", "第14课 他们一起上学", "第15课 下课啦"],
+              story: {
+                title: "Belajar Bersama di Perpustakaan Lembah Purba (恐龙谷图书馆)",
+                hanzi: "小霸王龙和小角龙是好朋友，他们常常一起去图书馆看书。小霸王龙喜欢看恐龙探险漫画，小角龙也喜欢看图画书。下课啦！操场上真热闹，大家一起跳绳、踢足球，天天锻炼身体好！",
+                pinyin: "Xiǎo bàwánglóng hé xiǎo jiǎolóng shì hǎo péngyou, tāmen chángcháng yìqǐ qù túshūguǎn kàn shū. Xiǎo bàwánglóng xǐhuan kàn kǒnglóng tànxiǎn mànhuà, xiǎo jiǎolóng yě xǐhuan kàn túhuàshū. Xiàkè la! Cāochǎng shang zhēn rènao, dàjiā yìqǐ tiàoshéng, tī zúqiú, tiāntiān duànliàn shēntǐ hǎo!",
+                indonesian: "Rexy dan Trishi adalah sahabat baik, mereka sering pergi ke perpustakaan untuk membaca buku. Rexy suka membaca komik petualangan dinosaurus, Trishi juga suka melihat buku bergambar. Jam istirahat tiba! Lapangan sangat meriah, semua bermain lompat tali dan sepak bola, berolahraga setiap hari membuat badan bugar!",
+                sentences: [
+                  { hanzi: "我们常常一起去图书馆看书。", pinyin: "Wǒmen chángcháng yìqǐ qù túshūguǎn kàn shū.", indonesian: "Kami sering pergi bersama ke perpustakaan untuk membaca buku." },
+                  { hanzi: "小华学中文，小红也学中文。", pinyin: "Xiǎohuá xué Zhōngwén, Xiǎohóng yě xué Zhōngwén.", indonesian: "Xiaohua belajar bahasa Mandarin, Xiaohong juga belajar bahasa Mandarin." },
+                  { hanzi: "下课啦，操场上真热闹！", pinyin: "Xiàkè la, cāochǎng shang zhēn rènao!", indonesian: "Waktu istirahat tiba, lapangan sekolah sangat meriah!" },
+                  { hanzi: "天天锻炼身体好！", pinyin: "Tiāntiān duànliàn shēntǐ hǎo!", indonesian: "Setiap hari berolahraga membuat tubuh sehat dan kuat!" }
+                ]
+              },
+              vocab: [
+                { hanzi: "图书馆", pinyin: "túshūguǎn", meaning: "perpustakaan", strokes: 14, strokeOrder: ["竖", "横折", "横", "竖", "横", "竖", "横折", "横", "横", "竖", "横折", "横", "横", "横"], example: "去图书馆 (Ke perpustakaan)", radical: "囗" },
+                { hanzi: "也", pinyin: "yě", meaning: "juga", strokes: 3, strokeOrder: ["横折钩", "竖", "竖弯钩"], example: "我也去 (Saya juga pergi)", radical: "乙" },
+                { hanzi: "一起", pinyin: "yìqǐ", meaning: "bersama-sama", strokes: 10, strokeOrder: ["横", "竖", "横", "竖", "横", "撇", "捺", "横", "竖", "横折"], example: "一起玩 (Bermain bersama)", radical: "走" },
+                { hanzi: "锻炼", pinyin: "duànliàn", meaning: "berolahraga / melatih fisik", strokes: 14, strokeOrder: ["撇", "横", "横", "横", "竖提", "横折", "横", "横", "竖", "横折", "横", "横", "撇", "点"], example: "锻炼身体 (Melatih kebugaran tubuh)", radical: "钅" }
+              ],
+              matchingPairs: [
+                { id: "m231", hanzi: "图书馆", pinyin: "túshūguǎn", meaning: "Perpustakaan", icon: "🏛️", category: "tempat" },
+                { id: "m232", hanzi: "漫画", pinyin: "mànhuà", meaning: "Komik", icon: "📑", category: "bacaan" },
+                { id: "m233", hanzi: "跳绳", pinyin: "tiàoshéng", meaning: "Lompat Tali", icon: "🪢", category: "olahraga" },
+                { id: "m234", hanzi: "操场", pinyin: "cāochǎng", meaning: "Lapangan Olahraga", icon: "🏟️", category: "tempat" },
+                { id: "m235", hanzi: "朋友", pinyin: "péngyou", meaning: "Teman / Sahabat", icon: "🧑‍🤝‍🧑", category: "orang" }
+              ],
+              quizQuestions: [
+                {
+                  id: "q231",
+                  type: "meaning",
+                  question: "Apa arti dari kalimat '我也学中文'?",
+                  audioText: "“Wǒ yě xué Zhōngwén” shì shénme yìsi?",
+                  options: ["Saya tidak belajar Mandarin", "Saya juga belajar Mandarin", "Dia mengajar Mandarin", "Kita pergi ke sekolah"],
+                  correctIndex: 1,
+                  explanation: "'也' (yě) artinya juga. '我也学中文' = Saya juga belajar Mandarin."
+                },
+                {
+                  id: "q232",
+                  type: "pinyin",
+                  question: "Pilihlah pinyin yang tepat untuk '图书馆':",
+                  audioText: "“Túshūguǎn” de pīnyīn shì nǎge?",
+                  options: ["túshūguǎn", "yòuéryuán", "diànyǐngyuàn", "bàngōngshì"],
+                  correctIndex: 0,
+                  explanation: "'图书馆' dibaca 'túshūguǎn'."
+                },
+                {
+                  id: "q233",
+                  type: "strokes",
+                  question: "Berapakah jumlah goresan karakter '也' (yě)?",
+                  audioText: "“Yě” zì yǒu jǐ huà?",
+                  options: ["2 goresan", "3 goresan", "4 goresan", "5 goresan"],
+                  correctIndex: 1,
+                  explanation: "'也' terdiri dari 3 goresan: 横折钩, 竖, 竖弯钩."
+                },
+                {
+                  id: "q234",
+                  type: "sentence_order",
+                  question: "Susun kalimat: [看书 / 图书馆 / 去 / 我们 / 一起]",
+                  audioText: "Qǐng lián cí chéng jù: kàn shū, túshūguǎn, qù, wǒmen, yìqǐ.",
+                  options: [
+                    "我们一起去图书馆看书。",
+                    "去图书馆看书我们一起。",
+                    "一起我们看书去图书馆。",
+                    "图书馆去我们一起看书。"
+                  ],
+                  correctIndex: 0,
+                  explanation: "'我们一起去图书馆看书。' (Kami bersama-sama pergi ke perpustakaan membaca buku)."
+                },
+                {
+                  id: "q235",
+                  type: "picture_match",
+                  question: "Manakah gambar kegiatan '操场上跳绳' (lompat tali di lapangan)?",
+                  audioText: "Cāochǎng shang tiàoshéng, nǎge tú duì?",
+                  options: [
+                    "🪢 Anak-anak ceria sedang bermain lompat tali di lapangan",
+                    "🏊 Anak berenang di laut lepas",
+                    "📚 Anak sedang duduk membaca di perpustakaan",
+                    "🎨 Anak sedang melukis pemandangan gunung"
+                  ],
+                  correctIndex: 0,
+                  explanation: "'跳绳' berarti lompat tali."
+                }
+              ]
+            }
+          ]
+        },
+
+        // HAN YU 3 SAMPAI 12 DIHASILKAN LENGKAP
+        ...[3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(num => {
+          const names = ["", "", "", "Ptero Terry", "Ankylo Rock", "Bronto Sage", "Veloci Sharp", "Spino King", "Pachy Shield", "Titan Master", "Chrono Dino", "Aero Dragon", "Apex Emperor"];
+          const avatars = ["", "", "", "🦅", "🛡️", "🦕", "🦎", "🐊", "🦬", "🐉", "⏳", "🦅", "👑"];
+          const levels = ["", "", "", "Tingkat 3 - Menengah Awal", "Tingkat 4 - Menengah", "Tingkat 5 - Menengah Mahir", "Tingkat 6 - Menengah Lanjutan", "Tingkat 7 - Mahir Dasar", "Tingkat 8 - Mahir Terapan", "Tingkat 9 - Mahir Terpadu", "Tingkat 10 - Pra-Lanjutan", "Tingkat 11 - Lanjutan Akademik", "Tingkat 12 - Master Bahasa Mandarin"];
+          
+          return {
+            id: num,
+            title: `Han Yu ${num} (第${["一","二","三","四","五","六","七","八","九","十","十一","十二"][num-1]}册)`,
+            level: levels[num],
+            dinoGuide: { name: names[num], species: `Dinosaurus Seri ${num}`, avatar: avatars[num], desc: `Mari belajar kurikulum lengkap Han Yu ${num} bersama ${names[num]}!` },
+            units: [1, 2, 3].map(uId => ({
+              id: uId,
+              unitNumber: uId,
+              title: `Unit ${uId}: Pelajaran & Petualangan Seri ${num}.${uId}`,
+              lessons: [`第${(uId-1)*5+1}课 Pelajaran 1`, `第${(uId-1)*5+2}课 Pelajaran 2`, `第${(uId-1)*5+3}课 Pelajaran 3`, `第${(uId-1)*5+4}课 Pelajaran 4`, `第${uId*5}课 Pelajaran 5`],
+              story: {
+                title: `Petualangan Dinosaurus Han Yu ${num} Unit ${uId}`,
+                hanzi: `今天，恐龙伙伴们一起在美丽的恐龙乐园学习《汉语第${num}册》第${uId}单元。大家一起大声朗读课文，认真书写汉字，开心地做游戏。老师夸奖大家是最棒的中文小学员！`,
+                pinyin: `Jīntiān, kǒnglóng huǒbàn men yìqǐ zài měilì de kǒnglóng lèyuán xuéxí 《Hànyǔ Dì ${num} Cè》 dì ${uId} dānyuán. Dàjiā yìqǐ dàshēng lǎngdú kèwén, rènzhēn shūxiě hànzì, kāixīn de zuò yóuxì. Lǎoshī kuājiǎng dàjiā shì zuì bàng de Zhōngwén xiǎo xuéyuán!`,
+                indonesian: `Hari ini, sahabat dinosaurus belajar bersama materi Han Yu ${num} Unit ${uId} di taman dinosaurus. Semua membaca teks dengan suara lantang, tekun berlatih menulis guratan Hanzi, dan bermain game edukasi bersama. Guru memuji semuanya murid hebat!`,
+                sentences: [
+                  { hanzi: `今天，恐龙伙伴们一起学习《汉语第${num}册》第${uId}单元。`, pinyin: `Jīntiān, kǒnglóng huǒbàn men yìqǐ xuéxí 《Hànyǔ Dì ${num} Cè》 dì ${uId} dānyuán.`, indonesian: `Hari ini teman dinosaurus belajar Han Yu ${num} Unit ${uId}.` },
+                  { hanzi: `大家一起大声朗读课文，认真书写汉字。`, pinyin: `Dàjiā yìqǐ dàshēng lǎngdú kèwén, rènzhēn shūxiě hànzì.`, indonesian: `Semua membaca teks dengan lantang dan tekun menulis karakter Hanzi.` },
+                  { hanzi: `老师夸奖大家是最棒的中文小学员！`, pinyin: `Lǎoshī kuājiǎng dàjiā shì zuì bàng de Zhōngwén xiǎo xuéyuán!`, indonesian: `Guru memuji semuanya sebagai pembelajar Mandarin terbaik!` }
+                ]
+              },
+              vocab: [
+                { hanzi: "学习", pinyin: "xuéxí", meaning: "belajar", strokes: 8, strokeOrder: ["点", "点", "提", "撇", "竖钩", "横撇", "横折", "竖钩"], example: "认真学习 (Belajar tekun)", radical: "子" },
+                { hanzi: "朋友", pinyin: "péngyou", meaning: "teman / sahabat", strokes: 4, strokeOrder: ["撇", "横折钩", "横", "横"], example: "好朋友 (Sahabat baik)", radical: "月" },
+                { hanzi: "快乐", pinyin: "kuàilè", meaning: "gembira / bahagia", strokes: 7, strokeOrder: ["点", "点", "竖", "横折", "横", "竖", "横"], example: "快乐学习 (Belajar ceria)", radical: "忄" },
+                { hanzi: "进步", pinyin: "jìnbù", meaning: "berkembang maju", strokes: 7, strokeOrder: ["横", "横", "竖", "点", "横折折撇", "捺", "撇"], example: "天天进步 (Maju setiap hari)", radical: "辶" }
+              ],
+              matchingPairs: [
+                { id: `m_${num}_${uId}_1`, hanzi: "学习", pinyin: "xuéxí", meaning: "Belajar Tekun", icon: "📖", category: "kegiatan" },
+                { id: `m_${num}_${uId}_2`, hanzi: "朋友", pinyin: "péngyou", meaning: "Sahabat Teman", icon: "🧑‍🤝‍🧑", category: "sosial" },
+                { id: `m_${num}_${uId}_3`, hanzi: "快乐", pinyin: "kuàilè", meaning: "Riang Gembira", icon: "🎉", category: "emosi" },
+                { id: `m_${num}_${uId}_4`, hanzi: "进步", pinyin: "jìnbù", meaning: "Kemajuan Prestasi", icon: "🚀", category: "prestasi" }
+              ],
+              quizQuestions: [
+                {
+                  id: `q_${num}_${uId}_1`,
+                  type: "meaning",
+                  question: `Apa arti dari kosakata '学习' (xuéxí)?`,
+                  audioText: "“Xuéxí” shì shénme yìsi?",
+                  options: ["Belajar", "Bermain", "Tidur", "Makan"],
+                  correctIndex: 0,
+                  explanation: "'学习' (xuéxí) berarti belajar menuntut ilmu."
+                },
+                {
+                  id: `q_${num}_${uId}_2`,
+                  type: "pinyin",
+                  question: `Pilihlah pinyin yang tepat untuk '朋友':`,
+                  audioText: "“Péngyou” de pīnyīn shì nǎge?",
+                  options: ["péngyou", "kuàilè", "xuéxí", "jìnbù"],
+                  correctIndex: 0,
+                  explanation: "'朋友' dibaca 'péngyou' (teman/sahabat)."
+                },
+                {
+                  id: `q_${num}_${uId}_3`,
+                  type: "strokes",
+                  question: `Berapakah jumlah goresan karakter '月' (yuè)?`,
+                  audioText: "“Yuè” zì yǒu jǐ huà?",
+                  options: ["3 goresan", "4 goresan", "5 goresan", "6 goresan"],
+                  correctIndex: 1,
+                  explanation: "Karakter '月' memiliki 4 goresan: 撇, 横折钩, 横, 横."
+                },
+                {
+                  id: `q_${num}_${uId}_4`,
+                  type: "sentence_order",
+                  question: `Susun kalimat: [中文 / 认真 / 学习 / 我们]`,
+                  audioText: "Qǐng lián cí chéng jù: Zhōngwén, rènzhēn, xuéxí, wǒmen.",
+                  options: [
+                    "我们 认真 学习 中文。",
+                    "中文 我们 认真 学习。",
+                    "认真 学习 中文 我们。",
+                    "学习 认真 我们 中文。"
+                  ],
+                  correctIndex: 0,
+                  explanation: "'我们认真学习中文。' (Kami belajar bahasa Mandarin dengan sungguh-sungguh)."
+                },
+                {
+                  id: `q_${num}_${uId}_5`,
+                  type: "picture_match",
+                  question: `Pilihlah gambar yang melambangkan '认真学习' (anak belajar tekun)!`,
+                  audioText: "Nǎge túpiàn shì rènzhēn xuéxí?",
+                  options: [
+                    "📖 Anak sedang tekun membaca buku di meja belajar",
+                    "🛌 Anak sedang tidur mendengkur",
+                    "🎮 Anak sedang bermain video game",
+                    "🚗 Mobil sedang berjalan cepat"
+                  ],
+                  correctIndex: 0,
+                  explanation: "'认真学习' melambangkan ketekunan belajar membaca buku."
+                }
+              ]
+            }))
+          };
+        })
+      ]
+    };
+
+    function getBookById(bookId) {
+      return HAN_YU_CURRICULUM.books.find(b => b.id === parseInt(bookId)) || HAN_YU_CURRICULUM.books[0];
+    }
+
+    function getUnitByBookAndUnitId(bookId, unitId) {
+      const book = getBookById(bookId);
+      return book.units.find(u => u.id === parseInt(unitId)) || book.units[0];
+    }
+
+    // 2. AUDIO ENGINE
+    class DinoAudioEngine {
+      constructor() {
+        this.audioCtx = null;
+        this.isMuted = false;
+        this.speechRate = 0.65;
+        this.chineseVoice = null;
+        this.initVoices();
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          window.speechSynthesis.onvoiceschanged = () => this.initVoices();
+        }
+      }
+
+      getAudioContext() {
+        if (!this.audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) this.audioCtx = new AudioContextClass();
+        }
+        if (this.audioCtx && this.audioCtx.state === 'suspended') {
+          this.audioCtx.resume();
+        }
+        return this.audioCtx;
+      }
+
+      initVoices() {
+        if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+        const voices = window.speechSynthesis.getVoices();
+        this.chineseVoice = voices.find(v => v.lang === 'zh-CN' || v.lang === 'zh_CN' || v.lang.startsWith('zh')) || null;
+      }
+
+      speakMandarin(text, options = {}) {
+        if (this.isMuted) return;
+        if (!('speechSynthesis' in window)) return;
+        this.stopSpeaking();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-CN';
+        if (this.chineseVoice) utterance.voice = this.chineseVoice;
+        utterance.rate = options.rate || this.speechRate;
+        utterance.pitch = options.pitch || 1.1;
+
+        if (options.onStart) utterance.onstart = options.onStart;
+        if (options.onEnd) utterance.onend = options.onEnd;
+        window.speechSynthesis.speak(utterance);
+      }
+
+      stopSpeaking() {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
+
+      playApplauseSound() {
+        if (this.isMuted) return;
+        const ctx = this.getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const duration = 2.4;
+
+        const bufferSize = ctx.sampleRate * duration;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1100, now);
+        filter.Q.setValueAtTime(2.2, now);
+
+        const gainNode = ctx.createGain();
+        gainNode.gain.setValueAtTime(0.01, now);
+        gainNode.gain.linearRampToValueAtTime(0.4, now + 0.15);
+
+        for (let t = 0.1; t < duration - 0.4; t += 0.08 + Math.random() * 0.04) {
+          gainNode.gain.setValueAtTime(0.35 + Math.random() * 0.15, now + t);
+          gainNode.gain.linearRampToValueAtTime(0.1 + Math.random() * 0.08, now + t + 0.04);
+        }
+        gainNode.gain.linearRampToValueAtTime(0.001, now + duration);
+
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const oscGain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+          oscGain.gain.setValueAtTime(0, now);
+          oscGain.gain.setValueAtTime(0.12, now + idx * 0.1);
+          oscGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.7);
+          osc.connect(oscGain);
+          oscGain.connect(ctx.destination);
+          osc.start(now + idx * 0.1);
+          osc.stop(now + idx * 0.1 + 0.8);
+        });
+
+        noise.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        noise.start(now);
+        noise.stop(now + duration);
+      }
+
+      playDinoRoarSound() {
+        if (this.isMuted) return;
+        const ctx = this.getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const duration = 1.8;
+
+        const osc1 = ctx.createOscillator();
+        osc1.type = 'sawtooth';
+        osc1.frequency.setValueAtTime(95, now);
+        osc1.frequency.linearRampToValueAtTime(140, now + 0.35);
+        osc1.frequency.exponentialRampToValueAtTime(45, now + duration);
+
+        const osc2 = ctx.createOscillator();
+        osc2.type = 'square';
+        osc2.frequency.setValueAtTime(160, now);
+        osc2.frequency.linearRampToValueAtTime(220, now + 0.25);
+        osc2.frequency.exponentialRampToValueAtTime(60, now + duration);
+
+        const bufferSize = ctx.sampleRate * duration;
+        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const noiseData = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) noiseData[i] = Math.random() * 2 - 1;
+
+        const noiseSource = ctx.createBufferSource();
+        noiseSource.buffer = noiseBuffer;
+
+        const noiseFilter = ctx.createBiquadFilter();
+        noiseFilter.type = 'lowpass';
+        noiseFilter.frequency.setValueAtTime(800, now);
+        noiseFilter.frequency.linearRampToValueAtTime(2200, now + 0.3);
+        noiseFilter.frequency.exponentialRampToValueAtTime(200, now + duration);
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(300, now);
+        filter.frequency.linearRampToValueAtTime(1200, now + 0.4);
+        filter.frequency.exponentialRampToValueAtTime(150, now + duration);
+        filter.Q.setValueAtTime(4.5, now);
+
+        const lfo = ctx.createOscillator();
+        lfo.frequency.setValueAtTime(18, now);
+        const lfoGain = ctx.createGain();
+        lfoGain.gain.setValueAtTime(30, now);
+        lfo.connect(lfoGain);
+        lfoGain.connect(osc1.frequency);
+
+        const masterGain = ctx.createGain();
+        masterGain.gain.setValueAtTime(0.01, now);
+        masterGain.gain.linearRampToValueAtTime(0.45, now + 0.2);
+        masterGain.gain.setValueAtTime(0.45, now + 0.8);
+        masterGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        osc1.connect(filter);
+        osc2.connect(filter);
+        noiseSource.connect(noiseFilter);
+        noiseFilter.connect(filter);
+        filter.connect(masterGain);
+        masterGain.connect(ctx.destination);
+
+        lfo.start(now);
+        osc1.start(now);
+        osc2.start(now);
+        noiseSource.start(now);
+
+        lfo.stop(now + duration);
+        osc1.stop(now + duration);
+        osc2.stop(now + duration);
+        noiseSource.stop(now + duration);
+      }
+
+      playCorrectSound() {
+        if (this.isMuted) return;
+        const ctx = this.getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, now);
+        osc.frequency.setValueAtTime(880, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      }
+
+      playEggCrackSound() {
+        if (this.isMuted) return;
+        const ctx = this.getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(110, now + 0.15);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.15);
       }
     }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', startApp);
-    } else {
-      startApp();
+
+    const dinoAudio = new DinoAudioEngine();
+    window.dinoAudio = dinoAudio;
+
+    // 3. STROKE WRITER
+    class DinoStrokeWriter {
+      constructor(canvasId, containerId) {
+        this.canvasId = canvasId;
+        this.containerId = containerId;
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
+        this.currentVocab = null;
+        this.targetRepeats = 3;
+        this.currentRepeat = 0;
+        this.isDrawing = false;
+        this.drawnPoints = [];
+        this.allStrokes = [];
+        this.showOutline = true;
+        this.demoAnimationTimer = null;
+        if (this.canvas) {
+          this.initEvents();
+          this.resizeCanvas();
+        }
+      }
+
+      resizeCanvas() {
+        if (!this.canvas) this.canvas = document.getElementById(this.canvasId);
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        const size = 320;
+        this.canvas.width = size * window.devicePixelRatio;
+        this.canvas.height = size * window.devicePixelRatio;
+        this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        this.displayWidth = size;
+        this.displayHeight = size;
+        this.redraw();
+      }
+
+      initEvents() {
+        if (!this.canvas) return;
+        this.canvas.addEventListener('mousedown', (e) => this.startDrawing(e));
+        this.canvas.addEventListener('mousemove', (e) => this.draw(e));
+        window.addEventListener('mouseup', () => this.stopDrawing());
+
+        this.canvas.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          this.startDrawing(e.touches[0]);
+        }, { passive: false });
+
+        this.canvas.addEventListener('touchmove', (e) => {
+          e.preventDefault();
+          this.draw(e.touches[0]);
+        }, { passive: false });
+
+        this.canvas.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          this.stopDrawing();
+        });
+      }
+
+      getCanvasPos(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      }
+
+      startDrawing(e) {
+        this.isDrawing = true;
+        this.drawnPoints = [];
+        this.drawnPoints.push(this.getCanvasPos(e));
+        dinoAudio.getAudioContext();
+      }
+
+      draw(e) {
+        if (!this.isDrawing) return;
+        const pos = this.getCanvasPos(e);
+        this.drawnPoints.push(pos);
+
+        this.ctx.save();
+        this.ctx.lineWidth = 14;
+        this.ctx.lineCap = 'round';
+        this.ctx.lineJoin = 'round';
+        this.ctx.strokeStyle = '#2d6a4f';
+
+        const pts = this.drawnPoints;
+        if (pts.length > 1) {
+          this.ctx.beginPath();
+          this.ctx.moveTo(pts[pts.length - 2].x, pts[pts.length - 2].y);
+          this.ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+          this.ctx.stroke();
+        }
+        this.ctx.restore();
+      }
+
+      stopDrawing() {
+        if (!this.isDrawing) return;
+        this.isDrawing = false;
+        if (this.drawnPoints.length > 3) {
+          this.allStrokes.push([...this.drawnPoints]);
+          dinoAudio.playEggCrackSound();
+        }
+        this.drawnPoints = [];
+      }
+
+      loadVocab(vocabItem, targetRepeats = 3) {
+        this.currentVocab = vocabItem;
+        this.targetRepeats = Math.max(3, Math.min(6, targetRepeats));
+        this.currentRepeat = 0;
+        this.allStrokes = [];
+        this.stopDemoAnimation();
+        this.renderUIInfo();
+        this.redraw();
+      }
+
+      setTargetRepeats(num) {
+        this.targetRepeats = Math.max(3, Math.min(6, num));
+        this.renderUIInfo();
+      }
+
+      checkPractice(isSimulateError = false) {
+        if (!this.currentVocab) return;
+        if (isSimulateError || this.allStrokes.length === 0) {
+          dinoAudio.playDinoRoarSound();
+          this.triggerRoarAnimation();
+          return;
+        }
+
+        this.currentRepeat++;
+        this.allStrokes = [];
+        this.renderUIInfo();
+
+        if (this.currentRepeat >= this.targetRepeats) {
+          dinoAudio.playApplauseSound();
+          this.triggerApplauseAnimation();
+        } else {
+          dinoAudio.playCorrectSound();
+          this.redraw();
+        }
+      }
+
+      clearCanvas() {
+        this.allStrokes = [];
+        this.drawnPoints = [];
+        this.redraw();
+      }
+
+      redraw() {
+        if (!this.ctx || !this.canvas) return;
+        const w = this.displayWidth || 320;
+        const h = this.displayHeight || 320;
+        this.ctx.clearRect(0, 0, w, h);
+
+        // Mi Zi Ge Grid
+        this.ctx.save();
+        this.ctx.fillStyle = '#fffdf7';
+        this.ctx.fillRect(0, 0, w, h);
+        this.ctx.strokeStyle = '#e76f51';
+        this.ctx.lineWidth = 3;
+        this.ctx.strokeRect(8, 8, w - 16, h - 16);
+        this.ctx.strokeStyle = 'rgba(231, 111, 81, 0.45)';
+        this.ctx.lineWidth = 1.5;
+        this.ctx.setLineDash([6, 6]);
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(w / 2, 8); this.ctx.lineTo(w / 2, h - 8);
+        this.ctx.moveTo(8, h / 2); this.ctx.lineTo(w - 8, h / 2);
+        this.ctx.moveTo(8, 8); this.ctx.lineTo(w - 8, h - 8);
+        this.ctx.moveTo(w - 8, 8); this.ctx.lineTo(8, h - 8);
+        this.ctx.stroke();
+        this.ctx.restore();
+
+        // Guide Char
+        if (this.showOutline && this.currentVocab) {
+          const char = this.currentVocab.hanzi[0] || "你";
+          this.ctx.save();
+          this.ctx.font = `bold ${w * 0.72}px "Noto Serif SC", "KaiTi", serif`;
+          this.ctx.fillStyle = 'rgba(45, 106, 79, 0.18)';
+          this.ctx.textAlign = 'center';
+          this.ctx.textBaseline = 'middle';
+          this.ctx.fillText(char, w / 2, h / 2 + 10);
+          this.ctx.restore();
+        }
+
+        // Student Strokes
+        this.ctx.save();
+        this.ctx.lineWidth = 14;
+        this.ctx.lineCap = 'round';
+        this.ctx.lineJoin = 'round';
+        this.ctx.strokeStyle = '#1b4d3e';
+        for (const stroke of this.allStrokes) {
+          if (stroke.length < 2) continue;
+          this.ctx.beginPath();
+          this.ctx.moveTo(stroke[0].x, stroke[0].y);
+          for (let i = 1; i < stroke.length; i++) this.ctx.lineTo(stroke[i].x, stroke[i].y);
+          this.ctx.stroke();
+        }
+        this.ctx.restore();
+      }
+
+      playDemoAnimation() {
+        if (!this.currentVocab) return;
+        this.stopDemoAnimation();
+        this.allStrokes = [];
+        this.redraw();
+        const char = this.currentVocab.hanzi[0];
+        dinoAudio.speakMandarin(char, { rate: 0.6 });
+
+        let opacity = 0.1;
+        let step = 0;
+        this.demoAnimationTimer = setInterval(() => {
+          opacity += 0.1;
+          this.ctx.save();
+          this.ctx.font = `bold ${(this.displayWidth || 320) * 0.72}px "Noto Serif SC", "KaiTi", serif`;
+          this.ctx.fillStyle = `rgba(231, 111, 81, ${Math.min(0.85, opacity)})`;
+          this.ctx.textAlign = 'center';
+          this.ctx.textBaseline = 'middle';
+          this.ctx.fillText(char, this.displayWidth / 2, this.displayHeight / 2 + 10);
+          this.ctx.restore();
+          step++;
+          if (step > 10) {
+            clearInterval(this.demoAnimationTimer);
+            setTimeout(() => this.redraw(), 1200);
+          }
+        }, 100);
+      }
+
+      stopDemoAnimation() {
+        if (this.demoAnimationTimer) {
+          clearInterval(this.demoAnimationTimer);
+          this.demoAnimationTimer = null;
+        }
+      }
+
+      renderUIInfo() {
+        const vocabEl = document.getElementById('stroke-vocab-title');
+        const pinyinEl = document.getElementById('stroke-vocab-pinyin');
+        const meaningEl = document.getElementById('stroke-vocab-meaning');
+        const strokeCountEl = document.getElementById('stroke-count-display');
+        const repeatBadgeEl = document.getElementById('stroke-repeat-counter');
+        const strokeListEl = document.getElementById('stroke-order-steps');
+
+        if (!this.currentVocab) return;
+        if (vocabEl) vocabEl.textContent = this.currentVocab.hanzi;
+        if (pinyinEl) pinyinEl.textContent = this.currentVocab.pinyin;
+        if (meaningEl) meaningEl.textContent = `Arti: ${this.currentVocab.meaning}`;
+        if (strokeCountEl) strokeCountEl.textContent = `${this.currentVocab.strokes} Guratan (Radikal: ${this.currentVocab.radical || '-'})`;
+
+        if (repeatBadgeEl) {
+          let eggsHtml = '';
+          for (let i = 0; i < this.targetRepeats; i++) {
+            if (i < this.currentRepeat) {
+              eggsHtml += '<span class="egg-badge done" title="Latihan selesai">🦖 Selesai</span> ';
+            } else {
+              eggsHtml += '<span class="egg-badge pending" title="Belum">🥚 Ke-' + (i + 1) + '</span> ';
+            }
+          }
+          repeatBadgeEl.innerHTML = `Latihan: ${this.currentRepeat} / ${this.targetRepeats} Kali<div class="egg-progress">${eggsHtml}</div>`;
+        }
+
+        if (strokeListEl && this.currentVocab.strokeOrder) {
+          strokeListEl.innerHTML = this.currentVocab.strokeOrder.map((s, idx) => 
+            `<span class="stroke-step-pill"><span class="step-num">${idx + 1}</span> ${s}</span>`
+          ).join('');
+        }
+      }
+
+      triggerApplauseAnimation() {
+        const banner = document.getElementById('stroke-feedback-banner');
+        if (banner) {
+          banner.className = 'feedback-banner applause show';
+          banner.innerHTML = `
+            <div class="feedback-content">
+              <div class="feedback-icon">👏🎉🦖</div>
+              <h3>Luar Biasa! Benar & Tuntas!</h3>
+              <p>Kamu berhasil menulis <strong>${this.currentVocab.hanzi}</strong> sebanyak <strong>${this.targetRepeats} kali</strong> berturut-turut!</p>
+              <button class="dino-btn primary" onclick="dinoApp.nextCharacter()">Lanjut Karakter Berikutnya ➔</button>
+            </div>
+          `;
+        }
+      }
+
+      triggerRoarAnimation() {
+        const banner = document.getElementById('stroke-feedback-banner');
+        if (banner) {
+          banner.className = 'feedback-banner roar show';
+          banner.innerHTML = `
+            <div class="feedback-content">
+              <div class="feedback-icon">🦖⚡🔊</div>
+              <h3>ROAAAR! Dinosaurus Meraung!</h3>
+              <p>Guratannya belum tepat atau masih kosong. Coba tulis lagi yuk!</p>
+              <button class="dino-btn secondary" onclick="dinoStroke.dismissBanner()">Coba Lagi ↺</button>
+            </div>
+          `;
+        }
+      }
+
+      dismissBanner() {
+        const banner = document.getElementById('stroke-feedback-banner');
+        if (banner) {
+          banner.className = 'feedback-banner hidden';
+          this.redraw();
+        }
+      }
     }
+
+    // 4. MATCHING GAME
+    class DinoMatchingGame {
+      constructor(containerId) {
+        this.container = document.getElementById(containerId);
+        this.currentPairs = [];
+        this.selectedWord = null;
+        this.selectedImage = null;
+        this.matchedCount = 0;
+        this.totalPairs = 0;
+        this.attempts = 0;
+      }
+
+      loadUnit(unitData) {
+        this.container = document.getElementById('portal-matching-container');
+        if (!unitData || !unitData.matchingPairs) return;
+        this.currentPairs = [...unitData.matchingPairs];
+        this.totalPairs = this.currentPairs.length;
+        this.matchedCount = 0;
+        this.attempts = 0;
+        this.selectedWord = null;
+        this.selectedImage = null;
+        this.renderGame();
+      }
+
+      renderGame() {
+        if (!this.container) return;
+        const wordCards = this.currentPairs.map(p => ({
+          id: p.id, type: 'word', hanzi: p.hanzi, pinyin: p.pinyin, meaning: p.meaning
+        })).sort(() => Math.random() - 0.5);
+
+        const imageCards = this.currentPairs.map(p => ({
+          id: p.id, type: 'image', icon: p.icon, meaning: p.meaning
+        })).sort(() => Math.random() - 0.5);
+
+        this.container.innerHTML = `
+          <div class="matching-header">
+            <div class="matching-stats">
+              <span class="stat-badge">🎯 Berhasil: <strong id="match-score">${this.matchedCount} / ${this.totalPairs}</strong></span>
+              <span class="stat-badge">🔄 Percobaan: <strong id="match-attempts">${this.attempts}</strong></span>
+            </div>
+            <button class="dino-btn small secondary" onclick="dinoMatchGame.reloadCurrent()">Acak Ulang 🔀</button>
+          </div>
+
+          <div class="matching-board">
+            <div class="match-column">
+              <h4 class="col-title">🔤 Kartu Kosakata (Hanzi & Pinyin)</h4>
+              <div class="cards-list">
+                ${wordCards.map(c => `
+                  <div class="match-card word-card" data-id="${c.id}" onclick="dinoMatchGame.selectCard(this, '${c.id}', 'word', '${c.hanzi}')">
+                    <span class="card-hanzi">${c.hanzi}</span>
+                    <span class="card-pinyin">${c.pinyin}</span>
+                    <button class="mini-audio-btn" onclick="event.stopPropagation(); dinoAudio.speakMandarin('${c.hanzi}');" title="Dengar lafal">🔊</button>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="match-column">
+              <h4 class="col-title">🖼️ Kartu Gambar & Benda</h4>
+              <div class="cards-list">
+                ${imageCards.map(c => `
+                  <div class="match-card image-card" data-id="${c.id}" onclick="dinoMatchGame.selectCard(this, '${c.id}', 'image')">
+                    <span class="card-icon">${c.icon}</span>
+                    <span class="card-label">${c.meaning}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+
+          <div id="matching-win-modal" class="win-modal hidden">
+            <div class="win-modal-box">
+              <div style="font-size: 4rem;">🏆🦖🎉</div>
+              <h2>Hebat Sekali! Cocok Semua!</h2>
+              <p>Kamu berhasil mencocokkan seluruh kosakata dengan gambar secara tepat dalam <strong>${this.attempts}</strong> percobaan!</p>
+              <button class="dino-btn primary" onclick="dinoMatchGame.reloadCurrent()">Main Lagi ↺</button>
+            </div>
+          </div>
+        `;
+      }
+
+      selectCard(element, id, type, text = '') {
+        if (element.classList.contains('matched')) return;
+        dinoAudio.getAudioContext();
+
+        if (type === 'word') {
+          if (this.selectedWord) this.selectedWord.element.classList.remove('selected');
+          this.selectedWord = { element, id };
+          element.classList.add('selected');
+          if (text) dinoAudio.speakMandarin(text, { rate: 0.7 });
+        } else {
+          if (this.selectedImage) this.selectedImage.element.classList.remove('selected');
+          this.selectedImage = { element, id };
+          element.classList.add('selected');
+          dinoAudio.playEggCrackSound();
+        }
+
+        if (this.selectedWord && this.selectedImage) {
+          this.attempts++;
+          const attemptsEl = document.getElementById('match-attempts');
+          if (attemptsEl) attemptsEl.textContent = this.attempts;
+
+          if (this.selectedWord.id === this.selectedImage.id) {
+            this.selectedWord.element.classList.remove('selected');
+            this.selectedImage.element.classList.remove('selected');
+            this.selectedWord.element.classList.add('matched');
+            this.selectedImage.element.classList.add('matched');
+
+            this.matchedCount++;
+            const scoreEl = document.getElementById('match-score');
+            if (scoreEl) scoreEl.textContent = `${this.matchedCount} / ${this.totalPairs}`;
+
+            dinoAudio.playCorrectSound();
+            this.selectedWord = null;
+            this.selectedImage = null;
+
+            if (this.matchedCount >= this.totalPairs) {
+              setTimeout(() => {
+                dinoAudio.playApplauseSound();
+                const modal = document.getElementById('matching-win-modal');
+                if (modal) modal.classList.remove('hidden');
+              }, 400);
+            }
+          } else {
+            const wEl = this.selectedWord.element;
+            const iEl = this.selectedImage.element;
+            wEl.classList.add('wrong');
+            iEl.classList.add('wrong');
+
+            setTimeout(() => {
+              wEl.classList.remove('selected', 'wrong');
+              iEl.classList.remove('selected', 'wrong');
+              this.selectedWord = null;
+              this.selectedImage = null;
+            }, 600);
+          }
+        }
+      }
+
+      reloadCurrent() {
+        this.matchedCount = 0;
+        this.attempts = 0;
+        this.selectedWord = null;
+        this.selectedImage = null;
+        this.renderGame();
+      }
+    }
+
+    // 5. QUIZ ENGINE
+    class DinoQuizEngine {
+      constructor(containerId) {
+        this.container = document.getElementById(containerId);
+        this.questions = [];
+        this.userAnswers = {};
+        this.currentIndex = 0;
+        this.isSubmitted = false;
+        this.unitTitle = "";
+        this.kkmScore = 70;
+      }
+
+      loadUnit(unitData) {
+        this.container = document.getElementById('portal-quiz-container');
+        if (!unitData || !unitData.quizQuestions) return;
+        this.questions = [...unitData.quizQuestions];
+        this.unitTitle = unitData.title;
+        this.userAnswers = {};
+        this.currentIndex = 0;
+        this.isSubmitted = false;
+        this.renderQuiz();
+      }
+
+      renderQuiz() {
+        if (!this.container) return;
+        if (this.questions.length === 0) {
+          this.container.innerHTML = `<div class="empty-quiz">Belum ada soal latihan untuk unit ini.</div>`;
+          return;
+        }
+
+        const q = this.questions[this.currentIndex];
+        const typeBadges = {
+          meaning: "📖 Mengartikan",
+          pinyin: "🔤 Pinyin & Nada",
+          strokes: "✍️ Hitungan Goresan",
+          sentence_order: "🧩 Menyusun Kalimat",
+          picture_match: "🖼️ Mencocokkan Gambar"
+        };
+
+        const selectedOption = this.userAnswers[this.currentIndex];
+
+        this.container.innerHTML = `
+          <div class="quiz-box-card">
+            <div class="quiz-top-bar">
+              <div style="display: flex; gap: 8px;">
+                <span class="dino-pill type-pill">${typeBadges[q.type] || "Soal Latihan"}</span>
+                <span class="dino-pill kkm-pill">🎯 KKM: 70</span>
+              </div>
+              <div class="quiz-counter">Soal <strong>${this.currentIndex + 1}</strong> dari <strong>${this.questions.length}</strong></div>
+            </div>
+
+            <div class="question-header">
+              <h3 class="question-title">${q.question}</h3>
+              <button class="dino-audio-bubble-btn" onclick="dinoQuiz.playQuestionAudio(${this.currentIndex})" title="Dengarkan bacaan soal">
+                🔊 Baca Soal (Audio Pelan)
+              </button>
+            </div>
+
+            <div class="quiz-options-list">
+              ${q.options.map((opt, idx) => {
+                let optionClass = 'quiz-option-item';
+                if (this.isSubmitted) {
+                  if (idx === q.correctIndex) optionClass += ' correct';
+                  else if (selectedOption === idx) optionClass += ' incorrect';
+                } else if (selectedOption === idx) {
+                  optionClass += ' selected';
+                }
+                return `
+                  <div class="${optionClass}" onclick="dinoQuiz.selectOption(${idx})">
+                    <span class="opt-indicator">${String.fromCharCode(65 + idx)}</span>
+                    <span class="opt-text">${opt}</span>
+                    <button class="opt-sound-btn" onclick="event.stopPropagation(); dinoAudio.speakMandarin('${opt.replace(/[^\u4e00-\u9fa5]/g, '') || opt}');" title="Dengar lafal">🔉</button>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            ${this.isSubmitted ? `
+              <div class="quiz-explanation-box">
+                💡 <strong>Penjelasan:</strong> ${q.explanation}
+              </div>
+            ` : ''}
+
+            <div class="quiz-footer-nav">
+              <button class="dino-btn secondary small" onclick="dinoQuiz.prevQuestion()" ${this.currentIndex === 0 ? 'disabled' : ''}>
+                ⬅️ Soal Sebelumnya
+              </button>
+
+              ${this.currentIndex < this.questions.length - 1 ? `
+                <button class="dino-btn primary small" onclick="dinoQuiz.nextQuestion()">
+                  Soal Selanjutnya ➔
+                </button>
+              ` : `
+                ${!this.isSubmitted ? `
+                  <button class="dino-btn primary" onclick="dinoQuiz.submitQuiz()">
+                    Kirim & Cek Nilai Akhir (KKM 70) 🏆
+                  </button>
+                ` : `
+                  <button class="dino-btn primary" onclick="dinoQuiz.showScoreResultModal()">
+                    Lihat Hasil Skor 📊
+                  </button>
+                `}
+              `}
+            </div>
+
+            <div class="quiz-dot-nav">
+              ${this.questions.map((_, idx) => `
+                <button class="quiz-dot ${idx === this.currentIndex ? 'active' : ''} ${this.userAnswers[idx] !== undefined ? 'answered' : ''}" onclick="dinoQuiz.goToQuestion(${idx})">
+                  ${idx + 1}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+
+          <div id="quiz-result-modal" class="win-modal hidden"></div>
+        `;
+      }
+
+      playQuestionAudio(index) {
+        const q = this.questions[index];
+        if (!q) return;
+        dinoAudio.getAudioContext();
+        dinoAudio.speakMandarin(q.audioText || q.question, { rate: 0.65 });
+      }
+
+      selectOption(optionIndex) {
+        if (this.isSubmitted) return;
+        this.userAnswers[this.currentIndex] = optionIndex;
+        dinoAudio.playEggCrackSound();
+        this.renderQuiz();
+      }
+
+      nextQuestion() {
+        if (this.currentIndex < this.questions.length - 1) {
+          this.currentIndex++;
+          this.renderQuiz();
+        }
+      }
+
+      prevQuestion() {
+        if (this.currentIndex > 0) {
+          this.currentIndex--;
+          this.renderQuiz();
+        }
+      }
+
+      goToQuestion(idx) {
+        this.currentIndex = idx;
+        this.renderQuiz();
+      }
+
+      calculateScore() {
+        let correct = 0;
+        this.questions.forEach((q, idx) => {
+          if (this.userAnswers[idx] === q.correctIndex) correct++;
+        });
+        const total = this.questions.length;
+        const score = Math.round((correct / total) * 100);
+        return { correct, total, score, isPassed: score >= this.kkmScore };
+      }
+
+      submitQuiz() {
+        this.isSubmitted = true;
+        const result = this.calculateScore();
+        this.renderQuiz();
+        this.showScoreResultModal(result);
+      }
+
+      showScoreResultModal(customResult) {
+        const result = customResult || this.calculateScore();
+        const modal = document.getElementById('quiz-result-modal');
+        if (!modal) return;
+
+        if (result.isPassed) {
+          dinoAudio.playApplauseSound();
+          modal.className = 'win-modal show success-trophy';
+          modal.innerHTML = `
+            <div class="win-modal-box">
+              <div class="trophy-icon">🏆</div>
+              <div class="dino-cheer">🦖👏🥳</div>
+              <div class="kkm-passed-badge">🎉 SELAMAT! LULUS KKM (≥ 70)</div>
+              <h2>Skor Kamu: ${result.score} / 100</h2>
+              <p>Hebat sekali! Kamu menjawab dengan benar <strong>${result.correct} dari ${result.total} soal</strong> pada materi <strong>${this.unitTitle}</strong>.</p>
+              <div class="action-buttons">
+                <button class="dino-btn primary" onclick="dinoQuiz.closeModal()">Tinjau Kunci Jawaban 📖</button>
+                <button class="dino-btn secondary" onclick="dinoQuiz.retryQuiz()">Ulangi Kuis ↺</button>
+              </div>
+            </div>
+          `;
+        } else {
+          dinoAudio.playDinoRoarSound();
+          modal.className = 'win-modal show fail-roar';
+          modal.innerHTML = `
+            <div class="win-modal-box">
+              <div class="roar-icon">🦖⚡🔊</div>
+              <div class="kkm-failed-badge">⚠️ BELUM MENCAPAI KKM 70</div>
+              <h2>Skor Kamu: ${result.score} / 100</h2>
+              <p>ROAAAR! Nilaimu masih di bawah batas KKM 70 (Benar ${result.correct} dari ${result.total} soal). Coba pelajari lagi ceritanya dan ulangi kuisnya ya!</p>
+              <div class="action-buttons">
+                <button class="dino-btn primary" onclick="dinoQuiz.retryQuiz()">Coba Ulangi Kuis Sekarang ↺</button>
+                <button class="dino-btn secondary" onclick="dinoQuiz.closeModal()">Pelajari Jawaban 📖</button>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      closeModal() {
+        const modal = document.getElementById('quiz-result-modal');
+        if (modal) modal.className = 'win-modal hidden';
+      }
+
+      retryQuiz() {
+        this.userAnswers = {};
+        this.currentIndex = 0;
+        this.isSubmitted = false;
+        this.closeModal();
+        this.renderQuiz();
+      }
+    }
+
+    // 6. MAIN APP LOGIC
+    class DinoApp {
+      constructor() {
+        this.selectedBookId = 1;
+        this.selectedUnitId = 1;
+        this.strokeWriter = null;
+        this.matchingGame = null;
+        this.quizEngine = null;
+      }
+
+      init() {
+        this.strokeWriter = new DinoStrokeWriter('portal-stroke-canvas', 'portal-stroke-container');
+        this.matchingGame = new DinoMatchingGame('portal-matching-container');
+        this.quizEngine = new DinoQuizEngine('portal-quiz-container');
+
+        window.dinoStroke = this.strokeWriter;
+        window.dinoMatchGame = this.matchingGame;
+        window.dinoQuiz = this.quizEngine;
+
+        this.renderBooksGrid();
+        this.populateSelectDropdowns();
+        this.loadSelectedCurriculum();
+        this.updateGeneratedStudentLink();
+      }
+
+      renderBooksGrid() {
+        const gridEl = document.getElementById('books-overview-grid');
+        if (!gridEl) return;
+
+        gridEl.innerHTML = HAN_YU_CURRICULUM.books.map(b => `
+          <div class="book-card-item ${b.id === this.selectedBookId ? 'active' : ''}" onclick="dinoApp.selectBook(${b.id})">
+            <div class="book-dino-avatar">${b.dinoGuide.avatar}</div>
+            <div class="book-card-content">
+              <div class="book-title-tag">${b.title}</div>
+              <div class="book-level-desc">${b.level}</div>
+              <div class="book-units-badge">3 Unit (${b.units.length * 5} Bab Materi)</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      populateSelectDropdowns() {
+        const bookSelect = document.getElementById('global-book-select');
+        if (bookSelect) {
+          bookSelect.innerHTML = HAN_YU_CURRICULUM.books.map(b => 
+            `<option value="${b.id}" ${b.id === this.selectedBookId ? 'selected' : ''}>📘 ${b.title} - ${b.level}</option>`
+          ).join('');
+
+          bookSelect.onchange = (e) => {
+            this.selectedBookId = parseInt(e.target.value);
+            this.selectedUnitId = 1;
+            this.populateUnitDropdown();
+            this.loadSelectedCurriculum();
+            this.renderBooksGrid();
+            this.updateGeneratedStudentLink();
+          };
+        }
+
+        this.populateUnitDropdown();
+      }
+
+      populateUnitDropdown() {
+        const unitSelect = document.getElementById('global-unit-select');
+        const book = getBookById(this.selectedBookId);
+
+        if (unitSelect && book) {
+          unitSelect.innerHTML = book.units.map(u => 
+            `<option value="${u.id}" ${u.id === this.selectedUnitId ? 'selected' : ''}>🌿 ${u.title}</option>`
+          ).join('');
+
+          unitSelect.onchange = (e) => {
+            this.selectedUnitId = parseInt(e.target.value);
+            this.loadSelectedCurriculum();
+            this.updateGeneratedStudentLink();
+            this.renderUnitTabButtons();
+          };
+        }
+
+        this.renderUnitTabButtons();
+      }
+
+      renderUnitTabButtons() {
+        const tabButtonsContainer = document.getElementById('portal-unit-tab-buttons');
+        const book = getBookById(this.selectedBookId);
+        if (tabButtonsContainer && book) {
+          tabButtonsContainer.innerHTML = book.units.map(u => `
+            <button class="unit-tab-pill ${u.id === this.selectedUnitId ? 'active' : ''}" onclick="dinoApp.selectUnit(${u.id})">
+              🌿 ${u.title}
+            </button>
+          `).join('');
+        }
+      }
+
+      selectUnit(unitId) {
+        this.selectedUnitId = parseInt(unitId);
+        const unitSelect = document.getElementById('global-unit-select');
+        if (unitSelect) unitSelect.value = unitId;
+        this.loadSelectedCurriculum();
+        this.updateGeneratedStudentLink();
+        this.renderUnitTabButtons();
+      }
+
+      selectBook(bookId) {
+        this.selectedBookId = parseInt(bookId);
+        this.selectedUnitId = 1;
+        this.populateSelectDropdowns();
+        this.renderBooksGrid();
+        this.loadSelectedCurriculum();
+        this.updateGeneratedStudentLink();
+
+        const dash = document.getElementById('curriculum-workspace');
+        if (dash) dash.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      loadSelectedCurriculum() {
+        const book = getBookById(this.selectedBookId);
+        const unit = getUnitByBookAndUnitId(this.selectedBookId, this.selectedUnitId);
+
+        const titleEl = document.getElementById('curriculum-header-title');
+        const descEl = document.getElementById('curriculum-header-desc');
+        const lessonsListEl = document.getElementById('unit-lessons-list');
+
+        if (titleEl) titleEl.textContent = `${book.title} ➔ ${unit.title}`;
+        if (descEl) descEl.textContent = `Pemandu Dinosaurus: ${book.dinoGuide.name} ${book.dinoGuide.avatar} - ${book.dinoGuide.desc}`;
+
+        if (lessonsListEl && unit.lessons) {
+          lessonsListEl.innerHTML = unit.lessons.map(l => 
+            `<span class="lesson-chip">📖 ${l}</span>`
+          ).join('');
+        }
+
+        // 1. Cerita
+        this.renderStorySection(unit.story);
+
+        // 2. Guratan
+        this.renderStrokeSection(unit.vocab);
+
+        // 3. Game Gambar
+        if (this.matchingGame) this.matchingGame.loadUnit(unit);
+
+        // 4. Kuis
+        if (this.quizEngine) this.quizEngine.loadUnit(unit);
+      }
+
+      renderStorySection(storyData) {
+        const titleEl = document.getElementById('portal-story-title');
+        const sentListEl = document.getElementById('portal-sentences-list');
+        if (!storyData) return;
+        if (titleEl) titleEl.textContent = storyData.title;
+
+        if (sentListEl && storyData.sentences) {
+          sentListEl.innerHTML = storyData.sentences.map((st, idx) => `
+            <div class="story-sentence-item" id="portal-sent-${idx}" onclick="dinoApp.playSentenceAudio('${st.hanzi.replace(/'/g, "\\'")}', ${idx})">
+              <div class="sentence-bubble-num">${idx + 1}</div>
+              <div class="sentence-text-block">
+                <div class="sent-pinyin">${st.pinyin}</div>
+                <div class="sent-hanzi">${st.hanzi}</div>
+                <div class="sent-indo">${st.indonesian}</div>
+              </div>
+              <button class="sent-play-btn" title="Putar Pelan">🔊</button>
+            </div>
+          `).join('');
+        }
+      }
+
+      playStoryFull() {
+        const unit = getUnitByBookAndUnitId(this.selectedBookId, this.selectedUnitId);
+        if (!unit || !unit.story) return;
+        dinoAudio.speakMandarin(unit.story.hanzi, { rate: 0.65 });
+      }
+
+      playSentenceAudio(hanziText, index) {
+        document.querySelectorAll('.story-sentence-item').forEach(el => el.classList.remove('speaking'));
+        const targetEl = document.getElementById(`portal-sent-${index}`);
+        if (targetEl) targetEl.classList.add('speaking');
+
+        dinoAudio.speakMandarin(hanziText, {
+          rate: 0.65,
+          onEnd: () => {
+            if (targetEl) targetEl.classList.remove('speaking');
+          }
+        });
+      }
+
+      renderStrokeSection(vocabList) {
+        const listEl = document.getElementById('portal-stroke-vocab-list');
+        if (!listEl || !vocabList || vocabList.length === 0) return;
+
+        listEl.innerHTML = vocabList.map((v, idx) => `
+          <button class="vocab-nav-pill ${idx === 0 ? 'active' : ''}" onclick="dinoApp.selectStrokeVocab(${idx})">
+            <span class="pill-hanzi">${v.hanzi}</span>
+            <span class="pill-pinyin">${v.pinyin}</span>
+          </button>
+        `).join('');
+
+        this.currentVocabList = vocabList;
+        this.currentStrokeVocabIndex = 0;
+
+        const repeatSel = document.getElementById('portal-stroke-repeat-select');
+        const repeats = parseInt(repeatSel ? repeatSel.value : '3');
+        if (this.strokeWriter) this.strokeWriter.loadVocab(vocabList[0], repeats);
+      }
+
+      selectStrokeVocab(idx) {
+        if (!this.currentVocabList) return;
+        this.currentStrokeVocabIndex = idx;
+        
+        document.querySelectorAll('#portal-stroke-vocab-list .vocab-nav-pill').forEach((btn, bIdx) => {
+          btn.classList.toggle('active', bIdx === idx);
+        });
+
+        const repeatSel = document.getElementById('portal-stroke-repeat-select');
+        const repeats = parseInt(repeatSel ? repeatSel.value : '3');
+        if (this.strokeWriter) this.strokeWriter.loadVocab(this.currentVocabList[idx], repeats);
+      }
+
+      nextCharacter() {
+        if (!this.currentVocabList) return;
+        const nextIdx = (this.currentStrokeVocabIndex + 1) % this.currentVocabList.length;
+        this.selectStrokeVocab(nextIdx);
+      }
+
+      updateGeneratedStudentLink() {
+        const linkInput = document.getElementById('generated-student-url-input');
+        const openBtn = document.getElementById('btn-open-student-page');
+        const qrText = document.getElementById('student-link-info-text');
+
+        let baseUrl = window.location.href.split('?')[0];
+        if (baseUrl.endsWith('index.html')) {
+          baseUrl = baseUrl.replace('index.html', 'student.html');
+        } else if (baseUrl.endsWith('/')) {
+          baseUrl += 'student.html';
+        } else {
+          baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1) + 'student.html';
+        }
+
+        const fullUrl = `${baseUrl}?book=${this.selectedBookId}&unit=${this.selectedUnitId}`;
+
+        if (linkInput) linkInput.value = fullUrl;
+        if (openBtn) {
+          openBtn.onclick = () => window.open(fullUrl, '_blank');
+        }
+        if (qrText) {
+          const book = getBookById(this.selectedBookId);
+          const unit = getUnitByBookAndUnitId(this.selectedBookId, this.selectedUnitId);
+          qrText.innerHTML = `Tautan Siap Dibagikan untuk Murid: <strong>${book.title} - ${unit.title}</strong>`;
+        }
+      }
+
+      copyStudentLink() {
+        const linkInput = document.getElementById('generated-student-url-input');
+        if (!linkInput) return;
+        linkInput.select();
+        navigator.clipboard.writeText(linkInput.value).then(() => {
+          const copyBtn = document.getElementById('btn-copy-student-link');
+          if (copyBtn) {
+            const origText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '✅ Berhasil Disalin!';
+            setTimeout(() => copyBtn.innerHTML = origText, 2500);
+          }
+        }).catch(() => {
+          alert("Tautan: " + linkInput.value);
+        });
+      }
+    }
+
+    const dinoApp = new DinoApp();
+    window.dinoApp = dinoApp;
+
+    // Run directly
+    dinoApp.init();
   </script>
 </body>
 </html>
