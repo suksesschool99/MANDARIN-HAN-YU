@@ -1,18 +1,18 @@
 /**
- * Dino Mandarin Adventure - Match Game Module (Han Yu 1 s/d Han Yu 15)
- * Permainan Kartu Mencocokkan Kata Hanzi & Gambar Berwarna Per-Unit Pelajaran
+ * Dino Mandarin Adventure - Matching Game Module (Han Yu 1 s/d Han Yu 12)
+ * Game Mencocokkan Kosakata dengan Ilustrasi Gambar Per-Unit
  */
 
 class DinoMatchGame {
   constructor() {
+    this.currentBookId = 1;
+    this.currentUnitId = 1;
+    this.pairCount = 6;
     this.cards = [];
     this.flippedCards = [];
     this.matchedPairs = 0;
-    this.totalPairs = 4;
-    this.score = 0;
+    this.totalPairs = 0;
     this.moves = 0;
-    this.currentBookId = 1;
-    this.currentUnitId = 'all';
     this.isLocked = false;
 
     this.init();
@@ -24,33 +24,29 @@ class DinoMatchGame {
     this.bindEvents();
 
     const params = new URLSearchParams(window.location.search);
-    const mod = params.get('mod') || params.get('module');
     const book = parseInt(params.get('book')) || 1;
-    const unit = params.get('unit') || 'all';
-    const pairs = parseInt(params.get('pairs')) || 4;
+    const unit = parseInt(params.get('unit')) || 1;
+    const pairs = parseInt(params.get('pairs')) || 6;
 
     this.currentBookId = book;
     this.currentUnitId = unit;
-    this.totalPairs = pairs;
+    this.pairCount = pairs;
 
     if (this.bookSelect) this.bookSelect.value = this.currentBookId;
-    this.updateUnitDropdown();
-    if (this.unitSelect) this.unitSelect.value = this.currentUnitId;
+    if (this.pairsSelect) this.pairsSelect.value = this.pairCount;
 
-    if (mod === 'match') {
-      this.startNewGame();
-    }
+    this.startNewGame();
   }
 
   cacheDom() {
-    this.boardEl = document.getElementById('match-board');
-    this.scoreEl = document.getElementById('match-score');
-    this.movesEl = document.getElementById('match-moves');
+    this.boardEl = document.getElementById('match-board-grid');
     this.bookSelect = document.getElementById('match-book-select');
     this.unitSelect = document.getElementById('match-unit-select');
-    this.btnRestart = document.getElementById('btn-match-restart');
-    this.diffBtns = document.querySelectorAll('.diff-btn');
-    this.winModal = document.getElementById('match-win-modal');
+    this.pairsSelect = document.getElementById('match-pairs-count');
+    this.btnRestart = document.getElementById('btn-restart-match');
+    this.movesCounterEl = document.getElementById('match-moves-count');
+    this.pairsLeftEl = document.getElementById('match-pairs-left');
+    this.successModal = document.getElementById('match-success-modal');
   }
 
   populateDropdowns() {
@@ -66,13 +62,16 @@ class DinoMatchGame {
     if (!this.unitSelect) return;
     const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[this.currentBookId]) || {};
     const unitKeys = Object.keys(unitMap);
-
-    let html = '<option value="all">Semua Pelajaran (Acak)</option>';
+    let html = '';
     if (unitKeys.length > 0) {
       unitKeys.forEach(u => {
         const title = unitMap[u] || `Unit ${u}`;
         html += `<option value="${u}">Pelajaran ${u} (${title})</option>`;
       });
+    } else {
+      for (let u = 1; u <= 12; u++) {
+        html += `<option value="${u}">Pelajaran ${u}</option>`;
+      }
     }
     this.unitSelect.innerHTML = html;
   }
@@ -81,7 +80,6 @@ class DinoMatchGame {
     if (this.bookSelect) {
       this.bookSelect.addEventListener('change', (e) => {
         this.currentBookId = parseInt(e.target.value) || 1;
-        this.currentUnitId = 'all';
         this.updateUnitDropdown();
         this.startNewGame();
       });
@@ -89,7 +87,14 @@ class DinoMatchGame {
 
     if (this.unitSelect) {
       this.unitSelect.addEventListener('change', (e) => {
-        this.currentUnitId = e.target.value;
+        this.currentUnitId = parseInt(e.target.value) || 1;
+        this.startNewGame();
+      });
+    }
+
+    if (this.pairsSelect) {
+      this.pairsSelect.addEventListener('change', (e) => {
+        this.pairCount = parseInt(e.target.value) || 6;
         this.startNewGame();
       });
     }
@@ -99,129 +104,121 @@ class DinoMatchGame {
         this.startNewGame();
       });
     }
-
-    if (this.diffBtns) {
-      this.diffBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          this.diffBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          this.totalPairs = parseInt(btn.getAttribute('data-pairs')) || 4;
-          this.startNewGame();
-        });
-      });
-    }
   }
 
   startNewGame() {
     this.flippedCards = [];
     this.matchedPairs = 0;
     this.moves = 0;
-    this.score = 0;
     this.isLocked = false;
     this.updateStats();
 
-    if (!window.DINO_DATA || !window.DINO_DATA.matchVocabItems) return;
-
-    let pool = window.DINO_DATA.matchVocabItems;
-    
-    // Filter by book
-    let filtered = pool.filter(item => item.book === this.currentBookId);
-    if (filtered.length === 0) filtered = pool;
-
-    // Filter by unit if not 'all'
-    if (this.currentUnitId !== 'all') {
-      const uId = parseInt(this.currentUnitId);
-      const unitFiltered = filtered.filter(item => item.unit === uId);
-      if (unitFiltered.length >= 2) {
-        filtered = unitFiltered;
+    // Fetch items from vocabList for current book & unit
+    let pool = [];
+    if (window.DINO_DATA && window.DINO_DATA.vocabList) {
+      pool = window.DINO_DATA.vocabList.filter(v => v.book === this.currentBookId && v.unit === this.currentUnitId);
+      if (pool.length < this.pairCount) {
+        const bookPool = window.DINO_DATA.vocabList.filter(v => v.book === this.currentBookId);
+        pool = [...pool, ...bookPool];
+      }
+      if (pool.length < this.pairCount) {
+        pool = window.DINO_DATA.vocabList;
       }
     }
 
-    // Tentukan jumlah pasang yang dimainkan
-    const availablePairs = Math.min(this.totalPairs, filtered.length);
-    const chosenItems = [...filtered].sort(() => Math.random() - 0.5).slice(0, availablePairs);
+    // Deduplicate by hanzi
+    const uniquePool = [];
+    const seen = new Set();
+    for (const item of pool) {
+      if (!seen.has(item.hanzi)) {
+        seen.add(item.hanzi);
+        uniquePool.push(item);
+      }
+    }
 
-    // Gandakan menjadi 2 kartu: Gambar & Teks Hanzi
-    const deck = [];
-    chosenItems.forEach(item => {
-      deck.push({
-        id: `${item.id}-img`,
-        pairId: item.id,
-        type: 'image',
+    // Shuffle and pick
+    const selectedItems = uniquePool.sort(() => Math.random() - 0.5).slice(0, this.pairCount);
+    this.totalPairs = selectedItems.length;
+
+    // Generate 2 cards per item: 1 Picture/Meaning card + 1 Hanzi/Pinyin card
+    const cardDeck = [];
+    selectedItems.forEach((item, idx) => {
+      // Card 1: Picture & Meaning
+      cardDeck.push({
+        pairId: idx,
+        type: 'picture',
         hanzi: item.hanzi,
         pinyin: item.pinyin,
         meaning: item.meaning,
-        svg: item.svg,
-        isFlipped: false,
-        isMatched: false
+        svg: item.svg || `<div style="font-size: 3rem;">🦕</div>`
       });
-      deck.push({
-        id: `${item.id}-txt`,
-        pairId: item.id,
+
+      // Card 2: Hanzi & Pinyin
+      cardDeck.push({
+        pairId: idx,
         type: 'text',
         hanzi: item.hanzi,
         pinyin: item.pinyin,
         meaning: item.meaning,
-        svg: item.svg,
-        isFlipped: false,
-        isMatched: false
+        svg: item.svg
       });
     });
 
-    this.cards = deck.sort(() => Math.random() - 0.5);
-    this.actualTotalPairs = chosenItems.length;
+    // Shuffle deck
+    this.cards = cardDeck.sort(() => Math.random() - 0.5);
     this.renderBoard();
   }
 
   renderBoard() {
     if (!this.boardEl) return;
-
+    this.boardEl.innerHTML = '';
     this.boardEl.className = `match-board-grid grid-pairs-${this.totalPairs}`;
-    this.boardEl.innerHTML = this.cards.map((card, idx) => `
-      <div class="match-card-item" data-index="${idx}">
-        <div class="match-card-inner">
-          <div class="match-card-face match-card-front">
-            <div class="dino-egg-back-icon">🦖</div>
-            <span style="font-size: 0.75rem; font-weight: 800; color: #558b2f;">Buka</span>
+
+    this.cards.forEach((card, index) => {
+      const cardEl = document.createElement('div');
+      cardEl.className = 'dino-card';
+      cardEl.setAttribute('data-index', index);
+
+      let frontContent = '';
+      let backContent = '';
+
+      if (card.type === 'picture') {
+        backContent = `
+          <div class="card-svg-wrap">${card.svg}</div>
+          <div class="card-meaning-label">${card.meaning}</div>
+        `;
+      } else {
+        backContent = `
+          <div class="card-hanzi-text">${card.hanzi}</div>
+          <div class="card-pinyin-label">${card.pinyin}</div>
+        `;
+      }
+
+      cardEl.innerHTML = `
+        <div class="dino-card-inner">
+          <div class="dino-card-front">
+            <span class="card-pattern-icon">🦖</span>
           </div>
-          <div class="match-card-face match-card-back ${card.type}">
-            ${card.type === 'image' ? `
-              <div class="card-img-wrap">${card.svg}</div>
-              <div class="card-meaning-text">${card.meaning}</div>
-            ` : `
-              <div class="card-hanzi-text">${card.hanzi}</div>
-              <div class="card-pinyin-text">${card.pinyin}</div>
-              <div class="card-meaning-text">${card.meaning}</div>
-            `}
+          <div class="dino-card-back">
+            ${backContent}
           </div>
         </div>
-      </div>
-    `).join('');
+      `;
 
-    const cardDoms = this.boardEl.querySelectorAll('.match-card-item');
-    cardDoms.forEach(dom => {
-      dom.addEventListener('click', () => {
-        const idx = parseInt(dom.getAttribute('data-index'));
-        this.flipCard(idx, dom);
-      });
+      cardEl.addEventListener('click', () => this.handleCardClick(index, cardEl));
+      this.boardEl.appendChild(cardEl);
     });
+
+    this.updateStats();
   }
 
-  flipCard(idx, domEl) {
+  handleCardClick(index, cardEl) {
     if (this.isLocked) return;
-    const card = this.cards[idx];
-    if (card.isFlipped || card.isMatched) return;
+    if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
 
-    card.isFlipped = true;
-    domEl.classList.add('flipped');
-    this.flippedCards.push({ card, domEl });
-
-    if (window.dinoAudio) {
-      window.dinoAudio.playEggCrack();
-      if (card.type === 'text' || card.type === 'image') {
-        window.dinoAudio.speakMandarin(card.hanzi);
-      }
-    }
+    if (window.dinoAudio) window.dinoAudio.playCardFlip();
+    cardEl.classList.add('flipped');
+    this.flippedCards.push({ index, cardEl, data: this.cards[index] });
 
     if (this.flippedCards.length === 2) {
       this.moves++;
@@ -234,81 +231,55 @@ class DinoMatchGame {
     this.isLocked = true;
     const [c1, c2] = this.flippedCards;
 
-    if (c1.card.pairId === c2.card.pairId) {
+    if (c1.data.pairId === c2.data.pairId && c1.index !== c2.index) {
       // Cocok!
       setTimeout(() => {
-        c1.card.isMatched = true;
-        c2.card.isMatched = true;
-        c1.domEl.classList.add('matched');
-        c2.domEl.classList.add('matched');
+        c1.cardEl.classList.add('matched');
+        c2.cardEl.classList.add('matched');
+
+        if (window.dinoAudio) {
+          window.dinoAudio.playMatchSuccess();
+          window.dinoAudio.speakMandarinSlow(c1.data.hanzi);
+        }
 
         this.matchedPairs++;
-        this.score += 25;
-        this.updateStats();
-
-        if (window.dinoAudio) window.dinoAudio.playApplause();
-
         this.flippedCards = [];
         this.isLocked = false;
+        this.updateStats();
 
-        if (this.matchedPairs >= this.actualTotalPairs) {
-          setTimeout(() => {
-            this.handleGameWon();
-          }, 600);
+        if (this.matchedPairs === this.totalPairs) {
+          this.handleGameComplete();
         }
       }, 500);
     } else {
       // Tidak Cocok
       setTimeout(() => {
-        if (window.dinoAudio) window.dinoAudio.playDinoRoar();
-
-        c1.domEl.classList.add('shake-wrong');
-        c2.domEl.classList.add('shake-wrong');
-
-        setTimeout(() => {
-          c1.card.isFlipped = false;
-          c2.card.isFlipped = false;
-          c1.domEl.classList.remove('flipped', 'shake-wrong');
-          c2.domEl.classList.remove('flipped', 'shake-wrong');
-
-          this.flippedCards = [];
-          this.isLocked = false;
-        }, 600);
-      }, 700);
+        if (window.dinoAudio) {
+          window.dinoAudio.playDinoRoar();
+        }
+        c1.cardEl.classList.remove('flipped');
+        c2.cardEl.classList.remove('flipped');
+        this.flippedCards = [];
+        this.isLocked = false;
+      }, 1000);
     }
   }
 
   updateStats() {
-    if (this.scoreEl) this.scoreEl.textContent = this.score;
-    if (this.movesEl) this.movesEl.textContent = this.moves;
+    if (this.movesCounterEl) this.movesCounterEl.textContent = this.moves;
+    if (this.pairsLeftEl) this.pairsLeftEl.textContent = `${this.matchedPairs} / ${this.totalPairs}`;
   }
 
-  handleGameWon() {
-    if (window.dinoAudio) window.dinoAudio.playFanfare();
-
-    if (this.winModal) {
-      this.winModal.classList.add('show');
-      this.winModal.style.display = 'flex';
-      const scoreEl = document.getElementById('win-score-display');
-      const movesEl = document.getElementById('win-moves-display');
-      if (scoreEl) scoreEl.textContent = this.score;
-      if (movesEl) movesEl.textContent = this.moves;
-
-      const btnPlayAgain = document.getElementById('btn-play-again-match');
-      if (btnPlayAgain) {
-        btnPlayAgain.onclick = () => {
-          this.winModal.classList.remove('show');
-          this.winModal.style.display = 'none';
-          this.startNewGame();
-        };
-      }
-    } else {
-      alert(`🎉 Selamat! Kamu berhasil mencocokkan semua kartu!\nSkor: ${this.score} • Langkah: ${this.moves}`);
+  handleGameComplete() {
+    if (window.dinoAudio) {
+      window.dinoAudio.playApplause();
+    }
+    if (this.successModal) {
+      this.successModal.classList.add('active');
     }
   }
 }
 
-// Global exposure
 if (typeof window !== 'undefined') {
   window.DinoMatchGame = DinoMatchGame;
 }

@@ -1,5 +1,5 @@
 /**
- * Dino Mandarin Adventure - Story Reader Module (Han Yu 1 s/d Han Yu 15)
+ * Dino Mandarin Adventure - Story Reader Module (Han Yu 1 s/d Han Yu 12)
  * Membaca Teks Pelajaran & Cerita Per-Unit dengan Pengaturan Kecepatan Lamban & Intonasi Akurat
  */
 
@@ -21,7 +21,6 @@ class DinoStoryReader {
     this.bindEvents();
 
     const params = new URLSearchParams(window.location.search);
-    const mod = params.get('mod') || params.get('module');
     const book = parseInt(params.get('book')) || 1;
     const unit = parseInt(params.get('unit')) || 1;
 
@@ -96,10 +95,17 @@ class DinoStoryReader {
     // Update dropdown unit
     if (this.unitSelect) {
       const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[this.currentBookId]) || {};
+      const unitKeys = Object.keys(unitMap);
       let html = '';
-      for (let u = 1; u <= 10; u++) {
-        const title = unitMap[u] || `Unit ${u}`;
-        html += `<option value="${u}" ${u === this.currentUnitId ? 'selected' : ''}>Unit ${u} (${title})</option>`;
+      if (unitKeys.length > 0) {
+        unitKeys.forEach(u => {
+          const title = unitMap[u] || `Unit ${u}`;
+          html += `<option value="${u}" ${parseInt(u) === this.currentUnitId ? 'selected' : ''}>Pelajaran ${u} (${title})</option>`;
+        });
+      } else {
+        for (let u = 1; u <= 12; u++) {
+          html += `<option value="${u}" ${u === this.currentUnitId ? 'selected' : ''}>Pelajaran ${u}</option>`;
+        }
       }
       this.unitSelect.innerHTML = html;
       this.unitSelect.value = this.currentUnitId;
@@ -147,87 +153,73 @@ class DinoStoryReader {
 
   playSentence(index) {
     if (!this.currentStory || !this.currentStory.sentences[index]) return;
-    const s = this.currentStory.sentences[index];
-
     this.highlightSentence(index);
 
+    const s = this.currentStory.sentences[index];
     if (window.dinoAudio) {
-      window.dinoAudio.speakMandarin(s.hanzi, () => {
-        if (!this.isPlayingAll) {
-          this.unhighlightAll();
-        }
-      }, this.currentSpeed);
+      window.dinoAudio.speakMandarinSlow(s.hanzi, this.currentSpeed, () => {
+        this.unhighlightSentence(index);
+      });
     }
   }
 
   playFullStory() {
-    if (!this.currentStory || this.currentStory.sentences.length === 0) return;
+    if (!this.currentStory || !this.currentStory.sentences || this.currentStory.sentences.length === 0) return;
+
     this.isPlayingAll = true;
-    this.activeSentenceIndex = 0;
+    if (this.btnPlayAllStory) this.btnPlayAllStory.classList.add('playing');
 
-    if (this.btnPlayAllStory) this.btnPlayAllStory.style.display = 'none';
-    if (this.btnStopStory) this.btnStopStory.style.display = 'inline-flex';
-
-    this.playNextSentenceInSequence();
-  }
-
-  playNextSentenceInSequence() {
-    if (!this.isPlayingAll || !this.currentStory) return;
-
-    if (this.activeSentenceIndex >= this.currentStory.sentences.length) {
-      this.stopStory();
-      if (window.dinoAudio) {
-        window.dinoAudio.playApplause();
+    let currentIdx = 0;
+    const playNext = () => {
+      if (!this.isPlayingAll || currentIdx >= this.currentStory.sentences.length) {
+        this.stopStory();
+        return;
       }
-      return;
-    }
 
-    const idx = this.activeSentenceIndex;
-    const s = this.currentStory.sentences[idx];
-    this.highlightSentence(idx);
+      this.highlightSentence(currentIdx);
+      const s = this.currentStory.sentences[currentIdx];
 
-    if (window.dinoAudio) {
-      window.dinoAudio.speakMandarin(s.hanzi, () => {
-        if (this.isPlayingAll) {
-          this.activeSentenceIndex++;
-          setTimeout(() => {
-            this.playNextSentenceInSequence();
-          }, 800);
-        }
-      }, this.currentSpeed);
-    }
+      if (window.dinoAudio) {
+        window.dinoAudio.speakMandarinSlow(s.hanzi, this.currentSpeed, () => {
+          this.unhighlightSentence(currentIdx);
+          currentIdx++;
+          setTimeout(playNext, 600); // Jeda santai antar kalimat
+        });
+      }
+    };
+
+    playNext();
   }
 
   stopStory() {
     this.isPlayingAll = false;
-    this.activeSentenceIndex = -1;
-    this.unhighlightAll();
-
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
+    if (this.btnPlayAllStory) this.btnPlayAllStory.classList.remove('playing');
+    if (window.dinoAudio) {
+      window.dinoAudio.stopSpeaking();
     }
-
-    if (this.btnPlayAllStory) this.btnPlayAllStory.style.display = 'inline-flex';
-    if (this.btnStopStory) this.btnStopStory.style.display = 'none';
+    const cards = document.querySelectorAll('.story-sentence-card');
+    cards.forEach(c => c.classList.remove('playing-active'));
   }
 
   highlightSentence(index) {
-    this.unhighlightAll();
-    const card = document.getElementById(`story-sentence-${index}`);
-    if (card) {
-      card.classList.add('playing-active');
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const cards = document.querySelectorAll('.story-sentence-card');
+    cards.forEach(c => c.classList.remove('playing-active'));
+
+    const activeCard = document.getElementById(`story-sentence-${index}`);
+    if (activeCard) {
+      activeCard.classList.add('playing-active');
+      activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }
 
-  unhighlightAll() {
-    if (!this.sentencesContainer) return;
-    const cards = this.sentencesContainer.querySelectorAll('.story-sentence-card');
-    cards.forEach(c => c.classList.remove('playing-active'));
+  unhighlightSentence(index) {
+    const activeCard = document.getElementById(`story-sentence-${index}`);
+    if (activeCard) {
+      activeCard.classList.remove('playing-active');
+    }
   }
 }
 
-// Global window exposure
 if (typeof window !== 'undefined') {
   window.DinoStoryReader = DinoStoryReader;
 }

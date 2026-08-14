@@ -1,276 +1,217 @@
 /**
  * Dino Mandarin Adventure - Main App Controller
- * Navigasi Modul, Generator Link Guru, & Student Task Parser (tugas.html)
+ * Navigasi Tab 5 Modul, Sinkronisasi Buku & Unit, Pengaturan Audio Global
  */
 
-function initDinoApp() {
-  // 1. Inisialisasi Audio Engine
-  if (typeof DinoAudioEngine !== 'undefined') {
-    window.dinoAudio = new DinoAudioEngine();
+class DinoApp {
+  constructor() {
+    this.strokeWriter = null;
+    this.storyReader = null;
+    this.matchGame = null;
+    this.quiz = null;
+    this.pdfViewer = null;
+
+    this.init();
   }
 
-  // 2. Inisialisasi Seluruh Modul
-  if (typeof DinoStrokeWriter !== 'undefined') {
-    window.dinoWriter = new DinoStrokeWriter();
-  }
-  if (typeof DinoStoryReader !== 'undefined') {
-    window.dinoStory = new DinoStoryReader();
-  }
-  if (typeof DinoMatchGame !== 'undefined') {
-    window.dinoMatch = new DinoMatchGame();
-  }
-  if (typeof DinoQuiz !== 'undefined') {
-    window.dinoQuiz = new DinoQuiz();
+  init() {
+    this.initAudioControls();
+    this.initNavigationTabs();
+    this.initModules();
+    this.initTeacherTaskModal();
+    this.checkStudentTaskUrl();
   }
 
-  // 3. Bind Tab Navigasi
-  bindNavigationTabs();
+  initAudioControls() {
+    const btnSfx = document.getElementById('btn-toggle-sfx');
+    const btnVoice = document.getElementById('btn-toggle-voice');
 
-  // 4. Bind Audio Controls di Header
-  bindAudioControls();
+    if (btnSfx) {
+      btnSfx.addEventListener('click', () => {
+        if (window.dinoAudio) {
+          const state = window.dinoAudio.toggleSfx();
+          btnSfx.innerHTML = state ? '🔊 Efek: ON' : '🔇 Efek: OFF';
+          btnSfx.classList.toggle('off', !state);
+        }
+      });
+    }
 
-  // 5. Parse Parameter URL Siswa (tugas.html)
-  parseStudentUrlParams();
-
-  // 6. Bind Generator Link Guru
-  bindTeacherGenerator();
-}
-
-function bindNavigationTabs() {
-  const tabBtns = document.querySelectorAll('.nav-tab-btn');
-  const sections = document.querySelectorAll('.app-module-section');
-
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-target');
-      switchTab(targetId);
-    });
-  });
-}
-
-function switchTab(targetModuleId) {
-  const tabBtns = document.querySelectorAll('.nav-tab-btn');
-  const sections = document.querySelectorAll('.app-module-section');
-
-  tabBtns.forEach(b => {
-    b.classList.toggle('active', b.getAttribute('data-target') === targetModuleId);
-  });
-
-  sections.forEach(sec => {
-    const isActive = sec.id === targetModuleId;
-    sec.classList.toggle('active', isActive);
-  });
-
-  if (window.dinoAudio) window.dinoAudio.playPop();
-
-  // Trigger modul spesifik jika baru dibuka
-  if (targetModuleId === 'module-stroke' && window.dinoWriter) {
-    window.dinoWriter.initWriter();
-  } else if (targetModuleId === 'module-story' && window.dinoStory) {
-    // refresh story jika perlu
-  } else if (targetModuleId === 'module-match' && window.dinoMatch) {
-    if (window.dinoMatch.cards.length === 0) window.dinoMatch.startNewGame();
-  } else if (targetModuleId === 'module-quiz' && window.dinoQuiz) {
-    if (window.dinoQuiz.questions.length === 0) window.dinoQuiz.startQuiz();
-  }
-}
-
-function bindAudioControls() {
-  const btnToggleSfx = document.getElementById('btn-toggle-sfx');
-  const btnToggleVoice = document.getElementById('btn-toggle-voice');
-
-  if (btnToggleSfx && window.dinoAudio) {
-    btnToggleSfx.addEventListener('click', () => {
-      const enabled = window.dinoAudio.toggleSfx();
-      btnToggleSfx.classList.toggle('muted', !enabled);
-      btnToggleSfx.innerHTML = enabled ? '🔊 Efek: ON' : '🔇 Efek: OFF';
-    });
-  }
-
-  if (btnToggleVoice && window.dinoAudio) {
-    btnToggleVoice.addEventListener('click', () => {
-      const enabled = window.dinoAudio.toggleVoice();
-      btnToggleVoice.classList.toggle('muted', !enabled);
-      btnToggleVoice.innerHTML = enabled ? '🗣️ Suara: ON' : '🤐 Suara: OFF';
-    });
-  }
-}
-
-function parseStudentUrlParams() {
-  const params = new URLSearchParams(window.location.search);
-  const mod = params.get('mod') || params.get('module');
-  const taskTitle = params.get('task') || params.get('title');
-  const book = parseInt(params.get('book')) || 1;
-  const unit = parseInt(params.get('unit')) || 1;
-  const reps = parseInt(params.get('reps')) || 3;
-
-  const banner = document.getElementById('student-task-banner');
-  const taskTitleEl = document.getElementById('student-task-title');
-  const taskDescEl = document.getElementById('student-task-desc');
-
-  if (taskTitle || mod) {
-    if (banner) banner.style.display = 'block';
-    if (taskTitleEl) taskTitleEl.textContent = taskTitle || 'Tugas Mandiri Siswa';
-    
-    let descText = `Buku Han Yu ${book} • Unit ${unit}`;
-    if (mod === 'stroke') descText += ` • Target: ${reps}x Tulis Telur Menetas`;
-    if (mod === 'story') descText += ` • Membaca Cerita & Teks Pelajaran`;
-    if (mod === 'match') descText += ` • Game Mencocokkan Pasangan Kartu`;
-    if (mod === 'quiz') descText += ` • Kuis Pilihan Berganda Ber-Audio`;
-    if (taskDescEl) taskDescEl.textContent = descText;
-
-    // Arahkan ke modul yang diminta dan load data sesuai unit
-    if (mod === 'stroke') {
-      switchTab('module-stroke');
-      if (window.dinoWriter) {
-        window.dinoWriter.targetReps = reps;
-        window.dinoWriter.loadBookUnit(book, unit);
-      }
-    } else if (mod === 'story') {
-      switchTab('module-story');
-      if (window.dinoStory) {
-        window.dinoStory.loadBookUnitStory(book, unit);
-      }
-    } else if (mod === 'match') {
-      switchTab('module-match');
-      if (window.dinoMatch) {
-        window.dinoMatch.currentBookId = book;
-        window.dinoMatch.currentUnitId = unit.toString();
-        if (window.dinoMatch.bookSelect) window.dinoMatch.bookSelect.value = book;
-        window.dinoMatch.updateUnitDropdown();
-        if (window.dinoMatch.unitSelect) window.dinoMatch.unitSelect.value = unit.toString();
-        window.dinoMatch.startNewGame();
-      }
-    } else if (mod === 'quiz') {
-      switchTab('module-quiz');
-      if (window.dinoQuiz) {
-        window.dinoQuiz.currentBookId = book;
-        window.dinoQuiz.currentUnitId = unit.toString();
-        if (window.dinoQuiz.bookSelect) window.dinoQuiz.bookSelect.value = book;
-        window.dinoQuiz.updateUnitDropdown();
-        if (window.dinoQuiz.unitSelect) window.dinoQuiz.unitSelect.value = unit.toString();
-        window.dinoQuiz.startQuiz();
-      }
+    if (btnVoice) {
+      btnVoice.addEventListener('click', () => {
+        if (window.dinoAudio) {
+          const state = window.dinoAudio.toggleVoice();
+          btnVoice.innerHTML = state ? '🗣️ Suara: ON' : '🤐 Suara: OFF';
+          btnVoice.classList.toggle('off', !state);
+        }
+      });
     }
   }
-}
 
-function bindTeacherGenerator() {
-  const btnOpenModal = document.getElementById('btn-open-teacher-modal');
-  const modal = document.getElementById('teacher-generator-modal');
-  const btnClose = document.getElementById('btn-close-teacher-modal');
-  const btnGenerate = document.getElementById('btn-generate-link');
-  const btnCopy = document.getElementById('btn-copy-link');
-  const btnTestOpen = document.getElementById('btn-test-open-link');
+  initNavigationTabs() {
+    const tabBtns = document.querySelectorAll('.nav-tab-btn');
+    const sections = document.querySelectorAll('.app-module-section');
 
-  const modSelect = document.getElementById('gen-module-select');
-  const bookSelect = document.getElementById('gen-book-select');
-  const unitSelect = document.getElementById('gen-unit-select');
-  const repsSelect = document.getElementById('gen-reps-select');
-  const repsGroup = document.getElementById('gen-reps-group');
-  const titleInput = document.getElementById('gen-task-title');
-  const outputInput = document.getElementById('gen-output-url');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
 
-  if (btnOpenModal && modal) {
-    btnOpenModal.addEventListener('click', () => {
-      modal.classList.add('show');
-      modal.style.display = 'flex';
-      populateTeacherBooks();
-      updateTeacherUnits();
-    });
-  }
+        tabBtns.forEach(b => b.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
 
-  if (btnClose && modal) {
-    btnClose.addEventListener('click', () => {
-      modal.classList.remove('show');
-      modal.style.display = 'none';
-    });
-  }
+        btn.classList.add('active');
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.classList.add('active');
+        }
 
-  if (modSelect) {
-    modSelect.addEventListener('change', () => {
-      const isStroke = modSelect.value === 'stroke';
-      if (repsGroup) repsGroup.style.display = isStroke ? 'block' : 'none';
-    });
-  }
+        // Hentikan suara bacaan jika berpindah tab
+        if (window.dinoAudio) {
+          window.dinoAudio.stopSpeaking();
+        }
 
-  if (bookSelect) {
-    bookSelect.addEventListener('change', () => {
-      updateTeacherUnits();
-    });
-  }
-
-  if (btnGenerate && outputInput) {
-    btnGenerate.addEventListener('click', () => {
-      const mod = modSelect ? modSelect.value : 'stroke';
-      const book = bookSelect ? bookSelect.value : '1';
-      const unit = unitSelect ? unitSelect.value : '1';
-      const reps = repsSelect ? repsSelect.value : '3';
-      const title = titleInput && titleInput.value ? titleInput.value.trim() : `Tugas Han Yu ${book} Unit ${unit}`;
-
-      // Buat URL yang mengarah langsung ke tugas.html
-      const currentUrl = window.location.href.split('?')[0].replace('index.html', '').replace(/\/$/, '');
-      const baseUrl = currentUrl.endsWith('.html') ? currentUrl.substring(0, currentUrl.lastIndexOf('/')) : currentUrl;
-      
-      const link = `${baseUrl}/tugas.html?mod=${mod}&book=${book}&unit=${unit}&reps=${reps}&task=${encodeURIComponent(title)}`;
-      outputInput.value = link;
-
-      const linkContainer = document.getElementById('generated-link-container');
-      if (linkContainer) linkContainer.style.display = 'block';
-    });
-  }
-
-  if (btnCopy && outputInput) {
-    btnCopy.addEventListener('click', () => {
-      outputInput.select();
-      navigator.clipboard.writeText(outputInput.value).then(() => {
-        btnCopy.textContent = '✅ Berhasil Disalin!';
-        setTimeout(() => { btnCopy.textContent = '📋 Salin Link Tugas'; }, 2000);
+        // Sinkronisasi data saat tab aktif
+        if (targetId === 'module-pdf' && this.pdfViewer) {
+          this.pdfViewer.loadPdf(this.pdfViewer.currentBookId);
+        }
       });
     });
-  }
 
-  if (btnTestOpen && outputInput) {
-    btnTestOpen.addEventListener('click', () => {
-      if (outputInput.value) {
-        window.open(outputInput.value, '_blank');
+    // Check URL parameters for default active tab
+    const params = new URLSearchParams(window.location.search);
+    const mod = params.get('mod') || params.get('module');
+    if (mod) {
+      const tabMap = {
+        'pdf': 'tab-btn-pdf',
+        'stroke': 'tab-btn-stroke',
+        'story': 'tab-btn-story',
+        'match': 'tab-btn-match',
+        'quiz': 'tab-btn-quiz'
+      };
+      const btnId = tabMap[mod];
+      if (btnId) {
+        const targetBtn = document.getElementById(btnId);
+        if (targetBtn) targetBtn.click();
       }
-    });
-  }
-}
-
-function populateTeacherBooks() {
-  const select = document.getElementById('gen-book-select');
-  if (!select) return;
-  if (window.DINO_DATA && window.DINO_DATA.books) {
-    select.innerHTML = window.DINO_DATA.books.map(b => `
-      <option value="${b.id}">${b.title}</option>
-    `).join('');
-  }
-}
-
-function updateTeacherUnits() {
-  const bookSelect = document.getElementById('gen-book-select');
-  const unitSelect = document.getElementById('gen-unit-select');
-  if (!bookSelect || !unitSelect) return;
-
-  const bookId = parseInt(bookSelect.value) || 1;
-  const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[bookId]) || {};
-  const unitKeys = Object.keys(unitMap);
-
-  let html = '';
-  if (unitKeys.length > 0) {
-    unitKeys.forEach(u => {
-      const title = unitMap[u] || `Unit ${u}`;
-      html += `<option value="${u}">Pelajaran ${u} (${title})</option>`;
-    });
-  } else {
-    for (let u = 1; u <= 10; u++) {
-      html += `<option value="${u}">Pelajaran ${u}</option>`;
     }
   }
-  unitSelect.innerHTML = html;
+
+  initModules() {
+    if (typeof DinoStrokeWriter !== 'undefined') {
+      this.strokeWriter = new DinoStrokeWriter();
+    }
+    if (typeof DinoStoryReader !== 'undefined') {
+      this.storyReader = new DinoStoryReader();
+    }
+    if (typeof DinoMatchGame !== 'undefined') {
+      this.matchGame = new DinoMatchGame();
+    }
+    if (typeof DinoQuiz !== 'undefined') {
+      this.quiz = new DinoQuiz();
+    }
+    if (typeof DinoPdfViewer !== 'undefined') {
+      this.pdfViewer = new DinoPdfViewer();
+    }
+  }
+
+  initTeacherTaskModal() {
+    const btnOpenModal = document.getElementById('btn-open-teacher-modal');
+    const modal = document.getElementById('teacher-task-modal');
+    const btnCloseModal = document.getElementById('btn-close-task-modal');
+    const btnGenerateLink = document.getElementById('btn-generate-task-link');
+    const generatedInput = document.getElementById('task-generated-url');
+    const btnCopyLink = document.getElementById('btn-copy-task-link');
+
+    if (btnOpenModal && modal) {
+      btnOpenModal.addEventListener('click', () => {
+        modal.classList.add('active');
+        this.populateModalDropdowns();
+      });
+    }
+
+    if (btnCloseModal && modal) {
+      btnCloseModal.addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+    }
+
+    if (btnGenerateLink) {
+      btnGenerateLink.addEventListener('click', () => {
+        const mod = document.getElementById('task-module-select').value;
+        const book = document.getElementById('task-book-select').value;
+        const unit = document.getElementById('task-unit-select').value;
+        const reps = document.getElementById('task-reps-select').value;
+
+        const baseUrl = window.location.origin + window.location.pathname.replace('tugas.html', 'index.html');
+        const finalUrl = `${baseUrl}?mod=${mod}&book=${book}&unit=${unit}&reps=${reps}`;
+
+        if (generatedInput) {
+          generatedInput.value = finalUrl;
+        }
+      });
+    }
+
+    if (btnCopyLink && generatedInput) {
+      btnCopyLink.addEventListener('click', () => {
+        generatedInput.select();
+        document.execCommand('copy');
+        btnCopyLink.textContent = '✅ Berhasil Disalin!';
+        setTimeout(() => {
+          btnCopyLink.textContent = '📋 Salin Link';
+        }, 2000);
+      });
+    }
+  }
+
+  populateModalDropdowns() {
+    const bookSel = document.getElementById('task-book-select');
+    const unitSel = document.getElementById('task-unit-select');
+    if (!bookSel || !window.DINO_DATA) return;
+
+    bookSel.innerHTML = window.DINO_DATA.books.map(b => `
+      <option value="${b.id}">${b.title}</option>
+    `).join('');
+
+    const updateUnits = () => {
+      const bId = parseInt(bookSel.value) || 1;
+      const unitMap = (window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[bId]) || {};
+      const keys = Object.keys(unitMap);
+      let html = '';
+      if (keys.length > 0) {
+        keys.forEach(k => {
+          html += `<option value="${k}">Pelajaran ${k} (${unitMap[k]})</option>`;
+        });
+      } else {
+        for (let u = 1; u <= 12; u++) {
+          html += `<option value="${u}">Pelajaran ${u}</option>`;
+        }
+      }
+      if (unitSel) unitSel.innerHTML = html;
+    };
+
+    bookSel.addEventListener('change', updateUnits);
+    updateUnits();
+  }
+
+  checkStudentTaskUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const book = params.get('book');
+    const unit = params.get('unit');
+    const mod = params.get('mod');
+
+    if (book && unit) {
+      const banner = document.getElementById('student-task-banner');
+      const descEl = document.getElementById('student-task-desc');
+      if (banner) {
+        banner.style.display = 'block';
+        if (descEl) {
+          descEl.textContent = `Buku Han Yu ${book} • Pelajaran ${unit} • Modul: ${mod || 'Latihan'}`;
+        }
+      }
+    }
+  }
 }
 
-// Global initialization
-window.addEventListener('DOMContentLoaded', initDinoApp);
+// Inisialisasi Otomatis saat DOM Siap
+document.addEventListener('DOMContentLoaded', () => {
+  window.dinoApp = new DinoApp();
+});
