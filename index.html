@@ -3,681 +3,273 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dino Mandarin Adventure - Han Yu 1 s/d Han Yu 12 (Lengkap Ber-Audio)</title>
-  <meta name="description" content="Aplikasi interaktif belajar bahasa Mandarin anak SD bertema dinosaurus berdasarkan materi PDF Han Yu 1 sampai Han Yu 12. Latihan menulis guratan 3-6x, baca cerita audio pelan, cocokkan gambar, kuis ber-audio KKM 70 berhadiah piala emas.">
-
-  <!-- Google Fonts: Fredoka & Noto Sans SC -->
+  <title>Platform Pembelajaran Bahasa Mandarin Han Yu 1 - 12 (Tema Dinosaurus)</title>
+  <meta name="description" content="Platform Edukasi Mandarin Interaktif Han Yu 1 sampai Han Yu 12 berbasis kurikulum Beijing Chinese Language and Culture College dengan Tema Dinosaurus Ceria untuk Anak SD.">
+  
+  <!-- Google Fonts & Stylesheets -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
-
-  <!-- External Stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/components.css">
-
-  <style>
-    /* Inline CSS Safety Net to guarantee 100% beautiful styling */
-    :root {
-      --dino-green-deep: #1b5e20;
-      --dino-green-main: #2e7d32;
-      --dino-green-light: #4caf50;
-      --dino-green-mint: #e8f5e9;
-      --dino-green-soft: #c8e6c9;
-      --dino-amber-deep: #e65100;
-      --dino-amber-main: #ff9800;
-      --dino-amber-light: #ffc107;
-      --dino-amber-soft: #fff3e0;
-      --dino-slate: #263238;
-      --dino-slate-light: #eceff1;
-      --dino-slate-border: #cfd8dc;
-      --dino-blue: #0288d1;
-      --dino-bg: #f5f9f6;
-      --radius-md: 14px;
-      --radius-lg: 20px;
-      --radius-xl: 28px;
-      --radius-pill: 9999px;
-      --font-main: 'Fredoka', 'Quicksand', system-ui, sans-serif;
-      --font-chinese: 'Noto Sans SC', 'KaiTi', sans-serif;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--font-main); background: var(--dino-bg); color: #212121; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
-    .dino-header { background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 60%, #388e3c 100%); color: white; padding: 14px 20px; box-shadow: 0 3px 12px rgba(27,94,32,0.25); position: sticky; top: 0; z-index: 100; }
-    .header-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-    .logo-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; }
-    .brand-dino-avatar { font-size: 2.2rem; background: rgba(255,255,255,0.2); width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
-    .brand-main-title { font-size: 1.35rem; font-weight: 900; }
-    .brand-sub-title { font-size: 0.82rem; color: #c8e6c9; font-weight: 600; }
-    .header-action-controls { display: flex; align-items: center; gap: 10px; }
-    .audio-toggle-btn { background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.4); color: white; padding: 7px 14px; border-radius: var(--radius-pill); font-family: var(--font-main); font-size: 0.88rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-    .audio-toggle-btn.teacher-btn { background: var(--dino-amber-main); border-color: #ffe082; color: #3e2723; box-shadow: 0 3px 0 #e65100; }
-    .nav-tabs-bar { background: white; border-bottom: 2px solid var(--dino-slate-border); position: sticky; top: 76px; z-index: 90; }
-    .tabs-container { max-width: 1200px; margin: 0 auto; display: flex; overflow-x: auto; padding: 6px 16px; gap: 8px; }
-    .nav-tab-btn { background: transparent; border: none; padding: 10px 18px; border-radius: var(--radius-md); font-family: var(--font-main); font-size: 0.95rem; font-weight: 700; color: #546e7a; cursor: pointer; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
-    .nav-tab-btn.active { background: var(--dino-green-main); color: white; }
-    .main-content { flex: 1; max-width: 1200px; width: 100%; margin: 20px auto; padding: 0 16px; }
-    .app-module-section { display: none; }
-    .app-module-section.active { display: block; }
-    .module-header-banner { background: white; border-radius: var(--radius-lg); padding: 18px 24px; margin-bottom: 18px; border: 2px solid var(--dino-slate-border); display: flex; align-items: center; gap: 16px; }
-    .module-title-icon { font-size: 2.2rem; background: var(--dino-green-mint); width: 56px; height: 56px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; }
-    .module-heading { font-size: 1.35rem; font-weight: 800; color: var(--dino-green-deep); }
-    .module-desc { font-size: 0.92rem; color: #546e7a; }
-    .curriculum-selector-bar { background: white; padding: 14px 20px; border-radius: var(--radius-lg); border: 1.5px solid var(--dino-slate-border); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
-    .selector-group { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; }
-    .filter-select-item { display: flex; align-items: center; gap: 8px; }
-    .filter-label { font-size: 0.9rem; font-weight: 700; color: var(--dino-slate); }
-    .dino-select-primary { padding: 8px 14px; border-radius: var(--radius-md); border: 2px solid var(--dino-slate-border); background: white; font-family: var(--font-main); font-size: 0.92rem; font-weight: 700; color: var(--dino-slate); cursor: pointer; outline: none; }
-    .dino-btn-action { background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); color: white; border: none; padding: 10px 22px; border-radius: var(--radius-pill); font-family: var(--font-main); font-size: 0.95rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 #1b5e20; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-    .dino-btn-outline { background: white; border: 2px solid var(--dino-slate-border); color: var(--dino-slate); padding: 10px 20px; border-radius: var(--radius-pill); font-family: var(--font-main); font-size: 0.95rem; font-weight: 700; cursor: pointer; }
-    .dino-btn-audio-circle { background: var(--dino-green-mint); border: 2px solid var(--dino-green-main); color: var(--dino-green-deep); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; cursor: pointer; }
-    .stroke-module-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 20px; }
-    .stroke-canvas-card { background: white; border-radius: var(--radius-lg); padding: 22px; border: 2px solid var(--dino-slate-border); display: flex; flex-direction: column; align-items: center; }
-    .stroke-char-pinyin { font-size: 1.6rem; font-weight: 800; color: var(--dino-blue); }
-    .stroke-char-meaning { font-size: 1.05rem; font-weight: 700; color: #546e7a; }
-    .writer-box-wrap { position: relative; width: 260px; height: 260px; background: #fffdf9; border: 4px solid #ffb74d; border-radius: var(--radius-md); margin: 12px 0; }
-    .mizige-grid-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-    #character-target-div { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; }
-    .reps-tracker-box { width: 100%; background: var(--dino-amber-soft); border: 2px solid #ffe082; border-radius: var(--radius-md); padding: 12px 16px; margin: 14px 0; text-align: center; }
-    .egg-items-row { display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .egg-item { background: white; border: 2px solid #ffe082; border-radius: var(--radius-md); padding: 8px 12px; display: flex; flex-direction: column; align-items: center; font-size: 1.6rem; }
-    .stroke-ctrl-buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
-    .stroke-guide-card { background: white; border-radius: var(--radius-lg); padding: 22px; border: 2px solid var(--dino-slate-border); display: flex; flex-direction: column; gap: 16px; }
-    .guide-box-title { font-size: 1.1rem; font-weight: 800; color: var(--dino-slate); border-bottom: 2px solid var(--dino-slate-light); padding-bottom: 8px; }
-    .stroke-char-chips-wrap { display: flex; flex-wrap: wrap; gap: 8px; max-height: 180px; overflow-y: auto; padding: 4px; }
-    .stroke-char-chip { background: #fafafa; border: 2px solid var(--dino-slate-border); border-radius: var(--radius-md); padding: 8px 12px; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
-    .stroke-char-chip.active { background: var(--dino-green-mint); border-color: var(--dino-green-main); }
-    .chip-hanzi { font-family: var(--font-chinese); font-size: 1.35rem; font-weight: 800; }
-    .chip-pinyin { font-size: 0.75rem; font-weight: 700; color: var(--dino-blue); }
-    .stroke-steps-list { list-style: none; display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; }
-    .step-item { background: var(--dino-slate-light); padding: 8px 14px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-    .step-num { background: var(--dino-green-main); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; }
-    .dino-footer { background: white; border-top: 1.5px solid var(--dino-slate-border); padding: 20px; margin-top: 40px; text-align: center; color: #546e7a; font-size: 0.88rem; }
-    .dino-modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
-    .dino-modal-backdrop.active { display: flex; }
-    .dino-modal-dialog { background: white; border-radius: var(--radius-xl); max-width: 520px; width: 100%; padding: 28px; border: 3px solid var(--dino-green-soft); text-align: center; }
-    @media (max-width: 860px) { .stroke-module-grid { grid-template-columns: 1fr; } }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Nunito:wght@400;600;700;800;900&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/stroke.css">
+  <link rel="stylesheet" href="css/student.css">
 </head>
 <body>
 
-  <!-- 1. Header & Top Controls -->
-  <header class="dino-header">
-    <div class="header-container">
-      <a href="index.html" class="logo-brand">
-        <span class="brand-dino-avatar">🦖</span>
-        <div class="brand-title-wrap">
-          <span class="brand-main-title">DINO MANDARIN ADVENTURE</span>
-          <span class="brand-sub-title">Kurikulum Lengkap PDF Han Yu 1 - 12 • Audio Lamban & Interaktif</span>
-        </div>
-      </a>
-
-      <div class="header-action-controls">
-        <button class="audio-toggle-btn" id="btn-toggle-sfx" title="Hidupkan/Matikan Efek Suara">🔊 Efek: ON</button>
-        <button class="audio-toggle-btn" id="btn-toggle-voice" title="Hidupkan/Matikan Suara Mandarin">🗣️ Suara: ON</button>
-        <button class="audio-toggle-btn teacher-btn" id="btn-open-teacher-modal">🔗 Buat Link Tugas</button>
+  <!-- TOP NAVBAR -->
+  <nav class="dino-navbar">
+    <a href="index.html" class="dino-brand">
+      <span class="brand-icon">🦖</span>
+      <div class="brand-titles">
+        <h1>汉语 HAN YU 1 - 12 PETUALANGAN DINOSAURUS</h1>
+        <p>Edisi Kurikulum Beijing Chinese Language & Culture College (北京华文学院)</p>
       </div>
-    </div>
-  </header>
-
-  <!-- 2. Student Task Banner -->
-  <aside class="student-task-banner" id="student-task-banner" style="display: none; background: #fff8e1; border-bottom: 2px solid #ffe082; padding: 10px 20px;">
-    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <span style="background: var(--dino-amber-main); color: white; font-weight: 800; font-size: 0.8rem; padding: 3px 10px; border-radius: var(--radius-pill);">🎒 TUGAS SISWA</span>
-        <span id="student-task-title" style="font-weight: 800; color: #e65100; font-size: 0.95rem;">Latihan Mandiri Siswa</span>
-        <span id="student-task-desc" style="color: #5d4037; font-size: 0.9rem;">Buku Han Yu 1 • Pelajaran 1</span>
-      </div>
-      <div><span style="font-size: 0.95rem; font-weight: 800; color: #e65100;">🦖 Semangat Belajar Juara!</span></div>
-    </div>
-  </aside>
-
-  <!-- 3. Navigation Module Tabs -->
-  <nav class="nav-tabs-bar" aria-label="Menu Utama Modul">
-    <div class="tabs-container">
-      <button class="nav-tab-btn active" data-target="module-stroke" id="tab-btn-stroke">
-        <span>✍️</span> <span>1. Tulis Guratan (3-6x)</span>
+    </a>
+    <div class="nav-actions">
+      <button class="dino-btn secondary small" onclick="dinoAudio.playApplauseSound()" title="Coba Suara Tepuk Tangan">
+        👏 Tes Tepuk Tangan
       </button>
-      <button class="nav-tab-btn" data-target="module-story" id="tab-btn-story">
-        <span>📖</span> <span>2. Baca Cerita (Audio Pelan)</span>
+      <button class="dino-btn secondary small" onclick="dinoAudio.playDinoRoarSound()" title="Coba Suara Raungan Dinosaurus">
+        🔊 Tes Roar Dinosaurus
       </button>
-      <button class="nav-tab-btn" data-target="module-match" id="tab-btn-match">
-        <span>🧩</span> <span>3. Cocokkan Gambar & Kata</span>
-      </button>
-      <button class="nav-tab-btn" data-target="module-quiz" id="tab-btn-quiz">
-        <span>📝</span> <span>4. Kuis Soal Ber-Audio (KKM 70 & 🏆)</span>
-      </button>
-      <button class="nav-tab-btn" data-target="module-pdf" id="tab-btn-pdf">
-        <span>📚</span> <span>5. Buku PDF Digital (Han Yu 1-12)</span>
+      <button class="dino-btn primary small" onclick="dinoApp.updateGeneratedStudentLink(); document.getElementById('generator-section').scrollIntoView({behavior: 'smooth'});">
+        🔗 Generator Link Murid
       </button>
     </div>
   </nav>
 
-  <!-- 4. Main Application Workspace -->
-  <main class="main-content">
-
-    <!-- MODUL 1: LATIHAN TULIS GURATAN (3-6x) -->
-    <section class="app-module-section active" id="module-stroke">
-      <div class="module-header-banner">
-        <div class="module-title-icon">✍️</div>
-        <div>
-          <h2 class="module-heading">Latihan Menulis Guratan Hanzi (3 - 6 Kali Repetisi)</h2>
-          <p class="module-desc">Tulis goresan karakter Hanzi di atas kanvas petak sembilan (米字格). Suara tepuk tangan jika benar, dan raungan dinosaurus jika salah!</p>
+  <!-- HERO SECTION WITH LINK GENERATOR -->
+  <header class="hero-banner">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <h2>Belajar Mandarin Seru & Interaktif <span>Han Yu 1 - 12</span> Bersama Sahabat Dinosaurus!</h2>
+        <p>Dilengkapi Cerita Narasi Pelan, Latihan Guratan Berulang 3-6 Kali, Game Mencocokkan Gambar, dan Kuis Pilihan Ganda Multi-Tipe Ber-KKM 70 dengan Efek Suara Tepuk Tangan & Raungan Dinosaurus!</p>
+        <div class="hero-features-chips">
+          <span class="hero-chip">🦕 Cerita Audio Lamban (SD)</span>
+          <span class="hero-chip">✍️ Guratan 3-6x (田字格 / 米字格)</span>
+          <span class="hero-chip">🧩 Cocokkan Kosakata & Gambar</span>
+          <span class="hero-chip">🏆 Kuis 5 Tipe Soal (KKM 70)</span>
+          <span class="hero-chip">🦖 Efek Suara Roar & Tepuk Tangan</span>
         </div>
       </div>
 
-      <!-- Curriculum Selector Bar dengan Pre-populated Options Lengkap Han Yu 1 - 12 -->
-      <div class="curriculum-selector-bar">
-        <div class="selector-group">
-          <div class="filter-select-item">
-            <label for="stroke-book-select" class="filter-label">📖 Buku:</label>
-            <select id="stroke-book-select" class="dino-select-primary">
-              <option value="1" selected>Han Yu 1 (汉语 第一册)</option>
-              <option value="2">Han Yu 2 (汉语 第二册)</option>
-              <option value="3">Han Yu 3 (汉语 第三册)</option>
-              <option value="4">Han Yu 4 (汉语 第四册)</option>
-              <option value="5">Han Yu 5 (汉语 第五册)</option>
-              <option value="6">Han Yu 6 (汉语 第六册)</option>
-              <option value="7">Han Yu 7 (汉语 第七册)</option>
-              <option value="8">Han Yu 8 (汉语 第八册)</option>
-              <option value="9">Han Yu 9 (汉语 第九册)</option>
-              <option value="10">Han Yu 10 (汉语 第十册)</option>
-              <option value="11">Han Yu 11 (汉语 第十一册)</option>
-              <option value="12">Han Yu 12 (汉语 第十二册)</option>
-            </select>
-          </div>
-
-          <div class="filter-select-item">
-            <label for="stroke-unit-select" class="filter-label">📑 Unit:</label>
-            <select id="stroke-unit-select" class="dino-select-primary">
-              <option value="1" selected>Pelajaran 1 (你好 - Nǐ hǎo)</option>
-              <option value="2">Pelajaran 2 (我爱爸爸妈妈 - Keluarga)</option>
-              <option value="3">Pelajaran 3 (爸爸是老师 - Profesi)</option>
-              <option value="4">Pelajaran 4 (你叫什么名字 - Nama)</option>
-              <option value="5">Pelajaran 5 (我爱我家 - Rumahku)</option>
-              <option value="6">Pelajaran 6 (哥哥去学校 - Sekolah)</option>
-              <option value="7">Pelajaran 7 (我们上课吧 - Kelas)</option>
-              <option value="8">Pelajaran 8 (我们吃午饭 - Makan Siang)</option>
-              <option value="9">Pelajaran 9 (小华打球 - Olahraga)</option>
-              <option value="10">Pelajaran 10 (我的一天 - Keseharianku)</option>
-              <option value="11">Pelajaran 11 (这是我的书 - Buku Saya)</option>
-              <option value="12">Pelajaran 12 (我有两本书 - Dua Buku)</option>
-              <option value="13">Pelajaran 13 (你家有电脑吗 - Komputer)</option>
-              <option value="14">Pelajaran 14 (书在书架上 - Rak Buku)</option>
-              <option value="15">Pelajaran 15 (我的房间 - Kamar Tidur)</option>
-            </select>
-          </div>
-
-          <div class="filter-select-item">
-            <label for="stroke-reps-target" class="filter-label">🎯 Target Repetisi:</label>
-            <select id="stroke-reps-target" class="dino-select-primary">
-              <option value="3" selected>3 Kali (Telur Menetas)</option>
-              <option value="4">4 Kali</option>
-              <option value="5">5 Kali</option>
-              <option value="6">6 Kali (Master Dinosaurus)</option>
-            </select>
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 8px;">
-          <input type="text" id="custom-char-input" placeholder="Cari Hanzi..." maxlength="2" style="width: 110px; padding: 7px 10px; border-radius: var(--radius-md); border: 1.5px solid var(--dino-slate-border); font-family: var(--font-chinese); font-size: 1rem; text-align: center;">
-          <button class="dino-btn-action" id="btn-search-char" style="padding: 6px 14px;">🔍 Cari</button>
-        </div>
-      </div>
-
-      <!-- Main Stroke Grid -->
-      <div class="stroke-module-grid">
-        <div class="stroke-canvas-card">
-          <div style="text-align: center; margin-bottom: 12px;">
-            <div class="stroke-char-pinyin" id="char-pinyin">nǐ</div>
-            <div class="stroke-char-meaning" id="char-meaning">Kamu</div>
-            <span style="display: inline-block; background: var(--dino-green-mint); color: var(--dino-green-deep); padding: 3px 12px; border-radius: var(--radius-pill); font-size: 0.85rem; font-weight: 800; margin-top: 4px;" id="char-stroke-count">
-              7 Guratan
-            </span>
-          </div>
-
-          <div class="writer-box-wrap">
-            <svg class="mizige-grid-lines" viewBox="0 0 260 260">
-              <line x1="0" y1="0" x2="260" y2="260" stroke="#ffcc80" stroke-width="1.5" stroke-dasharray="6,6" />
-              <line x1="260" y1="0" x2="0" y2="260" stroke="#ffcc80" stroke-width="1.5" stroke-dasharray="6,6" />
-              <line x1="130" y1="0" x2="130" y2="260" stroke="#ffa726" stroke-width="1.5" stroke-dasharray="6,6" />
-              <line x1="0" y1="130" x2="260" y2="130" stroke="#ffa726" stroke-width="1.5" stroke-dasharray="6,6" />
-            </svg>
-            <div id="character-target-div"></div>
-          </div>
-
-          <div class="reps-tracker-box">
-            <div style="font-size: 0.9rem; font-weight: 800; color: #e65100; margin-bottom: 8px;">🦖 Indikator Menetas Telur Dinosaurus</div>
-            <div class="egg-items-row" id="reps-egg-tracker"></div>
-          </div>
-
-          <div class="stroke-ctrl-buttons">
-            <button class="dino-btn-action" id="btn-animate-stroke">▶️ Animasi Goresan</button>
-            <button class="dino-btn-outline" id="btn-practice-stroke">✏️ Tulis Sendiri</button>
-            <button class="dino-btn-outline" id="btn-clear-canvas">🧹 Hapus</button>
-            <button class="dino-btn-audio-circle" id="btn-speak-current-char" title="Dengarkan Pelafalan Mandarin">🔊</button>
-          </div>
-
-          <div style="display: flex; gap: 14px; margin-top: 14px; font-size: 0.88rem; font-weight: 700;">
-            <span style="color: var(--dino-green-main);">✅ Goresan Benar: <b id="stroke-correct-count">0</b></span>
-            <span style="color: #e53935;">❌ Goresan Keliru: <b id="stroke-incorrect-count">0</b></span>
-          </div>
-        </div>
-
-        <div class="stroke-guide-card">
+      <!-- LINK GENERATOR CARD FOR TEACHER / PARENT -->
+      <div class="student-link-generator-card" id="generator-section">
+        <div class="generator-header">
+          <span style="font-size: 1.8rem;">🦖🔗</span>
           <div>
-            <h3 class="guide-box-title">📑 Pilihan Kosakata Unit Ini</h3>
-            <div class="stroke-char-chips-wrap" id="stroke-char-chips"></div>
-          </div>
-
-          <div>
-            <h3 class="guide-box-title">👣 Langkah Urutan Guratan Kaishu Resmi</h3>
-            <ul class="stroke-steps-list" id="stroke-steps-list"></ul>
-          </div>
-
-          <div style="background: var(--dino-green-mint); border-left: 4px solid var(--dino-green-main); padding: 12px 16px; border-radius: 0 var(--radius-md) var(--radius-md) 0;">
-            <div style="font-weight: 800; font-size: 0.88rem; color: var(--dino-green-deep);">🦖 Tips Rexy Dino:</div>
-            <p style="font-size: 0.85rem; color: #2e7d32; margin-top: 4px;" id="char-dino-tip">
-              Tulis karakter dengan urutan dari atas ke bawah dan kiri ke kanan.
-            </p>
-          </div>
-
-          <div style="display: flex; justify-content: space-between; margin-top: auto;">
-            <button class="dino-btn-outline" id="btn-prev-char">◀ Karakter Sebelumnya</button>
-            <button class="dino-btn-outline" id="btn-next-char">Karakter Berikutnya ▶</button>
+            <h3>Generator Link Halaman Murid</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Pilih buku & unit, lalu salin tautan khusus murid</p>
           </div>
         </div>
+
+        <div class="generator-controls">
+          <div class="select-group">
+            <label for="global-book-select">Pilih Buku Han Yu (1 - 12):</label>
+            <select id="global-book-select" class="dino-select"></select>
+          </div>
+          <div class="select-group">
+            <label for="global-unit-select">Pilih Unit Materi:</label>
+            <select id="global-unit-select" class="dino-select"></select>
+          </div>
+        </div>
+
+        <div class="url-output-box">
+          <input type="text" id="generated-student-url-input" class="url-input" readonly>
+          <button class="dino-btn primary small" id="btn-copy-student-link" onclick="dinoApp.copyStudentLink()">
+            📋 Salin
+          </button>
+        </div>
+
+        <div class="generator-actions">
+          <button class="dino-btn accent" id="btn-open-student-page" style="width: 100%;">
+            🚀 Buka Halaman Murid Langsung ➔
+          </button>
+        </div>
+        <p class="link-info-text" id="student-link-info-text"></p>
       </div>
+    </div>
+  </header>
+
+  <!-- MAIN CURRICULUM OVERVIEW & EXPLORER -->
+  <main class="main-content-layout">
+    
+    <!-- LEVEL EXPLORER (Buku Han Yu 1 - 12) -->
+    <section class="section-headline">
+      <h2>Pilih Tingkat Buku Han Yu 1 sampai Han Yu 12</h2>
+      <p>Klik salah satu buku untuk memuat materi bab, cerita narasi, kosakata guratan, game gambar, dan latihan soal</p>
     </section>
 
-    <!-- MODUL 2: BACA CERITA TEKS PELAJARAN (AUDIO LAMBAN) -->
-    <section class="app-module-section" id="module-story">
-      <div class="module-header-banner">
-        <div class="module-title-icon">📖</div>
-        <div>
-          <h2 class="module-heading">Baca Cerita & Percakapan Per-Unit (Audio Lamban)</h2>
-          <p class="module-desc">Dengarkan teks bacaan dengan tempo pelan dan jelas, dilengkapi penyorot kalimat dan Pinyin berharakat.</p>
-        </div>
+    <div class="books-grid" id="books-overview-grid">
+      <!-- Diisi oleh app.js -->
+    </div>
+
+    <!-- WORKSPACE INTERAKTIF UNIT YANG DIPILIH -->
+    <section class="workspace-wrapper" id="curriculum-workspace">
+      
+      <!-- Unit Banner -->
+      <div class="unit-banner-info">
+        <h2 id="curriculum-header-title">Memuat Materi...</h2>
+        <p id="curriculum-header-desc"></p>
+        <div class="lessons-chips-wrap" id="unit-lessons-list"></div>
       </div>
 
-      <div class="curriculum-selector-bar">
-        <div class="selector-group">
-          <div class="filter-select-item">
-            <label for="story-book-select" class="filter-label">📖 Buku:</label>
-            <select id="story-book-select" class="dino-select-primary">
-              <option value="1" selected>Han Yu 1 (汉语 第一册)</option>
-              <option value="2">Han Yu 2 (汉语 第二册)</option>
-              <option value="3">Han Yu 3 (汉语 第三册)</option>
-              <option value="4">Han Yu 4 (汉语 第四册)</option>
-              <option value="5">Han Yu 5 (汉语 第五册)</option>
-              <option value="6">Han Yu 6 (汉语 第六册)</option>
-              <option value="7">Han Yu 7 (汉语 第七册)</option>
-              <option value="8">Han Yu 8 (汉语 第八册)</option>
-              <option value="9">Han Yu 9 (汉语 第九册)</option>
-              <option value="10">Han Yu 10 (汉语 第十册)</option>
-              <option value="11">Han Yu 11 (汉语 第十一册)</option>
-              <option value="12">Han Yu 12 (汉语 第十二册)</option>
-            </select>
+      <div class="feature-showcase-sections">
+
+        <!-- ===================================================================
+             FITUR 1: CERITA SETIAP UNIT DENGAN AUDIO PELAN & LAMBAN UNTUK ANAK SD
+             =================================================================== -->
+        <article class="feature-panel-card">
+          <div class="panel-title-bar">
+            <h3>🦕 1. Cerita Unit dengan Narasi Audio Pelan & Lamban (Khusus Anak SD)</h3>
+            <div class="audio-controls-row">
+              <button class="dino-btn primary small" onclick="dinoApp.playStoryFull()">
+                ▶️ Putar Seluruh Cerita (Pelan 0.65x)
+              </button>
+              <button class="dino-btn secondary small" onclick="dinoAudio.stopSpeaking()">
+                ⏹️ Berhenti
+              </button>
+            </div>
           </div>
 
-          <div class="filter-select-item">
-            <label for="story-unit-select" class="filter-label">📑 Unit:</label>
-            <select id="story-unit-select" class="dino-select-primary">
-              <option value="1" selected>Pelajaran 1 (你好 - Nǐ hǎo)</option>
-              <option value="2">Pelajaran 2 (我爱爸爸妈妈 - Keluarga)</option>
-              <option value="3">Pelajaran 3 (爸爸是老师 - Profesi)</option>
-              <option value="4">Pelajaran 4 (你叫什么名字 - Nama)</option>
-              <option value="5">Pelajaran 5 (我爱我家 - Rumahku)</option>
-              <option value="6">Pelajaran 6 (哥哥去学校 - Sekolah)</option>
-              <option value="7">Pelajaran 7 (我们上课吧 - Kelas)</option>
-              <option value="8">Pelajaran 8 (我们吃午饭 - Makan Siang)</option>
-              <option value="9">Pelajaran 9 (小华打球 - Olahraga)</option>
-              <option value="10">Pelajaran 10 (我的一天 - Keseharianku)</option>
-              <option value="11">Pelajaran 11 (这是我的书 - Buku Saya)</option>
-              <option value="12">Pelajaran 12 (我有两本书 - Dua Buku)</option>
-              <option value="13">Pelajaran 13 (你家有电脑吗 - Komputer)</option>
-              <option value="14">Pelajaran 14 (书在书架上 - Rak Buku)</option>
-              <option value="15">Pelajaran 15 (我的房间 - Kamar Tidur)</option>
-            </select>
+          <div class="story-box-wrapper">
+            <div class="story-meta-header">
+              <h4 id="portal-story-title">Judul Cerita</h4>
+              <span class="dino-pill type-pill">🔊 Klik Setiap Kalimat untuk Mendengarkan Lafal Mandarin</span>
+            </div>
+
+            <!-- Kalimat-kalimat interaktif -->
+            <div class="story-sentences-list" id="portal-sentences-list">
+              <!-- Diisi otomatis oleh JavaScript -->
+            </div>
+          </div>
+        </article>
+
+        <!-- ===================================================================
+             FITUR 2: CONTOH GURATAN KOSAKATA & LATIHAN MENULIS 3-6 KALI
+             (Benar: Suara Tepuk Tangan, Salah: Raungan Dinosaurus)
+             =================================================================== -->
+        <article class="feature-panel-card">
+          <div class="panel-title-bar">
+            <h3>✍️ 2. Latihan Guratan Kosakata Berulang (3 - 6 Kali Target)</h3>
+            <div class="target-repeat-config">
+              <span>Target Pengulangan:</span>
+              <select id="portal-stroke-repeat-select" class="repeat-select-input" onchange="dinoStroke.setTargetRepeats(this.value)">
+                <option value="3" selected>3 Kali</option>
+                <option value="4">4 Kali</option>
+                <option value="5">5 Kali</option>
+                <option value="6">6 Kali</option>
+              </select>
+            </div>
           </div>
 
-          <div class="filter-select-item">
-            <label for="story-speed-select" class="filter-label">🐢 Kecepatan Suara:</label>
-            <select id="story-speed-select" class="dino-select-primary">
-              <option value="0.5">0.5x (Sangat Lamban)</option>
-              <option value="0.62" selected>0.62x (Standar Anak SD)</option>
-              <option value="0.75">0.75x (Sedang)</option>
-              <option value="1.0">1.0x (Normal)</option>
-            </select>
+          <div class="stroke-practice-layout">
+            <!-- Kolom Kiri: Daftar Kosakata & Info Karakter -->
+            <div class="stroke-char-card">
+              <div class="stroke-vocab-nav-wrap">
+                <p style="font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; color: var(--dino-forest-deep);">
+                  Pilih Kosakata Unit untuk Ditulis:
+                </p>
+                <div class="stroke-vocab-list-nav" id="portal-stroke-vocab-list"></div>
+              </div>
+
+              <div class="active-char-detail">
+                <div class="char-huge" id="stroke-vocab-title">你</div>
+                <div class="char-pinyin" id="stroke-vocab-pinyin">nǐ</div>
+                <div class="char-meaning" id="stroke-vocab-meaning">Arti: kamu</div>
+                <div class="char-meta-tags">
+                  <span class="dino-pill type-pill" id="stroke-count-display">7 Guratan</span>
+                </div>
+              </div>
+
+              <div class="stroke-steps-box">
+                <h5>Urutan Nama Goresan (*Bi Hua*):</h5>
+                <div class="stroke-steps-list" id="stroke-order-steps"></div>
+              </div>
+            </div>
+
+            <!-- Kolom Kanan: Kanvas Tian Zi Ge & Tombol Kontrol -->
+            <div class="stroke-canvas-card" id="portal-stroke-container">
+              <div class="canvas-toolbar-top">
+                <button class="dino-btn secondary small" onclick="dinoStroke.playDemoAnimation()">
+                  🎬 Peragaan Animasi Guratan
+                </button>
+                <div class="repeat-progress-counter" id="stroke-repeat-counter">
+                  Latihan: 0 / 3 Kali
+                </div>
+              </div>
+
+              <div class="canvas-frame-box">
+                <canvas id="portal-stroke-canvas" width="320" height="320"></canvas>
+              </div>
+
+              <div class="canvas-actions-row">
+                <button class="dino-btn primary" onclick="dinoStroke.checkPractice(false)">
+                  ✅ Selesai Menulis 1x (Cek)
+                </button>
+                <button class="dino-btn secondary" onclick="dinoStroke.clearCanvas()">
+                  🧹 Hapus Kanvas
+                </button>
+                <button class="dino-btn small secondary" onclick="dinoStroke.checkPractice(true)" title="Uji Suara Raungan Jika Salah">
+                  ⚠️ Simulasi Salah (Uji Roar)
+                </button>
+              </div>
+
+              <!-- Feedback Banner Suara -->
+              <div id="stroke-feedback-banner" class="feedback-banner hidden"></div>
+            </div>
           </div>
-        </div>
-      </div>
+        </article>
 
-      <div class="story-header-card" style="background: white; border-radius: var(--radius-lg); padding: 22px 28px; border: 2px solid var(--dino-slate-border); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-        <div>
-          <span style="background: var(--dino-amber-soft); color: #e65100; border: 1.5px solid #ffe082; padding: 4px 12px; border-radius: var(--radius-pill); font-weight: 800; font-size: 0.85rem;" id="story-mascot-badge">🦖 Rexy Si T-Rex Cilik</span>
-          <h3 style="font-family: var(--font-chinese); font-size: 1.6rem; font-weight: 900; margin-top: 6px;" id="story-title-hanzi">第一课：你好 (Nǐ hǎo)</h3>
-          <div style="font-size: 1rem; font-weight: 700; color: var(--dino-blue);" id="story-title-pinyin">Dì Yī Kè: Nǐ hǎo</div>
-          <div style="font-size: 0.95rem; color: #546e7a;" id="story-title-meaning">Pelajaran 1: Halo / Apa Kabar</div>
-        </div>
-
-        <div style="display: flex; gap: 10px;">
-          <button class="dino-btn-action" id="btn-play-all-story">▶️ Putar Seluruh Cerita</button>
-          <button class="dino-btn-outline" id="btn-stop-story">⏹️ Berhenti</button>
-        </div>
-      </div>
-
-      <div class="story-sentences-list" id="story-sentences-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
-    </section>
-
-    <!-- MODUL 3: GAME MENCOCOKKAN KOSAKATA DENGAN GAMBAR -->
-    <section class="app-module-section" id="module-match">
-      <div class="module-header-banner">
-        <div class="module-title-icon">🧩</div>
-        <div>
-          <h2 class="module-heading">Game Mencocokkan Kosakata dengan Gambar Per-Unit</h2>
-          <p class="module-desc">Buka kartu dan pasangkan antara gambar ilustrasi dengan kosakata Hanzi + Pinyin yang tepat!</p>
-        </div>
-      </div>
-
-      <div class="curriculum-selector-bar">
-        <div class="selector-group">
-          <div class="filter-select-item">
-            <label for="match-book-select" class="filter-label">📖 Buku:</label>
-            <select id="match-book-select" class="dino-select-primary">
-              <option value="1" selected>Han Yu 1 (汉语 第一册)</option>
-              <option value="2">Han Yu 2 (汉语 第二册)</option>
-              <option value="3">Han Yu 3 (汉语 第三册)</option>
-              <option value="4">Han Yu 4 (汉语 第四册)</option>
-              <option value="5">Han Yu 5 (汉语 第五册)</option>
-              <option value="6">Han Yu 6 (汉语 第六册)</option>
-              <option value="7">Han Yu 7 (汉语 第七册)</option>
-              <option value="8">Han Yu 8 (汉语 第八册)</option>
-              <option value="9">Han Yu 9 (汉语 第九册)</option>
-              <option value="10">Han Yu 10 (汉语 第十册)</option>
-              <option value="11">Han Yu 11 (汉语 第十一册)</option>
-              <option value="12">Han Yu 12 (汉语 第十二册)</option>
-            </select>
-          </div>
-
-          <div class="filter-select-item">
-            <label for="match-unit-select" class="filter-label">📑 Unit:</label>
-            <select id="match-unit-select" class="dino-select-primary">
-              <option value="1" selected>Pelajaran 1 (你好 - Nǐ hǎo)</option>
-              <option value="2">Pelajaran 2 (我爱爸爸妈妈 - Keluarga)</option>
-              <option value="3">Pelajaran 3 (爸爸是老师 - Profesi)</option>
-              <option value="4">Pelajaran 4 (你叫什么名字 - Nama)</option>
-              <option value="5">Pelajaran 5 (我爱我家 - Rumahku)</option>
-              <option value="6">Pelajaran 6 (哥哥去学校 - Sekolah)</option>
-              <option value="7">Pelajaran 7 (我们上课吧 - Kelas)</option>
-              <option value="8">Pelajaran 8 (我们吃午饭 - Makan Siang)</option>
-              <option value="9">Pelajaran 9 (小华打球 - Olahraga)</option>
-              <option value="10">Pelajaran 10 (我的一天 - Keseharianku)</option>
-              <option value="11">Pelajaran 11 (这是我的书 - Buku Saya)</option>
-              <option value="12">Pelajaran 12 (我有两本书 - Dua Buku)</option>
-              <option value="13">Pelajaran 13 (你家有电脑吗 - Komputer)</option>
-              <option value="14">Pelajaran 14 (书在书架上 - Rak Buku)</option>
-              <option value="15">Pelajaran 15 (我的房间 - Kamar Tidur)</option>
-            </select>
+        <!-- ===================================================================
+             FITUR 3: MENCOCOKKAN KOSAKATA SETIAP UNIT DENGAN GAMBAR
+             =================================================================== -->
+        <article class="feature-panel-card">
+          <div class="panel-title-bar">
+            <h3>🧩 3. Game Mencocokkan Kosakata Unit dengan Gambar / Benda</h3>
+            <span class="dino-pill type-pill">Klik 1 Kartu Kata lalu Klik Pasangan Gambarnya!</span>
           </div>
 
-          <div class="filter-select-item">
-            <label for="match-pairs-count" class="filter-label">🃏 Jumlah Pasangan:</label>
-            <select id="match-pairs-count" class="dino-select-primary">
-              <option value="4">4 Pasang (Mudah)</option>
-              <option value="6" selected>6 Pasang (Seru)</option>
-              <option value="8">8 Pasang (Tantangan)</option>
-            </select>
+          <div id="portal-matching-container">
+            <!-- Diisi otomatis oleh matching-game.js -->
           </div>
-        </div>
+        </article>
 
-        <button class="dino-btn-action" id="btn-restart-match">🔄 Main Ulang</button>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 14px 20px; border-radius: var(--radius-md); border: 1.5px solid var(--dino-slate-border); margin-bottom: 20px;">
-        <div>Langkah: <span id="match-moves-count" style="font-weight: 800; color: var(--dino-green-deep);">0</span></div>
-        <div>Terpasang: <span id="match-pairs-left" style="font-weight: 800; color: var(--dino-green-deep);">0 / 6</span></div>
-        <div style="font-size: 0.9rem; font-weight: 700; color: #e65100;">🦖 Dengarkan suara saat kartu cocok!</div>
-      </div>
-
-      <div id="match-board-grid" class="match-board-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;"></div>
-    </section>
-
-    <!-- MODUL 4: KUIS PILIHAN BERGANDA BER-AUDIO (KKM 70 & PIALA 🏆) -->
-    <section class="app-module-section" id="module-quiz">
-      <div class="module-header-banner">
-        <div class="module-title-icon">📝</div>
-        <div>
-          <h2 class="module-heading">Soal Latihan Pilihan Berganda Ber-Audio (KKM 70)</h2>
-          <p class="module-desc">5 Tipe Soal: Mengartikan, Pinyin, Hitung Guratan, Susun Kalimat, dan Gambar. Dapatkan Piala Emas 🏆 jika nilai &ge; 70!</p>
-        </div>
-      </div>
-
-      <div class="curriculum-selector-bar">
-        <div class="selector-group">
-          <div class="filter-select-item">
-            <label for="quiz-book-select" class="filter-label">📖 Buku:</label>
-            <select id="quiz-book-select" class="dino-select-primary">
-              <option value="1" selected>Han Yu 1 (汉语 第一册)</option>
-              <option value="2">Han Yu 2 (汉语 第二册)</option>
-              <option value="3">Han Yu 3 (汉语 第三册)</option>
-              <option value="4">Han Yu 4 (汉语 第四册)</option>
-              <option value="5">Han Yu 5 (汉语 第五册)</option>
-              <option value="6">Han Yu 6 (汉语 第六册)</option>
-              <option value="7">Han Yu 7 (汉语 第七册)</option>
-              <option value="8">Han Yu 8 (汉语 第八册)</option>
-              <option value="9">Han Yu 9 (汉语 第九册)</option>
-              <option value="10">Han Yu 10 (汉语 第十册)</option>
-              <option value="11">Han Yu 11 (汉语 第十一册)</option>
-              <option value="12">Han Yu 12 (汉语 第十二册)</option>
-            </select>
+        <!-- ===================================================================
+             FITUR 4: SOAL LATIHAN PILIHAN GANDA (5 TIPE SOAL + AUDIO + KKM 70)
+             =================================================================== -->
+        <article class="feature-panel-card">
+          <div class="panel-title-bar">
+            <h3>🏆 4. Soal Latihan Pilihan Ganda Multi-Tipe & Audio Bacaan (KKM: 70)</h3>
+            <span class="dino-pill kkm-pill">Nilai ≥ 70: Piala Emas + Tepuk Tangan | Nilai &lt; 70: Dino Meraung</span>
           </div>
 
-          <div class="filter-select-item">
-            <label for="quiz-unit-select" class="filter-label">📑 Unit:</label>
-            <select id="quiz-unit-select" class="dino-select-primary">
-              <option value="all">Semua Pelajaran (Kuis Lengkap)</option>
-              <option value="1">Pelajaran 1 (你好 - Nǐ hǎo)</option>
-              <option value="2">Pelajaran 2 (我爱爸爸妈妈 - Keluarga)</option>
-              <option value="3">Pelajaran 3 (爸爸是老师 - Profesi)</option>
-              <option value="4">Pelajaran 4 (你叫什么名字 - Nama)</option>
-              <option value="5">Pelajaran 5 (我爱我家 - Rumahku)</option>
-              <option value="6">Pelajaran 6 (哥哥去学校 - Sekolah)</option>
-              <option value="7">Pelajaran 7 (我们上课吧 - Kelas)</option>
-              <option value="8">Pelajaran 8 (我们吃午饭 - Makan Siang)</option>
-              <option value="9">Pelajaran 9 (小华打球 - Olahraga)</option>
-              <option value="10">Pelajaran 10 (我的一天 - Keseharianku)</option>
-              <option value="11">Pelajaran 11 (这是我的书 - Buku Saya)</option>
-              <option value="12">Pelajaran 12 (我有两本书 - Dua Buku)</option>
-              <option value="13">Pelajaran 13 (你家有电脑吗 - Komputer)</option>
-              <option value="14">Pelajaran 14 (书在书架上 - Rak Buku)</option>
-              <option value="15">Pelajaran 15 (我的房间 - Kamar Tidur)</option>
-            </select>
+          <div id="portal-quiz-container">
+            <!-- Diisi otomatis oleh quiz-engine.js -->
           </div>
-        </div>
+        </article>
 
-        <button class="dino-btn-action" id="btn-restart-quiz">🔄 Mulai Kuis Baru</button>
-      </div>
-
-      <div id="quiz-wrapper-card">
-        <div id="quiz-question-box"></div>
-        <div id="quiz-result-card" style="display: none;"></div>
       </div>
     </section>
-
-    <!-- MODUL 5: BUKU PDF DIGITAL INTERAKTIF (HAN YU 1 - 12) -->
-    <section class="app-module-section" id="module-pdf">
-      <div class="module-header-banner">
-        <div class="module-title-icon">📚</div>
-        <div>
-          <h2 class="module-heading">Buku Pelajaran Digital PDF Han Yu 1 sampai Han Yu 12</h2>
-          <p class="module-desc">Buka dan baca langsung seluruh file buku asli PDF Han Yu 1 sampai Han Yu 12 di dalam website.</p>
-        </div>
-      </div>
-
-      <div class="curriculum-selector-bar">
-        <div class="selector-group">
-          <div class="filter-select-item">
-            <label for="pdf-book-select" class="filter-label">📖 Pilih Buku PDF:</label>
-            <select id="pdf-book-select" class="dino-select-primary">
-              <option value="1" selected>Han Yu 1 (汉语 第一册)</option>
-              <option value="2">Han Yu 2 (汉语 第二册)</option>
-              <option value="3">Han Yu 3 (汉语 第三册)</option>
-              <option value="4">Han Yu 4 (汉语 第四册)</option>
-              <option value="5">Han Yu 5 (汉语 第五册)</option>
-              <option value="6">Han Yu 6 (汉语 第六册)</option>
-              <option value="7">Han Yu 7 (汉语 第七册)</option>
-              <option value="8">Han Yu 8 (汉语 第八册)</option>
-              <option value="9">Han Yu 9 (汉语 第九册)</option>
-              <option value="10">Han Yu 10 (汉语 第十册)</option>
-              <option value="11">Han Yu 11 (汉语 第十一册)</option>
-              <option value="12">Han Yu 12 (汉语 第十二册)</option>
-            </select>
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 8px;">
-          <button class="dino-btn-action" id="btn-pdf-fullscreen">⛶ Layar Penuh</button>
-          <button class="dino-btn-outline" id="btn-pdf-newtab">↗️ Buka di Tab Baru</button>
-          <button class="dino-btn-outline" id="btn-pdf-download">📥 Unduh PDF</button>
-        </div>
-      </div>
-
-      <div style="background: white; border-radius: var(--radius-lg); padding: 20px; border: 2px solid var(--dino-slate-border);">
-        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--dino-slate-light); padding: 12px 18px; border-radius: var(--radius-md); margin-bottom: 16px;">
-          <div>
-            <div style="font-size: 1.2rem; font-weight: 800; color: var(--dino-green-deep);" id="pdf-book-title-display">Han Yu 1 (汉语 第一册)</div>
-            <div style="font-size: 0.88rem; color: #546e7a;" id="pdf-book-desc-display">15 Pelajaran Lengkap Kurikulum Resmi PDF Han Yu 1</div>
-          </div>
-          <div><span style="font-weight: 800; color: #e65100;">🦖 Buku Teks Asli</span></div>
-        </div>
-
-        <div style="width: 100%; height: 750px; border: 2px solid var(--dino-slate-border); border-radius: var(--radius-md); overflow: hidden; background: #eceff1;">
-          <iframe id="pdf-embed-frame" src="HAN YU 1.pdf#toolbar=1" style="width: 100%; height: 100%; border: none;" title="PDF Viewer Han Yu"></iframe>
-        </div>
-      </div>
-    </section>
-
   </main>
 
-  <!-- Modals -->
-  <div class="dino-modal-backdrop" id="stroke-success-modal">
-    <div class="dino-modal-dialog">
-      <div style="font-size: 3.5rem;">🦖🎉</div>
-      <h3 style="font-size: 1.45rem; font-weight: 900; color: var(--dino-green-deep); margin-top: 10px;">Luar Biasa! Karakter Berhasil Dikuasai!</h3>
-      <div style="font-family: var(--font-chinese); font-size: 4rem; font-weight: 900; color: var(--dino-amber-deep); margin: 10px 0;" class="modal-char-display">你</div>
-      <p style="color: #555; margin-bottom: 20px;">Telur dinosaurus telah menetas sempurna! Kamu telah menulis karakter ini berulang kali dengan tepat!</p>
-      <button class="dino-btn-action" onclick="document.getElementById('stroke-success-modal').classList.remove('active')">🌟 Lanjut Belajar!</button>
-    </div>
-  </div>
-
-  <div class="dino-modal-backdrop" id="match-success-modal">
-    <div class="dino-modal-dialog">
-      <div style="font-size: 3.5rem;">🏆🦕</div>
-      <h3 style="font-size: 1.45rem; font-weight: 900; color: var(--dino-green-deep); margin-top: 10px;">Hebat! Semua Pasangan Cocok!</h3>
-      <p style="color: #555; margin: 14px 0 24px;">Daya ingatmu luar biasa seperti dinosaurus perkasa! Seluruh gambar dan kosakata berhasil dipasangkan.</p>
-      <button class="dino-btn-action" onclick="document.getElementById('match-success-modal').classList.remove('active')">🎮 Main Lagi!</button>
-    </div>
-  </div>
-
-  <!-- Teacher Assignment Link Generator Modal -->
-  <div class="dino-modal-backdrop" id="teacher-task-modal">
-    <div class="dino-modal-dialog" style="max-width: 560px; text-align: left;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-        <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--dino-green-deep);">🔗 Buat Link Tugas Siswa</h3>
-        <button id="btn-close-task-modal" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">✕</button>
-      </div>
-
-      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
-        <div>
-          <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 4px;">Pilih Modul:</label>
-          <select id="task-module-select" class="dino-select-primary" style="width: 100%;">
-            <option value="stroke">✍️ Modul 1: Latihan Tulis Guratan (3-6x)</option>
-            <option value="story">📖 Modul 2: Baca Cerita (Audio Pelan)</option>
-            <option value="match">🧩 Modul 3: Cocokkan Gambar & Kata</option>
-            <option value="quiz">📝 Modul 4: Kuis Soal Ber-Audio (KKM 70)</option>
-            <option value="pdf">📚 Modul 5: Baca Buku PDF Digital</option>
-          </select>
-        </div>
-
-        <div>
-          <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 4px;">Pilih Buku:</label>
-          <select id="task-book-select" class="dino-select-primary" style="width: 100%;">
-            <option value="1" selected>Han Yu 1 (汉语 第一册)</option>
-            <option value="2">Han Yu 2 (汉语 第二册)</option>
-            <option value="3">Han Yu 3 (汉语 第三册)</option>
-            <option value="4">Han Yu 4 (汉语 第四册)</option>
-            <option value="5">Han Yu 5 (汉语 第五册)</option>
-            <option value="6">Han Yu 6 (汉语 第六册)</option>
-            <option value="7">Han Yu 7 (汉语 第七册)</option>
-            <option value="8">Han Yu 8 (汉语 第八册)</option>
-            <option value="9">Han Yu 9 (汉语 第九册)</option>
-            <option value="10">Han Yu 10 (汉语 第十册)</option>
-            <option value="11">Han Yu 11 (汉语 第十一册)</option>
-            <option value="12">Han Yu 12 (汉语 第十二册)</option>
-          </select>
-        </div>
-
-        <div>
-          <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 4px;">Pilih Unit / Pelajaran:</label>
-          <select id="task-unit-select" class="dino-select-primary" style="width: 100%;">
-            <option value="1">Pelajaran 1 (你好 - Nǐ hǎo)</option>
-            <option value="2">Pelajaran 2 (我爱爸爸妈妈 - Keluarga)</option>
-            <option value="3">Pelajaran 3 (爸爸是老师 - Profesi)</option>
-            <option value="4">Pelajaran 4 (你叫什么名字 - Nama)</option>
-            <option value="5">Pelajaran 5 (我爱我家 - Rumahku)</option>
-            <option value="6">Pelajaran 6 (哥哥去学校 - Sekolah)</option>
-            <option value="7">Pelajaran 7 (我们上课吧 - Kelas)</option>
-            <option value="8">Pelajaran 8 (我们吃午饭 - Makan Siang)</option>
-            <option value="9">Pelajaran 9 (小华打球 - Olahraga)</option>
-            <option value="10">Pelajaran 10 (我的一天 - Keseharianku)</option>
-            <option value="11">Pelajaran 11 (这是我的书 - Buku Saya)</option>
-            <option value="12">Pelajaran 12 (我有两本书 - Dua Buku)</option>
-            <option value="13">Pelajaran 13 (你家有电脑吗 - Komputer)</option>
-            <option value="14">Pelajaran 14 (书在书架上 - Rak Buku)</option>
-            <option value="15">Pelajaran 15 (我的房间 - Kamar Tidur)</option>
-          </select>
-        </div>
-
-        <div>
-          <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 4px;">Target Repetisi Guratan:</label>
-          <select id="task-reps-select" class="dino-select-primary" style="width: 100%;">
-            <option value="3">3 Kali Repetisi (Standar)</option>
-            <option value="4">4 Kali Repetisi</option>
-            <option value="5">5 Kali Repetisi</option>
-            <option value="6">6 Kali Repetisi (Juara Dino)</option>
-          </select>
-        </div>
-
-        <div>
-          <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 4px;">Nama Siswa (Opsional):</label>
-          <input type="text" id="task-student-name-input" placeholder="Contoh: Budi / Ani..." style="width: 100%; padding: 8px 12px; border-radius: var(--radius-md); border: 2px solid var(--dino-slate-border); font-family: var(--font-main); font-size: 0.92rem;">
-        </div>
-      </div>
-
-      <button class="dino-btn-action" id="btn-generate-task-link" style="width: 100%; margin-bottom: 14px;">✨ Generate Tautan Halaman Murid</button>
-
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <input type="text" id="task-generated-url" readonly placeholder="Klik Generate Tautan..." style="flex: 1; min-width: 200px; padding: 10px 14px; border-radius: var(--radius-md); border: 2px solid var(--dino-slate-border); font-size: 0.88rem;">
-        <button class="dino-btn-outline" id="btn-copy-task-link" style="white-space: nowrap;">📋 Salin Link</button>
-        <button class="dino-btn-action" id="btn-test-task-link" style="white-space: nowrap; display: none;">🚀 Buka Halaman Murid</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="dino-footer">
-    <p>🦖 <b>Dino Mandarin Adventure</b> • Kurikulum Lengkap PDF Han Yu 1 s/d Han Yu 12 • Pelafalan Audio Lamban Anak SD</p>
-    <p style="margin-top: 6px; font-size: 0.82rem;">Dilengkapi HanziWriter Engine, Web Audio Synthesizer, TTS Mandarin, dan Standar Kelulusan KKM 70 Berhadiah Piala 🏆</p>
+  <footer style="text-align: center; padding: 40px 20px; background: var(--dino-forest-deep); color: white; margin-top: 60px;">
+    <p style="font-weight: 800; font-size: 1.1rem; margin-bottom: 6px;">🦖 Platform Pembelajaran Bahasa Mandarin Han Yu 1 - 12 🦕</p>
+    <p style="font-size: 0.85rem; color: var(--dino-pale-moss);">Disesuaikan secara lengkap dengan seluruh isi PDF Han Yu 1 sampai Han Yu 12 • Tema Dinosaurus Ceria Anak SD</p>
   </footer>
 
   <!-- Scripts -->
-  <script src="js/hanzi-writer.min.js"></script>
-  <script src="js/data.js" charset="utf-8"></script>
-  <script src="js/audio-synth.js" charset="utf-8"></script>
-  <script src="js/stroke-writer.js" charset="utf-8"></script>
-  <script src="js/story-reader.js" charset="utf-8"></script>
-  <script src="js/match-game.js" charset="utf-8"></script>
-  <script src="js/quiz.js" charset="utf-8"></script>
-  <script src="js/pdf-viewer.js" charset="utf-8"></script>
-  <script src="js/app.js" charset="utf-8"></script>
+  <script src="js/data-curriculum.js"></script>
+  <script src="js/audio-engine.js"></script>
+  <script src="js/stroke-writer.js"></script>
+  <script src="js/matching-game.js"></script>
+  <script src="js/quiz-engine.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      dinoApp.init();
+    });
+  </script>
 </body>
 </html>

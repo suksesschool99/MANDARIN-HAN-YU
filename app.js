@@ -1,249 +1,281 @@
-/**
- * Dino Mandarin Adventure - Main App Controller
- * Navigasi Tab 5 Modul, Sinkronisasi Buku & Unit, Pengaturan Audio Global
- */
+// =========================================================================
+// MAIN APP CONTROLLER & TEACHER / CURRICULUM EXPLORER
+// Generator Link Halaman Murid Dinamis, Navigasi Kurikulum Han Yu 1 - 12
+// =========================================================================
 
 class DinoApp {
   constructor() {
+    this.selectedBookId = 1;
+    this.selectedUnitId = 1;
     this.strokeWriter = null;
-    this.storyReader = null;
-    this.matchGame = null;
-    this.quiz = null;
-    this.pdfViewer = null;
-
-    this.init();
+    this.matchingGame = null;
+    this.quizEngine = null;
   }
 
   init() {
-    this.initAudioControls();
-    this.initNavigationTabs();
-    this.initModules();
-    this.initTeacherTaskModal();
-    this.checkStudentTaskUrl();
+    // Inisialisasi Sub-Engines pada Halaman Utama
+    this.strokeWriter = new DinoStrokeWriter('portal-stroke-canvas', 'portal-stroke-container');
+    this.matchingGame = new DinoMatchingGame('portal-matching-container');
+    this.quizEngine = new DinoQuizEngine('portal-quiz-container');
+
+    window.dinoStroke = this.strokeWriter;
+    window.dinoMatchGame = this.matchingGame;
+    window.dinoQuiz = this.quizEngine;
+
+    this.renderBooksGrid();
+    this.populateSelectDropdowns();
+    this.loadSelectedCurriculum();
+    this.updateGeneratedStudentLink();
   }
 
-  initAudioControls() {
-    const btnSfx = document.getElementById('btn-toggle-sfx');
-    const btnVoice = document.getElementById('btn-toggle-voice');
+  renderBooksGrid() {
+    const gridEl = document.getElementById('books-overview-grid');
+    if (!gridEl) return;
 
-    if (btnSfx) {
-      btnSfx.addEventListener('click', () => {
-        if (window.dinoAudio) {
-          const state = window.dinoAudio.toggleSfx();
-          btnSfx.innerHTML = state ? '🔊 Efek: ON' : '🔇 Efek: OFF';
-          btnSfx.classList.toggle('off', !state);
-        }
-      });
-    }
-
-    if (btnVoice) {
-      btnVoice.addEventListener('click', () => {
-        if (window.dinoAudio) {
-          const state = window.dinoAudio.toggleVoice();
-          btnVoice.innerHTML = state ? '🗣️ Suara: ON' : '🤐 Suara: OFF';
-          btnVoice.classList.toggle('off', !state);
-        }
-      });
-    }
+    gridEl.innerHTML = HAN_YU_CURRICULUM.books.map(b => `
+      <div class="book-card-item ${b.id === this.selectedBookId ? 'active' : ''}" onclick="dinoApp.selectBook(${b.id})">
+        <div class="book-dino-avatar">${b.dinoGuide.avatar}</div>
+        <div class="book-card-content">
+          <div class="book-title-tag">${b.title}</div>
+          <div class="book-level-desc">${b.level}</div>
+          <div class="book-units-badge">3 Unit (${b.units.length * 5} Bab Materi)</div>
+        </div>
+      </div>
+    `).join('');
   }
 
-  initNavigationTabs() {
-    const tabBtns = document.querySelectorAll('.nav-tab-btn');
-    const sections = document.querySelectorAll('.app-module-section');
+  populateSelectDropdowns() {
+    const bookSelect = document.getElementById('global-book-select');
+    const unitSelect = document.getElementById('global-unit-select');
 
-    tabBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const targetId = btn.getAttribute('data-target');
+    if (bookSelect) {
+      bookSelect.innerHTML = HAN_YU_CURRICULUM.books.map(b => 
+        `<option value="${b.id}" ${b.id === this.selectedBookId ? 'selected' : ''}>📘 ${b.title} - ${b.level}</option>`
+      ).join('');
 
-        tabBtns.forEach(b => b.classList.remove('active'));
-        sections.forEach(s => s.classList.remove('active'));
-
-        btn.classList.add('active');
-        const targetSection = document.getElementById(targetId);
-        if (targetSection) {
-          targetSection.classList.add('active');
-        }
-
-        // Hentikan suara bacaan jika berpindah tab
-        if (window.dinoAudio) {
-          window.dinoAudio.stopSpeaking();
-        }
-
-        // Sinkronisasi data saat tab aktif
-        if (targetId === 'module-pdf' && this.pdfViewer) {
-          this.pdfViewer.loadPdf(this.pdfViewer.currentBookId);
-        }
-      });
-    });
-
-    // Check URL parameters for default active tab
-    const params = new URLSearchParams(window.location.search);
-    const mod = params.get('mod') || params.get('module');
-    if (mod) {
-      const tabMap = {
-        'pdf': 'tab-btn-pdf',
-        'stroke': 'tab-btn-stroke',
-        'story': 'tab-btn-story',
-        'match': 'tab-btn-match',
-        'quiz': 'tab-btn-quiz'
+      bookSelect.onchange = (e) => {
+        this.selectedBookId = parseInt(e.target.value);
+        this.selectedUnitId = 1;
+        this.populateUnitDropdown();
+        this.loadSelectedCurriculum();
+        this.renderBooksGrid();
+        this.updateGeneratedStudentLink();
       };
-      const btnId = tabMap[mod];
-      if (btnId) {
-        const targetBtn = document.getElementById(btnId);
-        if (targetBtn) targetBtn.click();
+    }
+
+    this.populateUnitDropdown();
+  }
+
+  populateUnitDropdown() {
+    const unitSelect = document.getElementById('global-unit-select');
+    const book = getBookById(this.selectedBookId);
+
+    if (unitSelect && book) {
+      unitSelect.innerHTML = book.units.map(u => 
+        `<option value="${u.id}" ${u.id === this.selectedUnitId ? 'selected' : ''}>🌿 ${u.title}</option>`
+      ).join('');
+
+      unitSelect.onchange = (e) => {
+        this.selectedUnitId = parseInt(e.target.value);
+        this.loadSelectedCurriculum();
+        this.updateGeneratedStudentLink();
+      };
+    }
+  }
+
+  selectBook(bookId) {
+    this.selectedBookId = parseInt(bookId);
+    this.selectedUnitId = 1;
+    this.populateSelectDropdowns();
+    this.renderBooksGrid();
+    this.loadSelectedCurriculum();
+    this.updateGeneratedStudentLink();
+
+    // Scroll ke dashboard kerja
+    const dash = document.getElementById('curriculum-workspace');
+    if (dash) dash.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  loadSelectedCurriculum() {
+    const book = getBookById(this.selectedBookId);
+    const unit = getUnitByBookAndUnitId(this.selectedBookId, this.selectedUnitId);
+
+    // Update Header Dashboard
+    const titleEl = document.getElementById('curriculum-header-title');
+    const descEl = document.getElementById('curriculum-header-desc');
+    const lessonsListEl = document.getElementById('unit-lessons-list');
+
+    if (titleEl) titleEl.textContent = `${book.title} ➔ ${unit.title}`;
+    if (descEl) descEl.textContent = `Pemandu Dinosaurus: ${book.dinoGuide.name} ${book.dinoGuide.avatar} - ${book.dinoGuide.desc}`;
+
+    if (lessonsListEl && unit.lessons) {
+      lessonsListEl.innerHTML = unit.lessons.map(l => 
+        `<span class="lesson-chip">📖 ${l}</span>`
+      ).join('');
+    }
+
+    // 1. Cerita Unit Audio Lamban
+    this.renderStorySection(unit.story);
+
+    // 2. Latihan Guratan
+    this.renderStrokeSection(unit.vocab);
+
+    // 3. Game Gambar
+    if (this.matchingGame) {
+      this.matchingGame.loadUnit(unit);
+    }
+
+    // 4. Kuis Pilihan Ganda KKM 70
+    if (this.quizEngine) {
+      this.quizEngine.loadUnit(unit);
+    }
+  }
+
+  // -----------------------------------------------------------------------
+  // RENDER CERITA UNIT
+  // -----------------------------------------------------------------------
+  renderStorySection(storyData) {
+    const titleEl = document.getElementById('portal-story-title');
+    const hanziEl = document.getElementById('portal-story-hanzi');
+    const pinyinEl = document.getElementById('portal-story-pinyin');
+    const indoEl = document.getElementById('portal-story-indo');
+    const sentListEl = document.getElementById('portal-sentences-list');
+
+    if (!storyData) return;
+
+    if (titleEl) titleEl.textContent = storyData.title;
+    if (hanziEl) hanziEl.textContent = storyData.hanzi;
+    if (pinyinEl) pinyinEl.textContent = storyData.pinyin;
+    if (indoEl) indoEl.textContent = storyData.indonesian;
+
+    if (sentListEl && storyData.sentences) {
+      sentListEl.innerHTML = storyData.sentences.map((st, idx) => `
+        <div class="story-sentence-item" id="portal-sent-${idx}" onclick="dinoApp.playSentenceAudio('${st.hanzi.replace(/'/g, "\\'")}', ${idx})">
+          <div class="sentence-bubble-num">${idx + 1}</div>
+          <div class="sentence-text-block">
+            <div class="sent-pinyin">${st.pinyin}</div>
+            <div class="sent-hanzi">${st.hanzi}</div>
+            <div class="sent-indo">${st.indonesian}</div>
+          </div>
+          <button class="sent-play-btn" title="Putar Pelan">🔊</button>
+        </div>
+      `).join('');
+    }
+  }
+
+  playStoryFull() {
+    const unit = getUnitByBookAndUnitId(this.selectedBookId, this.selectedUnitId);
+    if (!unit || !unit.story) return;
+    dinoAudio.speakMandarin(unit.story.hanzi, { rate: 0.65 });
+  }
+
+  playSentenceAudio(hanziText, index) {
+    document.querySelectorAll('.story-sentence-item').forEach(el => el.classList.remove('speaking'));
+    const targetEl = document.getElementById(`portal-sent-${index}`);
+    if (targetEl) targetEl.classList.add('speaking');
+
+    dinoAudio.speakMandarin(hanziText, {
+      rate: 0.65,
+      onEnd: () => {
+        if (targetEl) targetEl.classList.remove('speaking');
       }
-    }
+    });
   }
 
-  initModules() {
-    if (typeof DinoStrokeWriter !== 'undefined') {
-      this.strokeWriter = new DinoStrokeWriter();
-    }
-    if (typeof DinoStoryReader !== 'undefined') {
-      this.storyReader = new DinoStoryReader();
-    }
-    if (typeof DinoMatchGame !== 'undefined') {
-      this.matchGame = new DinoMatchGame();
-    }
-    if (typeof DinoQuiz !== 'undefined') {
-      this.quiz = new DinoQuiz();
-    }
-    if (typeof DinoPdfViewer !== 'undefined') {
-      this.pdfViewer = new DinoPdfViewer();
-    }
-  }
+  // -----------------------------------------------------------------------
+  // RENDER GURATAN
+  // -----------------------------------------------------------------------
+  renderStrokeSection(vocabList) {
+    const listEl = document.getElementById('portal-stroke-vocab-list');
+    if (!listEl || !vocabList || vocabList.length === 0) return;
 
-  initTeacherTaskModal() {
-    const btnOpenModal = document.getElementById('btn-open-teacher-modal');
-    const modal = document.getElementById('teacher-task-modal');
-    const btnCloseModal = document.getElementById('btn-close-task-modal');
-    const btnGenerateLink = document.getElementById('btn-generate-task-link');
-    const generatedInput = document.getElementById('task-generated-url');
-    const btnCopyLink = document.getElementById('btn-copy-task-link');
-    const btnTestLink = document.getElementById('btn-test-task-link');
-
-    if (btnOpenModal && modal) {
-      btnOpenModal.addEventListener('click', () => {
-        modal.classList.add('active');
-        this.populateModalDropdowns();
-      });
-    }
-
-    if (btnCloseModal && modal) {
-      btnCloseModal.addEventListener('click', () => {
-        modal.classList.remove('active');
-      });
-    }
-
-    if (btnGenerateLink) {
-      btnGenerateLink.addEventListener('click', () => {
-        const mod = document.getElementById('task-module-select').value;
-        const book = document.getElementById('task-book-select').value;
-        const unit = document.getElementById('task-unit-select').value;
-        const reps = document.getElementById('task-reps-select').value;
-        const studentNameInput = document.getElementById('task-student-name-input');
-        const student = studentNameInput ? encodeURIComponent(studentNameInput.value.trim()) : '';
-
-        // Tentukan URL langsung ke murid.html
-        let path = window.location.pathname;
-        if (path.endsWith('index.html') || path.endsWith('tugas.html') || path.endsWith('murid.html')) {
-          path = path.substring(0, path.lastIndexOf('/') + 1) + 'murid.html';
-        } else if (path.endsWith('/')) {
-          path = path + 'murid.html';
-        } else {
-          path = path.substring(0, path.lastIndexOf('/') + 1) + 'murid.html';
-        }
-
-        const origin = window.location.origin && window.location.origin !== 'null' ? window.location.origin : '';
-        let finalUrl = `${origin}${path}?mod=${mod}&book=${book}&unit=${unit}&reps=${reps}`;
-        if (student) {
-          finalUrl += `&student=${student}`;
-        }
-
-        if (generatedInput) {
-          generatedInput.value = finalUrl;
-        }
-
-        if (btnTestLink) {
-          btnTestLink.style.display = 'inline-flex';
-          btnTestLink.onclick = () => window.open(finalUrl, '_blank');
-        }
-      });
-    }
-
-    if (btnCopyLink && generatedInput) {
-      btnCopyLink.addEventListener('click', () => {
-        if (!generatedInput.value) {
-          if (btnGenerateLink) btnGenerateLink.click();
-        }
-        generatedInput.select();
-        document.execCommand('copy');
-        btnCopyLink.textContent = '✅ Berhasil Disalin!';
-        setTimeout(() => {
-          btnCopyLink.textContent = '📋 Salin Link';
-        }, 2000);
-      });
-    }
-  }
-
-  populateModalDropdowns() {
-    const bookSel = document.getElementById('task-book-select');
-    const unitSel = document.getElementById('task-unit-select');
-    if (!bookSel || !window.DINO_DATA) return;
-
-    bookSel.innerHTML = window.DINO_DATA.books.map(b => `
-      <option value="${b.id}">${b.title}</option>
+    listEl.innerHTML = vocabList.map((v, idx) => `
+      <button class="vocab-nav-pill ${idx === 0 ? 'active' : ''}" onclick="dinoApp.selectStrokeVocab(${idx})">
+        <span class="pill-hanzi">${v.hanzi}</span>
+        <span class="pill-pinyin">${v.pinyin}</span>
+      </button>
     `).join('');
 
-    const updateUnits = () => {
-      const bId = parseInt(bookSel.value) || 1;
-      const unitMap = (window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[bId]) || {};
-      const keys = Object.keys(unitMap);
-      let html = '';
-      if (keys.length > 0) {
-        keys.forEach(k => {
-          html += `<option value="${k}">Pelajaran ${k} (${unitMap[k]})</option>`;
-        });
-      } else {
-        for (let u = 1; u <= 12; u++) {
-          html += `<option value="${u}">Pelajaran ${u}</option>`;
-        }
-      }
-      if (unitSel) unitSel.innerHTML = html;
-    };
+    this.currentVocabList = vocabList;
+    this.currentStrokeVocabIndex = 0;
 
-    bookSel.addEventListener('change', updateUnits);
-    updateUnits();
-  }
-
-  checkStudentTaskUrl() {
-    const params = new URLSearchParams(window.location.search);
-    const book = params.get('book');
-    const unit = params.get('unit');
-    const mod = params.get('mod');
-
-    if (book && unit) {
-      const banner = document.getElementById('student-task-banner');
-      const descEl = document.getElementById('student-task-desc');
-      if (banner) {
-        banner.style.display = 'block';
-        if (descEl) {
-          descEl.textContent = `Buku Han Yu ${book} • Pelajaran ${unit} • Modul: ${mod || 'Latihan'}`;
-        }
-      }
+    const repeatSel = document.getElementById('portal-stroke-repeat-select');
+    const repeats = parseInt(repeatSel ? repeatSel.value : '3');
+    if (this.strokeWriter) {
+      this.strokeWriter.loadVocab(vocabList[0], repeats);
     }
   }
-}
 
-// Inisialisasi Otomatis yang Kebal Lifecycle
-function startDinoApp() {
-  if (!window.dinoApp) {
-    window.dinoApp = new DinoApp();
+  selectStrokeVocab(idx) {
+    if (!this.currentVocabList) return;
+    this.currentStrokeVocabIndex = idx;
+    
+    document.querySelectorAll('#portal-stroke-vocab-list .vocab-nav-pill').forEach((btn, bIdx) => {
+      btn.classList.toggle('active', bIdx === idx);
+    });
+
+    const repeatSel = document.getElementById('portal-stroke-repeat-select');
+    const repeats = parseInt(repeatSel ? repeatSel.value : '3');
+    if (this.strokeWriter) {
+      this.strokeWriter.loadVocab(this.currentVocabList[idx], repeats);
+    }
+  }
+
+  nextCharacter() {
+    if (!this.currentVocabList) return;
+    const nextIdx = (this.currentStrokeVocabIndex + 1) % this.currentVocabList.length;
+    this.selectStrokeVocab(nextIdx);
+  }
+
+  // -----------------------------------------------------------------------
+  // GENERATOR LINK HALAMAN MURID
+  // -----------------------------------------------------------------------
+  updateGeneratedStudentLink() {
+    const linkInput = document.getElementById('generated-student-url-input');
+    const openBtn = document.getElementById('btn-open-student-page');
+    const qrText = document.getElementById('student-link-info-text');
+
+    // Mendapatkan URL absolut dasar
+    let baseUrl = window.location.href.split('?')[0];
+    if (baseUrl.endsWith('index.html')) {
+      baseUrl = baseUrl.replace('index.html', 'student.html');
+    } else if (baseUrl.endsWith('/')) {
+      baseUrl += 'student.html';
+    } else {
+      baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1) + 'student.html';
+    }
+
+    const fullUrl = `${baseUrl}?book=${this.selectedBookId}&unit=${this.selectedUnitId}`;
+
+    if (linkInput) linkInput.value = fullUrl;
+    if (openBtn) {
+      openBtn.onclick = () => window.open(fullUrl, '_blank');
+    }
+    if (qrText) {
+      const book = getBookById(this.selectedBookId);
+      const unit = getUnitByBookAndUnitId(this.selectedBookId, this.selectedUnitId);
+      qrText.innerHTML = `Tautan Siap Dibagikan untuk Murid: <strong>${book.title} - ${unit.title}</strong>`;
+    }
+  }
+
+  copyStudentLink() {
+    const linkInput = document.getElementById('generated-student-url-input');
+    if (!linkInput) return;
+
+    linkInput.select();
+    navigator.clipboard.writeText(linkInput.value).then(() => {
+      const copyBtn = document.getElementById('btn-copy-student-link');
+      if (copyBtn) {
+        const origText = copyBtn.innerHTML;
+        copyBtn.innerHTML = '✅ Berhasil Disalin!';
+        setTimeout(() => copyBtn.innerHTML = origText, 2500);
+      }
+    }).catch(() => {
+      alert("Tautan: " + linkInput.value);
+    });
   }
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', startDinoApp);
-} else {
-  startDinoApp();
-}
+// Global instance
+const dinoApp = new DinoApp();
+window.dinoApp = dinoApp;

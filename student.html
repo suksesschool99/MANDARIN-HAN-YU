@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Halaman Murid - Petualangan Mandarin Dinosaurus (Han Yu 1 - 12)</title>
+  <meta name="description" content="Halaman Belajar Khusus Murid: Cerita Audio Lamban, Menulis Guratan Berulang 3-6x, Mencocokkan Gambar, dan Kuis KKM 70 bertema Dinosaurus.">
+  
+  <!-- Google Fonts & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Nunito:wght@400;600;700;800;900&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/stroke.css">
+  <link rel="stylesheet" href="css/student.css">
+</head>
+<body style="background-color: #f7faf7;">
+
+  <!-- TOP STUDENT NAVBAR -->
+  <nav class="dino-navbar" style="background: linear-gradient(135deg, #1b4332, #2d6a4f);">
+    <a href="index.html" class="dino-brand">
+      <span class="brand-icon">🦕</span>
+      <div class="brand-titles">
+        <h1>RUANG BELAJAR MURID DINOSAURUS</h1>
+        <p id="student-page-title">Memuat Petualangan...</p>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <span class="dino-pill type-pill" id="student-book-badge">Tingkat SD</span>
+      <a href="index.html" class="dino-btn secondary small">
+        🏠 Menu Utama
+      </a>
+    </div>
+  </nav>
+
+  <main class="main-content-layout" style="max-width: 1100px;">
+    
+    <!-- SELECTOR BUKU & UNIT (JIKA INGIN PINDAH UNIT) -->
+    <div style="background: white; padding: 14px 20px; border-radius: var(--radius-md); margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; border: 2px solid var(--dino-pale-moss);">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-weight: 800; color: var(--dino-forest-dark);">📚 Materi Pilihan:</span>
+        <select id="student-book-select" class="dino-select" style="width: auto; min-width: 180px;"></select>
+        <select id="student-unit-select" class="dino-select" style="width: auto; min-width: 240px;"></select>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="dino-btn secondary small" onclick="dinoAudio.playApplauseSound()">👏 Tepuk Tangan</button>
+        <button class="dino-btn secondary small" onclick="dinoAudio.playDinoRoarSound()">🔊 Raungan Dino</button>
+      </div>
+    </div>
+
+    <!-- HERO DINO GUIDE BAR -->
+    <div class="student-dino-guide-bar">
+      <div class="dino-avatar-large" id="dino-guide-avatar">🦖</div>
+      <div class="dino-speech-bubble">
+        <div class="dino-guide-title" id="dino-guide-name">Pemandu Petualangan</div>
+        <p class="dino-speech-text" id="dino-guide-speech">
+          Halo teman-teman! Selesaikan 4 Misi Petualangan Dinosaurus di bawah ini!
+        </p>
+      </div>
+    </div>
+
+    <!-- 4 QUEST ADVENTURE TABS -->
+    <div class="quest-nav-container">
+      <button class="quest-tab-btn active" data-tab="story" onclick="studentPortal.switchTab('story')">
+        <span class="quest-icon">🦕</span>
+        <span class="quest-label">Misi 1: Cerita Unit</span>
+        <span class="quest-sublabel">Audio Pelan & Lamban</span>
+      </button>
+
+      <button class="quest-tab-btn" data-tab="stroke" onclick="studentPortal.switchTab('stroke')">
+        <span class="quest-icon">✍️</span>
+        <span class="quest-label">Misi 2: Tulis Guratan</span>
+        <span class="quest-sublabel">Target 3-6x Latihan</span>
+      </button>
+
+      <button class="quest-tab-btn" data-tab="matching" onclick="studentPortal.switchTab('matching')">
+        <span class="quest-icon">🧩</span>
+        <span class="quest-label">Misi 3: Game Gambar</span>
+        <span class="quest-sublabel">Cocokkan Kosakata</span>
+      </button>
+
+      <button class="quest-tab-btn" data-tab="quiz" onclick="studentPortal.switchTab('quiz')">
+        <span class="quest-icon">🏆</span>
+        <span class="quest-label">Misi 4: Ujian Kuis</span>
+        <span class="quest-sublabel">KKM 70 + Piala Emas</span>
+      </button>
+    </div>
+
+    <!-- =====================================================================
+         QUEST PANEL 1: CERITA AUDIO LAMBAN (UNTUK ANAK SD)
+         ===================================================================== -->
+    <div class="quest-panel active" id="quest-panel-story">
+      <div class="story-box-wrapper">
+        <div class="story-meta-header">
+          <h3 id="story-display-title" style="color: var(--dino-forest-dark); font-size: 1.4rem;">Judul Cerita</h3>
+          <div class="audio-controls-row">
+            <button class="dino-btn primary" onclick="studentPortal.playStoryFull()">
+              ▶️ Putar Seluruh Cerita (Pelan 0.65x)
+            </button>
+            <button class="dino-btn secondary small" onclick="studentPortal.stopStoryAudio()">
+              ⏹️ Berhenti
+            </button>
+          </div>
+        </div>
+
+        <div style="background: var(--dino-pale-moss); padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.9rem; color: var(--dino-forest-deep); font-weight: 700;">
+          💡 Petunjuk Murid: Dengarkan cerita secara menyeluruh atau klik masing-masing kalimat berbayang di bawah untuk menirukan pelafalan per kalimat!
+        </div>
+
+        <div class="story-sentences-list" id="story-sentences-container">
+          <!-- Diisi otomatis oleh student-portal.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         QUEST PANEL 2: LATIHAN MENULIS GURATAN 3-6 KALI
+         (Tepuk Tangan jika Selesai, Raungan Dino jika Salah)
+         ===================================================================== -->
+    <div class="quest-panel" id="quest-panel-stroke">
+      <div class="feature-panel-card" style="background: white;">
+        <div class="panel-title-bar">
+          <h3>✍️ Latihan Menulis Guratan Kosakata (Tian Zi Ge Grid)</h3>
+          <div class="target-repeat-config">
+            <span>Pilih Target Pengulangan:</span>
+            <select id="stroke-repeat-select" class="repeat-select-input" onchange="dinoStroke.setTargetRepeats(this.value)">
+              <option value="3" selected>3 Kali</option>
+              <option value="4">4 Kali</option>
+              <option value="5">5 Kali</option>
+              <option value="6">6 Kali</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="stroke-practice-layout">
+          <!-- Kiri: Pilih Kosakata -->
+          <div class="stroke-char-card">
+            <p style="font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; color: var(--dino-forest-deep);">
+              Pilih Kosakata Unit:
+            </p>
+            <div class="stroke-vocab-list-nav" id="stroke-vocab-list-nav"></div>
+
+            <div class="active-char-detail" style="margin-top: 14px;">
+              <div class="char-huge" id="stroke-vocab-title">你</div>
+              <div class="char-pinyin" id="stroke-vocab-pinyin">nǐ</div>
+              <div class="char-meaning" id="stroke-vocab-meaning">Arti: kamu</div>
+              <div class="char-meta-tags">
+                <span class="dino-pill type-pill" id="stroke-count-display">7 Guratan</span>
+              </div>
+            </div>
+
+            <div class="stroke-steps-box">
+              <h5>Urutan Nama Guratan (*Bi Hua*):</h5>
+              <div class="stroke-steps-list" id="stroke-order-steps"></div>
+            </div>
+          </div>
+
+          <!-- Kanan: Kanvas Menulis & Suara -->
+          <div class="stroke-canvas-card" id="student-stroke-container">
+            <div class="canvas-toolbar-top">
+              <button class="dino-btn secondary small" onclick="dinoStroke.playDemoAnimation()">
+                🎬 Peragaan Guratan
+              </button>
+              <div class="repeat-progress-counter" id="stroke-repeat-counter">
+                Latihan: 0 / 3 Kali
+              </div>
+            </div>
+
+            <div class="canvas-frame-box">
+              <canvas id="student-stroke-canvas" width="320" height="320"></canvas>
+            </div>
+
+            <div class="canvas-actions-row">
+              <button class="dino-btn primary" onclick="dinoStroke.checkPractice(false)">
+                ✅ Selesai Menulis 1x (Cek)
+              </button>
+              <button class="dino-btn secondary" onclick="dinoStroke.clearCanvas()">
+                🧹 Hapus Kanvas
+              </button>
+              <button class="dino-btn small secondary" onclick="dinoStroke.checkPractice(true)">
+                ⚠️ Uji Raungan Dinosaurus
+              </button>
+            </div>
+
+            <!-- Feedback Banner Suara -->
+            <div id="stroke-feedback-banner" class="feedback-banner hidden"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         QUEST PANEL 3: GAME MENCOCOKKAN KOSAKATA & GAMBAR
+         ===================================================================== -->
+    <div class="quest-panel" id="quest-panel-matching">
+      <div id="student-matching-container">
+        <!-- Diisi oleh matching-game.js -->
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         QUEST PANEL 4: SOAL LATIHAN MULTI-TIPE (KKM 70 + PIALA)
+         ===================================================================== -->
+    <div class="quest-panel" id="quest-panel-quiz">
+      <div id="student-quiz-container">
+        <!-- Diisi oleh quiz-engine.js -->
+      </div>
+    </div>
+
+  </main>
+
+  <footer style="text-align: center; padding: 32px 20px; background: #143628; color: white; margin-top: 50px;">
+    <p style="font-weight: 800; font-size: 1rem;">🦖 Halaman Murid Petualangan Mandarin Han Yu 1 - 12 🦕</p>
+    <p style="font-size: 0.8rem; color: #a7f3d0; margin-top: 4px;">Disesuaikan dengan Materi Kurikulum Sekolah Dasar Beijing Chinese Language & Culture College</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data-curriculum.js"></script>
+  <script src="js/audio-engine.js"></script>
+  <script src="js/stroke-writer.js"></script>
+  <script src="js/matching-game.js"></script>
+  <script src="js/quiz-engine.js"></script>
+  <script src="js/student-portal.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      studentPortal.init();
+    });
+  </script>
+</body>
+</html>

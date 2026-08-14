@@ -1,396 +1,378 @@
-/**
- * Dino Mandarin Adventure - Stroke Writer Module
- * Canvas Menulis Interaktif, Target Repetisi 3-6x, Panduan Langkah Guratan Resmi,
- * Hitungan Skor Benar/Salah + Audio Tepuk Tangan (Benar) & Suara Dino Roar (Salah)
- */
+// =========================================================================
+// INTERACTIVE HANZI STROKE WRITER & PRACTICE CANVAS
+// Grid Tian Zi Ge / Mi Zi Ge, Stroke Order Animation, 3-6x Repetition Counter
+// Sound Trigger: Applause on Completion, Dino Roar on Error
+// =========================================================================
 
 class DinoStrokeWriter {
-  constructor() {
-    this.writer = null;
-    this.currentBookId = 1;
-    this.currentUnitId = 1;
-    this.currentChar = '你';
-    this.currentCharIndex = 0;
-    this.unitChars = [];
+  constructor(canvasId, containerId) {
+    this.canvas = document.getElementById(canvasId);
+    this.container = document.getElementById(containerId);
+    this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
     
-    // Repetition & Score Tracker (3 sampai 6 kali)
-    this.targetReps = 3;
-    this.currentReps = 0;
-    this.correctCount = 0;
-    this.incorrectCount = 0;
-    this.isCompleted = false;
-
-    this.init();
-  }
-
-  init() {
-    this.cacheDom();
-    this.populateBookDropdown();
-    this.bindEvents();
-
-    const params = new URLSearchParams(window.location.search);
-    const book = parseInt(params.get('book')) || 1;
-    const unit = parseInt(params.get('unit')) || 1;
-    const reps = parseInt(params.get('reps')) || 3;
-
-    this.targetReps = Math.min(Math.max(reps, 3), 6);
-    if (this.repsSelect) this.repsSelect.value = this.targetReps;
-
-    this.loadBookUnit(book, unit);
-  }
-
-  cacheDom() {
-    this.bookSelect = document.getElementById('stroke-book-select');
-    this.unitSelect = document.getElementById('stroke-unit-select');
-    this.repsSelect = document.getElementById('stroke-reps-target');
-    this.eggTracker = document.getElementById('reps-egg-tracker');
+    this.currentVocab = null;
+    this.targetRepeats = 3; // Rentang 3-6 kali
+    this.currentRepeat = 0;
+    this.strokesDrawn = 0;
+    this.isDrawing = false;
+    this.drawnPoints = [];
+    this.allStrokes = [];
+    this.showOutline = true;
+    this.demoAnimationTimer = null;
     
-    this.pinyinEl = document.getElementById('char-pinyin');
-    this.meaningEl = document.getElementById('char-meaning');
-    this.strokeCountBadge = document.getElementById('char-stroke-count');
-    this.dinoTipEl = document.getElementById('char-dino-tip');
+    if (this.canvas) {
+      this.initEvents();
+      this.resizeCanvas();
+    }
+  }
+
+  setCanvas(canvasId) {
+    this.canvas = document.getElementById(canvasId);
+    if (this.canvas) {
+      this.ctx = this.canvas.getContext('2d');
+      this.initEvents();
+      this.resizeCanvas();
+    }
+  }
+
+  resizeCanvas() {
+    if (!this.canvas) return;
+    const rect = this.canvas.getBoundingClientRect();
+    const size = Math.min(rect.width || 320, 340);
+    this.canvas.width = size * window.devicePixelRatio;
+    this.canvas.height = size * window.devicePixelRatio;
+    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.displayWidth = size;
+    this.displayHeight = size;
+    this.redraw();
+  }
+
+  initEvents() {
+    if (!this.canvas) return;
     
-    this.correctCountEl = document.getElementById('stroke-correct-count');
-    this.incorrectCountEl = document.getElementById('stroke-incorrect-count');
-    
-    this.btnAnimate = document.getElementById('btn-animate-stroke');
-    this.btnPractice = document.getElementById('btn-practice-stroke');
-    this.btnClear = document.getElementById('btn-clear-canvas');
-    this.btnAudio = document.getElementById('btn-speak-current-char');
-    
-    this.btnPrev = document.getElementById('btn-prev-char');
-    this.btnNext = document.getElementById('btn-next-char');
-    this.customInput = document.getElementById('custom-char-input');
-    this.btnSearch = document.getElementById('btn-search-char');
-    this.chipsContainer = document.getElementById('stroke-char-chips');
-    this.strokeStepsList = document.getElementById('stroke-steps-list');
-    this.writerContainer = document.getElementById('character-target-div');
-  }
+    // Mouse events
+    this.canvas.addEventListener('mousedown', (e) => this.startDrawing(e));
+    this.canvas.addEventListener('mousemove', (e) => this.draw(e));
+    window.addEventListener('mouseup', () => this.stopDrawing());
 
-  populateBookDropdown() {
-    if (!this.bookSelect) return;
-    if (window.DINO_DATA && window.DINO_DATA.books) {
-      this.bookSelect.innerHTML = window.DINO_DATA.books.map(b => `
-        <option value="${b.id}">${b.title}</option>
-      `).join('');
-    }
-  }
+    // Touch events
+    this.canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      this.startDrawing(touch);
+    }, { passive: false });
 
-  bindEvents() {
-    if (this.bookSelect) {
-      this.bookSelect.addEventListener('change', (e) => {
-        this.loadBookUnit(parseInt(e.target.value) || 1, 1);
-      });
-    }
+    this.canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      this.draw(touch);
+    }, { passive: false });
 
-    if (this.unitSelect) {
-      this.unitSelect.addEventListener('change', (e) => {
-        this.loadUnit(parseInt(e.target.value) || 1);
-      });
-    }
-
-    if (this.repsSelect) {
-      this.repsSelect.addEventListener('change', (e) => {
-        this.targetReps = parseInt(e.target.value) || 3;
-        this.currentReps = 0;
-        this.renderEggTracker();
-      });
-    }
-
-    if (this.btnAnimate) {
-      this.btnAnimate.addEventListener('click', () => this.animateStroke());
-    }
-
-    if (this.btnPractice) {
-      this.btnPractice.addEventListener('click', () => this.startQuizMode());
-    }
-
-    if (this.btnClear) {
-      this.btnClear.addEventListener('click', () => this.clearCanvas());
-    }
-
-    if (this.btnAudio) {
-      this.btnAudio.addEventListener('click', () => {
-        if (window.dinoAudio) window.dinoAudio.speakMandarinSlow(this.currentChar);
-      });
-    }
-
-    if (this.btnPrev) {
-      this.btnPrev.addEventListener('click', () => this.navigateChar(-1));
-    }
-
-    if (this.btnNext) {
-      this.btnNext.addEventListener('click', () => this.navigateChar(1));
-    }
-
-    if (this.btnSearch && this.customInput) {
-      this.btnSearch.addEventListener('click', () => {
-        const val = this.customInput.value.trim();
-        if (val) this.setCustomCharacter(val[0]);
-      });
-      this.customInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          const val = this.customInput.value.trim();
-          if (val) this.setCustomCharacter(val[0]);
-        }
-      });
-    }
-  }
-
-  loadBookUnit(bookId, unitId) {
-    this.currentBookId = parseInt(bookId) || 1;
-    this.currentUnitId = parseInt(unitId) || 1;
-
-    if (this.bookSelect) this.bookSelect.value = this.currentBookId;
-
-    // Update unit dropdown titles
-    if (this.unitSelect) {
-      const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[this.currentBookId]) || {};
-      const unitKeys = Object.keys(unitMap);
-      let html = '';
-      if (unitKeys.length > 0) {
-        unitKeys.forEach(u => {
-          const title = unitMap[u] || `Unit ${u}`;
-          html += `<option value="${u}" ${parseInt(u) === this.currentUnitId ? 'selected' : ''}>Pelajaran ${u} (${title})</option>`;
-        });
-      } else {
-        for (let u = 1; u <= 10; u++) {
-          html += `<option value="${u}" ${u === this.currentUnitId ? 'selected' : ''}>Pelajaran ${u}</option>`;
-        }
-      }
-      this.unitSelect.innerHTML = html;
-      this.unitSelect.value = this.currentUnitId;
-    }
-
-    this.loadUnit(this.currentUnitId);
-  }
-
-  loadUnit(unitId) {
-    this.currentUnitId = parseInt(unitId) || 1;
-
-    // Filter characters for this book & unit
-    let chars = [];
-    if (window.DINO_DATA && window.DINO_DATA.vocabList) {
-      chars = window.DINO_DATA.vocabList.filter(v => v.book === this.currentBookId && v.unit === this.currentUnitId);
-      if (chars.length === 0) {
-        chars = window.DINO_DATA.vocabList.filter(v => v.book === this.currentBookId);
-      }
-    }
-
-    if (chars.length === 0) {
-      // Fallback
-      chars = [
-        { hanzi: '你', pinyin: 'nǐ', meaning: 'Kamu', strokes: 7, strokeSteps: ['1. 撇', '2. 竖', '3. 撇', '4. 横撇', '5. 竖钩', '6. 撇', '7. 点'], tip: 'Radikal orang (亻) di kiri.' },
-        { hanzi: '好', pinyin: 'hǎo', meaning: 'Baik / Bagus', strokes: 6, strokeSteps: ['1. 撇点', '2. 撇', '3. 提', '4. 横撇', '5. 弯钩', '6. 横'], tip: 'Radikal wanita (女) + anak (子).' }
-      ];
-    }
-
-    this.unitChars = chars;
-    this.currentCharIndex = 0;
-    this.renderCharChips();
-    this.selectCharacter(0);
-  }
-
-  renderCharChips() {
-    if (!this.chipsContainer) return;
-    this.chipsContainer.innerHTML = this.unitChars.map((item, idx) => `
-      <button class="stroke-char-chip ${idx === this.currentCharIndex ? 'active' : ''}" data-index="${idx}">
-        <span class="chip-hanzi">${item.hanzi}</span>
-        <span class="chip-pinyin">${item.pinyin}</span>
-      </button>
-    `).join('');
-
-    const chips = this.chipsContainer.querySelectorAll('.stroke-char-chip');
-    chips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        const idx = parseInt(chip.getAttribute('data-index'));
-        this.selectCharacter(idx);
-      });
+    this.canvas.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      this.stopDrawing();
     });
   }
 
-  selectCharacter(index) {
-    if (!this.unitChars[index]) return;
-    this.currentCharIndex = index;
-    const item = this.unitChars[index];
-    this.currentChar = item.hanzi[0]; // Ambil karakter pertama jika frasa
-
-    // Update Chips UI
-    if (this.chipsContainer) {
-      const allChips = this.chipsContainer.querySelectorAll('.stroke-char-chip');
-      allChips.forEach((c, idx) => {
-        c.classList.toggle('active', idx === index);
-      });
-    }
-
-    // Update Metadata
-    if (this.pinyinEl) this.pinyinEl.textContent = item.pinyin;
-    if (this.meaningEl) this.meaningEl.textContent = item.meaning;
-    if (this.strokeCountBadge) this.strokeCountBadge.textContent = `${item.strokes || 1} Guratan`;
-    if (this.dinoTipEl) this.dinoTipEl.textContent = item.tip || 'Tulis setiap goresan dengan mantap dan runtut!';
-
-    // Render Stroke Steps
-    this.renderStrokeSteps(item.strokeSteps || []);
-
-    // Reset Repetition State
-    this.currentReps = 0;
-    this.isCompleted = false;
-    this.renderEggTracker();
-
-    // Render Canvas HanziWriter
-    this.initHanziWriter(this.currentChar);
+  getCanvasPos(e) {
+    const rect = this.canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
   }
 
-  renderStrokeSteps(steps) {
-    if (!this.strokeStepsList) return;
-    if (!steps || steps.length === 0) {
-      this.strokeStepsList.innerHTML = '<li class="step-item">Urutan guratan standar Kaishu</li>';
+  startDrawing(e) {
+    this.isDrawing = true;
+    this.drawnPoints = [];
+    const pos = this.getCanvasPos(e);
+    this.drawnPoints.push(pos);
+    dinoAudio.getAudioContext(); // Wake up audio
+  }
+
+  draw(e) {
+    if (!this.isDrawing) return;
+    const pos = this.getCanvasPos(e);
+    this.drawnPoints.push(pos);
+
+    // Live stroke rendering on canvas
+    this.ctx.save();
+    this.ctx.lineWidth = 14;
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
+    this.ctx.strokeStyle = '#2d6a4f';
+
+    const pts = this.drawnPoints;
+    if (pts.length > 1) {
+      this.ctx.beginPath();
+      this.ctx.moveTo(pts[pts.length - 2].x, pts[pts.length - 2].y);
+      this.ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+      this.ctx.stroke();
+    }
+    this.ctx.restore();
+  }
+
+  stopDrawing() {
+    if (!this.isDrawing) return;
+    this.isDrawing = false;
+    if (this.drawnPoints.length > 3) {
+      this.allStrokes.push([...this.drawnPoints]);
+      this.strokesDrawn++;
+      dinoAudio.playEggCrackSound();
+    }
+    this.drawnPoints = [];
+  }
+
+  loadVocab(vocabItem, targetRepeats = 3) {
+    this.currentVocab = vocabItem;
+    this.targetRepeats = Math.max(3, Math.min(6, targetRepeats));
+    this.currentRepeat = 0;
+    this.strokesDrawn = 0;
+    this.allStrokes = [];
+    this.stopDemoAnimation();
+    this.renderUIInfo();
+    this.redraw();
+  }
+
+  setTargetRepeats(num) {
+    this.targetRepeats = Math.max(3, Math.min(6, num));
+    this.renderUIInfo();
+  }
+
+  // Cek keberhasilan tulisan anak
+  checkPractice(isSimulateError = false) {
+    if (!this.currentVocab) return;
+
+    if (isSimulateError || this.allStrokes.length === 0) {
+      // SALAH / MELENCENG -> SUARA DINOSAURUS MERAUNG
+      dinoAudio.playDinoRoarSound();
+      this.triggerRoarAnimation();
       return;
     }
-    this.strokeStepsList.innerHTML = steps.map((s, idx) => `
-      <li class="step-item"><span class="step-num">${idx + 1}</span> ${s}</li>
-    `).join('');
-  }
 
-  initHanziWriter(char) {
-    const targetDiv = document.getElementById('character-target-div');
-    if (!targetDiv) return;
-    targetDiv.innerHTML = '';
+    // TULISAN BENAR / 1 REPETISI BERHASIL
+    this.currentRepeat++;
+    this.allStrokes = [];
+    this.renderUIInfo();
 
-    if (typeof HanziWriter === 'undefined') {
-      targetDiv.innerHTML = `<div style="font-size: 8rem; font-family: var(--font-chinese); color: var(--dino-green-deep); text-align: center; line-height: 250px;">${char}</div>`;
-      return;
-    }
-
-    try {
-      this.writer = HanziWriter.create('character-target-div', char, {
-        width: 260,
-        height: 260,
-        padding: 15,
-        showOutline: true,
-        strokeAnimationSpeed: 1,
-        delayBetweenStrokes: 250,
-        strokeColor: '#1b5e20',
-        outlineColor: '#c8e6c9',
-        drawingColor: '#e65100',
-        drawingWidth: 16,
-        showHintAfterMisses: 2,
-        highlightColor: '#ff9800'
-      });
-
-      // Otomatis mulai mode latihan interaktif
-      this.startQuizMode();
-    } catch (e) {
-      console.warn('HanziWriter init error:', e);
-      targetDiv.innerHTML = `<div style="font-size: 8rem; font-family: var(--font-chinese); color: var(--dino-green-deep); text-align: center; line-height: 250px;">${char}</div>`;
-    }
-  }
-
-  animateStroke() {
-    if (this.writer) {
-      if (window.dinoAudio) window.dinoAudio.speakMandarinSlow(this.currentChar);
-      this.writer.animateCharacter({
-        onComplete: () => {
-          this.startQuizMode();
-        }
-      });
+    if (this.currentRepeat >= this.targetRepeats) {
+      // SELESAI SEMUA TARGET 3-6 KALI -> SUARA TEPUK TANGAN MERIAH
+      dinoAudio.playApplauseSound();
+      this.triggerApplauseAnimation();
+    } else {
+      dinoAudio.playCorrectSound();
+      this.redraw();
     }
   }
 
   clearCanvas() {
-    if (this.writer) {
-      this.writer.quiz();
+    this.allStrokes = [];
+    this.drawnPoints = [];
+    this.redraw();
+  }
+
+  redraw() {
+    if (!this.ctx || !this.canvas) return;
+    const w = this.displayWidth || 320;
+    const h = this.displayHeight || 320;
+
+    this.ctx.clearRect(0, 0, w, h);
+
+    // 1. Gambar Grid Mi Zi Ge (米字格)
+    this.drawMiZiGe(w, h);
+
+    // 2. Gambar Karakter Pemandu (Outline Transparan)
+    if (this.showOutline && this.currentVocab) {
+      this.drawGuideCharacter(w, h);
+    }
+
+    // 3. Gambar Goresan yang Sudah Digambar Siswa
+    this.drawStudentStrokes();
+  }
+
+  drawMiZiGe(w, h) {
+    const ctx = this.ctx;
+    ctx.save();
+    
+    // Background Grid
+    ctx.fillStyle = '#fffdf7';
+    ctx.fillRect(0, 0, w, h);
+
+    // Border Kotak
+    ctx.strokeStyle = '#e76f51';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(8, 8, w - 16, h - 16);
+
+    // Garis Putus-putus Merah (Salib & Diagonal)
+    ctx.strokeStyle = 'rgba(231, 111, 81, 0.45)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([6, 6]);
+
+    // Garis Vertikal Tengah
+    ctx.beginPath();
+    ctx.moveTo(w / 2, 8);
+    ctx.lineTo(w / 2, h - 8);
+    ctx.stroke();
+
+    // Garis Horizontal Tengah
+    ctx.beginPath();
+    ctx.moveTo(8, h / 2);
+    ctx.lineTo(w - 8, h / 2);
+    ctx.stroke();
+
+    // Garis Diagonal 1
+    ctx.beginPath();
+    ctx.moveTo(8, 8);
+    ctx.lineTo(w - 8, h - 8);
+    ctx.stroke();
+
+    // Garis Diagonal 2
+    ctx.beginPath();
+    ctx.moveTo(w - 8, 8);
+    ctx.lineTo(8, h - 8);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  drawGuideCharacter(w, h) {
+    const ctx = this.ctx;
+    const char = this.currentVocab.hanzi[0] || "你";
+    ctx.save();
+    ctx.font = `bold ${w * 0.72}px "KaiTi", "STKaiti", "Microsoft YaHei", "Noto Sans SC", serif`;
+    ctx.fillStyle = 'rgba(45, 106, 79, 0.18)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(char, w / 2, h / 2 + 10);
+    ctx.restore();
+  }
+
+  drawStudentStrokes() {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.lineWidth = 14;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#1b4d3e';
+
+    for (const stroke of this.allStrokes) {
+      if (stroke.length < 2) continue;
+      ctx.beginPath();
+      ctx.moveTo(stroke[0].x, stroke[0].y);
+      for (let i = 1; i < stroke.length; i++) {
+        ctx.lineTo(stroke[i].x, stroke[i].y);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // Animasi Peragaan Guratan
+  playDemoAnimation() {
+    if (!this.currentVocab) return;
+    this.stopDemoAnimation();
+    this.allStrokes = [];
+    this.redraw();
+
+    const char = this.currentVocab.hanzi[0];
+    dinoAudio.speakMandarin(char, { rate: 0.6 });
+
+    let opacity = 0.1;
+    let step = 0;
+    this.demoAnimationTimer = setInterval(() => {
+      opacity += 0.1;
+      this.ctx.save();
+      this.ctx.font = `bold ${(this.displayWidth || 320) * 0.72}px "KaiTi", "STKaiti", "Microsoft YaHei", serif`;
+      this.ctx.fillStyle = `rgba(231, 111, 81, ${Math.min(0.85, opacity)})`;
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.fillText(char, this.displayWidth / 2, this.displayHeight / 2 + 10);
+      this.ctx.restore();
+
+      step++;
+      if (step > 10) {
+        clearInterval(this.demoAnimationTimer);
+        setTimeout(() => this.redraw(), 1200);
+      }
+    }, 100);
+  }
+
+  stopDemoAnimation() {
+    if (this.demoAnimationTimer) {
+      clearInterval(this.demoAnimationTimer);
+      this.demoAnimationTimer = null;
     }
   }
 
-  startQuizMode() {
-    if (!this.writer) return;
+  renderUIInfo() {
+    const vocabEl = document.getElementById('stroke-vocab-title');
+    const pinyinEl = document.getElementById('stroke-vocab-pinyin');
+    const meaningEl = document.getElementById('stroke-vocab-meaning');
+    const strokeCountEl = document.getElementById('stroke-count-display');
+    const repeatBadgeEl = document.getElementById('stroke-repeat-counter');
+    const strokeListEl = document.getElementById('stroke-order-steps');
 
-    this.writer.quiz({
-      onCorrectStroke: (data) => {
-        this.correctCount++;
-        if (this.correctCountEl) this.correctCountEl.textContent = this.correctCount;
-        
-        // Suara Tepuk Tangan Single Clap pada setiap goresan benar
-        if (window.dinoAudio) window.dinoAudio.playClapSingle();
-      },
-      onMistake: (strokeData) => {
-        this.incorrectCount++;
-        if (this.incorrectCountEl) this.incorrectCountEl.textContent = this.incorrectCount;
-        
-        // Suara Raungan Dinosaurus saat salah goresan
-        if (window.dinoAudio) window.dinoAudio.playDinoRoar();
-      },
-      onComplete: (summary) => {
-        this.currentReps++;
-        this.renderEggTracker();
+    if (!this.currentVocab) return;
 
-        if (this.currentReps >= this.targetReps) {
-          // Sukses Penuh Menyelesaikan Target Repetisi (3-6x)
-          this.isCompleted = true;
-          if (window.dinoAudio) {
-            window.dinoAudio.playApplause(); // Suara Tepuk Tangan Meriah & Fanfare
-          }
-          this.showCelebrationModal();
+    if (vocabEl) vocabEl.textContent = this.currentVocab.hanzi;
+    if (pinyinEl) pinyinEl.textContent = this.currentVocab.pinyin;
+    if (meaningEl) meaningEl.textContent = `Arti: ${this.currentVocab.meaning}`;
+    if (strokeCountEl) strokeCountEl.textContent = `${this.currentVocab.strokes} Guratan (Radikal: ${this.currentVocab.radical || '-'})`;
+
+    if (repeatBadgeEl) {
+      let eggsHtml = '';
+      for (let i = 0; i < this.targetRepeats; i++) {
+        if (i < this.currentRepeat) {
+          eggsHtml += '<span class="egg-badge done" title="Latihan selesai">🦖 Selesai</span> ';
         } else {
-          // Masih perlu repetisi berikutnya
-          if (window.dinoAudio) {
-            window.dinoAudio.playApplause();
-          }
-          setTimeout(() => {
-            if (this.writer) this.writer.quiz();
-          }, 800);
+          eggsHtml += '<span class="egg-badge pending" title="Belum">🥚 Ke-' + (i + 1) + '</span> ';
         }
       }
-    });
-  }
-
-  renderEggTracker() {
-    if (!this.eggTracker) return;
-    let html = '';
-    for (let i = 1; i <= this.targetReps; i++) {
-      if (i < this.currentReps) {
-        html += `<div class="egg-item hatched" title="Selesai Latihan ke-${i}">🦖<span>Lolos ${i}x</span></div>`;
-      } else if (i === this.currentReps) {
-        html += `<div class="egg-item cracking" title="Latihan ke-${i} Selesai!">🐣<span>Retak ${i}x</span></div>`;
-      } else {
-        html += `<div class="egg-item intact" title="Target Latihan ke-${i}">🥚<span>Target ${i}x</span></div>`;
-      }
+      repeatBadgeEl.innerHTML = `Latihan: ${this.currentRepeat} / ${this.targetRepeats} Kali<div class="egg-progress">${eggsHtml}</div>`;
     }
-    this.eggTracker.innerHTML = html;
-  }
 
-  showCelebrationModal() {
-    const modal = document.getElementById('stroke-success-modal');
-    if (modal) {
-      const charEl = modal.querySelector('.modal-char-display');
-      if (charEl) charEl.textContent = this.currentChar;
-      modal.classList.add('active');
+    if (strokeListEl && this.currentVocab.strokeOrder) {
+      strokeListEl.innerHTML = this.currentVocab.strokeOrder.map((s, idx) => 
+        `<span class="stroke-step-pill"><span class="step-num">${idx + 1}</span> ${s}</span>`
+      ).join('');
     }
   }
 
-  navigateChar(direction) {
-    const newIdx = this.currentCharIndex + direction;
-    if (newIdx >= 0 && newIdx < this.unitChars.length) {
-      this.selectCharacter(newIdx);
+  triggerApplauseAnimation() {
+    const banner = document.getElementById('stroke-feedback-banner');
+    if (banner) {
+      banner.className = 'feedback-banner applause show';
+      banner.innerHTML = `
+        <div class="feedback-content">
+          <div class="feedback-icon">👏🎉🦖</div>
+          <h3>Luar Biasa! Benar & Tuntas!</h3>
+          <p>Kamu telah berhasil menulis <strong>${this.currentVocab.hanzi}</strong> sebanyak <strong>${this.targetRepeats} kali</strong> berturut-turut!</p>
+          <button class="dino-btn primary" onclick="dinoStroke.nextCharacter()">Lanjut Karakter Berikutnya ➔</button>
+        </div>
+      `;
     }
   }
 
-  setCustomCharacter(char) {
-    if (!char) return;
-    this.currentChar = char;
-    if (this.pinyinEl) this.pinyinEl.textContent = '-';
-    if (this.meaningEl) this.meaningEl.textContent = 'Karakter Pilihan';
-    if (this.strokeCountBadge) this.strokeCountBadge.textContent = 'Kustom';
-    if (this.dinoTipEl) this.dinoTipEl.textContent = `Latihan menulis karakter kustom: ${char}`;
-    this.renderStrokeSteps([]);
-    this.currentReps = 0;
-    this.renderEggTracker();
-    this.initHanziWriter(char);
+  triggerRoarAnimation() {
+    const banner = document.getElementById('stroke-feedback-banner');
+    if (banner) {
+      banner.className = 'feedback-banner roar show';
+      banner.innerHTML = `
+        <div class="feedback-content">
+          <div class="feedback-icon">🦖⚡🔊</div>
+          <h3>ROAAAR! Dinosaurus Meraung!</h3>
+          <p>Guratannya belum tepat atau masih kosong. Tenang, Rexy percaya kamu pasti bisa! Coba tulis lagi ya!</p>
+          <button class="dino-btn secondary" onclick="dinoStroke.dismissBanner()">Coba Lagi ↺</button>
+        </div>
+      `;
+    }
   }
-}
 
-// Inisialisasi Singleton
-if (typeof window !== 'undefined') {
-  window.DinoStrokeWriter = DinoStrokeWriter;
+  dismissBanner() {
+    const banner = document.getElementById('stroke-feedback-banner');
+    if (banner) {
+      banner.className = 'feedback-banner hidden';
+      this.redraw();
+    }
+  }
 }
