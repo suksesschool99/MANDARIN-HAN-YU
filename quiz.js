@@ -1,6 +1,6 @@
 /**
- * Dino Mandarin Adventure - Quiz Module
- * Latihan Soal Pilihan Berganda Fokus Jumlah Guratan (1, 3, 4, 5, 6, 7, 11) & Kosakata Han Yu 1 - 12
+ * Dino Mandarin Adventure - Multiple Choice Quiz Module (Han Yu 1 s/d Han Yu 15)
+ * Kuis Pilihan Berganda Ber-Audio Mandarin + Piala Emas & Tepuk Tangan Meriah
  */
 
 class DinoQuiz {
@@ -8,372 +8,218 @@ class DinoQuiz {
     this.questions = [];
     this.currentIndex = 0;
     this.score = 0;
+    this.correctAnswersCount = 0;
+    this.filterType = 'all';
     this.userAnswers = [];
-    this.hasAnswered = false;
-    this.filterType = 'all'; // 'all', 'stroke-only', 'book-1', etc.
+    this.isAnswered = false;
 
     this.init();
   }
 
   init() {
     this.cacheDom();
-    this.populateFilterDropdown();
     this.bindEvents();
 
     const params = new URLSearchParams(window.location.search);
     const mod = params.get('mod') || params.get('module');
-    const qmode = params.get('qmode');
+    const book = params.get('book') || 'all';
 
-    if (mod === 'quiz' || qmode) {
-      if (qmode) {
-        this.filterType = qmode;
-        if (this.quizFilterSelect) this.quizFilterSelect.value = qmode;
-      }
+    if (book !== 'all') {
+      this.filterType = `book-${book}`;
     }
 
-    this.startQuiz();
+    if (mod === 'quiz') {
+      this.startQuiz();
+    }
   }
 
   cacheDom() {
-    this.quizContainer = document.getElementById('quiz-active-card');
-    this.questionNumEl = document.getElementById('quiz-q-num');
-    this.totalQEl = document.getElementById('quiz-total-q');
-    this.scoreBadgeEl = document.getElementById('quiz-score-badge');
-    this.footprintProgress = document.getElementById('dino-footprints');
-    this.questionTextEl = document.getElementById('quiz-question-text');
-    this.questionMediaEl = document.getElementById('quiz-question-media');
-    this.optionsContainer = document.getElementById('quiz-options-grid');
-    this.explanationCard = document.getElementById('quiz-explanation-card');
-    this.explanationText = document.getElementById('quiz-explanation-text');
-    this.btnNextQuestion = document.getElementById('btn-next-question');
-    this.resultContainer = document.getElementById('quiz-result-card');
-    this.finalScoreEl = document.getElementById('quiz-final-score');
-    this.finalRatingEl = document.getElementById('quiz-final-rating');
-    this.finalTitleEl = document.getElementById('quiz-final-title');
-    this.finalDetailEl = document.getElementById('quiz-final-detail');
-    this.finalReviewList = document.getElementById('quiz-review-list');
-    this.btnRestartQuiz = document.getElementById('btn-restart-quiz');
-    this.mascotReactionEl = document.getElementById('quiz-mascot-box');
-    this.quizFilterSelect = document.getElementById('quiz-filter-select');
-  }
-
-  populateFilterDropdown() {
-    if (!this.quizFilterSelect) return;
-    this.quizFilterSelect.innerHTML = `
-      <option value="all">🌟 Semua Soal (Guratan + Kosakata Han Yu 1 - 12)</option>
-      <option value="stroke-only">✍️ Khusus Kuis Jumlah Guratan (1, 3, 4, 5, 6, 7, 11)</option>
-      <option value="book-1">📖 Han Yu 1 (Dasar & Angka 1-10)</option>
-      <option value="book-2">📖 Han Yu 2 (Dinosaurus, Tubuh & Warna)</option>
-      <option value="book-3-12">📚 Han Yu 3 s/d 12 (Tingkat Lanjut)</option>
-    `;
+    this.wrapperEl = document.getElementById('quiz-wrapper-card');
+    this.filterSelect = document.getElementById('quiz-filter-select');
+    this.btnRestart = document.getElementById('btn-restart-quiz');
+    this.resultCard = document.getElementById('quiz-result-card');
+    this.questionCard = document.getElementById('quiz-question-box');
   }
 
   bindEvents() {
-    if (this.btnNextQuestion) {
-      this.btnNextQuestion.addEventListener('click', () => this.handleNextQuestion());
-    }
-
-    if (this.btnRestartQuiz) {
-      this.btnRestartQuiz.addEventListener('click', () => this.startQuiz());
-    }
-
-    if (this.quizFilterSelect) {
-      this.quizFilterSelect.addEventListener('change', (e) => {
+    if (this.filterSelect) {
+      this.filterSelect.addEventListener('change', (e) => {
         this.filterType = e.target.value;
+        this.startQuiz();
+      });
+    }
+
+    if (this.btnRestart) {
+      this.btnRestart.addEventListener('click', () => {
         this.startQuiz();
       });
     }
   }
 
   startQuiz() {
-    let pool = [...(window.DINO_DATA && (window.DINO_DATA.strokeCountQuestions || window.DINO_DATA.strokeQuizQuestions) || [])];
-
-    if (this.filterType === 'stroke-only') {
-      pool = pool.filter(q => q.type === 'stroke-count' || q.type === 'count-stroke' || q.type === 'stroke-find-char');
-    } else if (this.filterType === 'book-1') {
-      pool = pool.filter(q => q.book === 1);
-    } else if (this.filterType === 'book-2') {
-      pool = pool.filter(q => q.book === 2);
-    } else if (this.filterType === 'book-3-12') {
-      pool = pool.filter(q => q.book >= 3);
-    }
-
-    // Fallback jika pool kosong
-    if (pool.length === 0 && window.DINO_DATA && window.DINO_DATA.strokeCountQuestions) {
-      pool = [...window.DINO_DATA.strokeCountQuestions];
-    }
-
-    // Acak urutan pertanyaan
-    this.questions = pool.sort(() => 0.5 - Math.random());
     this.currentIndex = 0;
     this.score = 0;
+    this.correctAnswersCount = 0;
     this.userAnswers = [];
-    this.hasAnswered = false;
+    this.isAnswered = false;
 
-    if (this.quizContainer) this.quizContainer.style.display = 'block';
-    if (this.resultContainer) this.resultContainer.style.display = 'none';
+    if (this.resultCard) this.resultCard.style.display = 'none';
+    if (this.questionCard) this.questionCard.style.display = 'block';
 
-    this.renderFootprints();
-    this.renderQuestion();
+    if (!window.DINO_DATA || !window.DINO_DATA.strokeCountQuestions) return;
+
+    let pool = window.DINO_DATA.strokeCountQuestions;
+
+    if (this.filterType.startsWith('book-')) {
+      const bId = parseInt(this.filterType.replace('book-', ''));
+      const filtered = pool.filter(q => q.book === bId);
+      if (filtered.length > 0) pool = filtered;
+    }
+
+    this.questions = [...pool].sort(() => Math.random() - 0.5);
+    this.renderCurrentQuestion();
   }
 
-  renderFootprints() {
-    if (!this.footprintProgress) return;
-    this.footprintProgress.innerHTML = this.questions.map((_, i) => `
-      <div class="footprint-step ${i === 0 ? 'current' : ''}" id="fp-step-${i}" title="Soal ${i + 1}">
-        <span class="fp-icon">🐾</span>
-        <span class="fp-num">${i + 1}</span>
-      </div>
-    `).join('');
-  }
+  renderCurrentQuestion() {
+    if (!this.questionCard || this.questions.length === 0) return;
 
-  renderQuestion() {
+    if (this.currentIndex >= this.questions.length) {
+      this.showFinalResult();
+      return;
+    }
+
     const q = this.questions[this.currentIndex];
-    this.hasAnswered = false;
+    this.isAnswered = false;
 
-    if (this.questionNumEl) this.questionNumEl.textContent = this.currentIndex + 1;
-    if (this.totalQEl) this.totalQEl.textContent = this.questions.length;
-    if (this.scoreBadgeEl) this.scoreBadgeEl.textContent = `Skor: ${this.score}`;
+    const optLetters = ['A', 'B', 'C', 'D'];
 
-    // Update Footprint tracker
-    this.questions.forEach((_, i) => {
-      const step = document.getElementById(`fp-step-${i}`);
-      if (step) {
-        step.classList.remove('current');
-        if (i === this.currentIndex) step.classList.add('current');
-      }
-    });
+    this.questionCard.innerHTML = `
+      <div class="quiz-question-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-weight: 800; color: var(--dino-green-deep); font-size: 0.95rem;">
+            Soal ${this.currentIndex + 1} dari ${this.questions.length}
+          </span>
+          <span style="font-weight: 700; color: var(--dino-amber-deep); background: var(--dino-amber-soft); padding: 4px 12px; border-radius: var(--radius-pill);">
+            Buku Han Yu ${q.book || 1}
+          </span>
+        </div>
 
-    if (this.questionTextEl) {
-      this.questionTextEl.textContent = q.question;
-    }
+        <div class="quiz-audio-prompt-row">
+          <button class="dino-btn-audio-pill" id="btn-play-quiz-audio" title="Dengarkan Soal Hanzi">
+            🔊 Dengarkan Soal Hanzi
+          </button>
+        </div>
 
-    // Render Media (Hanzi Besar, Gambar Vektor, Audio)
-    if (this.questionMediaEl) {
-      this.questionMediaEl.innerHTML = '';
+        <div class="quiz-question-text">${q.question}</div>
 
-      const audioToSpeak = q.audioText || q.hanzi || q.question;
-
-      if (q.type === 'stroke-count' || q.type === 'count-stroke' || q.type === 'hanzi-to-meaning') {
-        this.questionMediaEl.innerHTML = `
-          <div class="quiz-hanzi-display">
-            <div class="large-hanzi">${q.hanzi}</div>
-            <div class="hanzi-sub-pinyin">${q.pinyin || ''} ${q.meaning ? `• ${q.meaning}` : ''}</div>
-            <div style="margin-top: 10px; display: flex; justify-content: center; gap: 8px;">
-              <button class="dino-btn-audio-pill" id="btn-quiz-audio-play" title="Dengarkan Soal Hanzi">
-                🔊 Dengarkan Soal Hanzi
-              </button>
-            </div>
+        ${q.hanzi ? `
+          <div class="quiz-char-large-display">${q.hanzi}</div>
+          <div style="text-align: center; font-size: 1.1rem; color: var(--dino-blue); font-weight: 700; margin-bottom: 14px;">
+            ${q.pinyin || ''}
           </div>
-        `;
-      } else if (q.type === 'image-to-hanzi') {
-        const vocab = window.DINO_DATA.matchVocabItems ? window.DINO_DATA.matchVocabItems.find(v => v.id === q.imageSvgId) : null;
-        this.questionMediaEl.innerHTML = `
-          <div class="quiz-image-display">
-            <div class="quiz-svg-holder">${vocab ? vocab.svg : '🦕'}</div>
-            <div style="margin-top: 8px;">
-              <button class="dino-btn-audio-pill" id="btn-quiz-audio-play" title="Dengarkan Soal">
-                🔊 Dengarkan Soal
-              </button>
-            </div>
-          </div>
-        `;
-      } else {
-        this.questionMediaEl.innerHTML = `
-          <div class="quiz-stroke-badge-display">
-            <span class="stroke-target-number">🎯 Target: ${q.targetStrokeCount || q.targetStroke || 6} GURATAN</span>
-            <div style="margin-top: 8px;">
-              <button class="dino-btn-audio-pill" id="btn-quiz-audio-play" title="Dengarkan Soal">
-                🔊 Dengarkan Soal
-              </button>
-            </div>
-          </div>
-        `;
-      }
+        ` : ''}
 
-      const audioBtn = document.getElementById('btn-quiz-audio-play');
-      if (audioBtn) {
-        audioBtn.addEventListener('click', () => {
-          if (window.dinoAudio) {
-            window.dinoAudio.speakMandarinSlow(audioToSpeak);
-            audioBtn.classList.add('pulse');
-            setTimeout(() => audioBtn.classList.remove('pulse'), 600);
-          }
-        });
-      }
-    }
+        <div class="quiz-options-grid">
+          ${q.options.map((opt, i) => `
+            <button class="quiz-option-btn" data-index="${i}">
+              <span class="opt-badge">${optLetters[i]}</span>
+              <span class="opt-text">${opt.text}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
 
-    // Render Pilihan Jawaban
-    if (this.optionsContainer) {
-      const letters = ['A', 'B', 'C', 'D'];
-      this.optionsContainer.innerHTML = q.options.map((opt, idx) => `
-        <button class="quiz-option-btn" data-index="${idx}">
-          <span class="opt-letter">${letters[idx]}</span>
-          <div class="opt-content">
-            <span class="opt-text">${opt.text}</span>
-            ${opt.sub ? `<span class="opt-sub">${opt.sub}</span>` : ''}
-          </div>
-        </button>
-      `).join('');
-
-      const optionButtons = this.optionsContainer.querySelectorAll('.quiz-option-btn');
-      optionButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const optIdx = parseInt(btn.getAttribute('data-index'));
-          this.handleSelectOption(optIdx, btn);
-        });
+    // Bind Audio Button
+    const btnAudio = this.questionCard.querySelector('#btn-play-quiz-audio');
+    if (btnAudio) {
+      btnAudio.addEventListener('click', () => {
+        const textToRead = q.audioText || q.hanzi || q.question;
+        if (window.dinoAudio) window.dinoAudio.speakMandarinSlow(textToRead);
       });
     }
 
-    if (this.explanationCard) this.explanationCard.style.display = 'none';
-    if (this.btnNextQuestion) this.btnNextQuestion.style.display = 'none';
-    this.updateMascotMood('neutral');
+    // Bind Option Clicks
+    const optBtns = this.questionCard.querySelectorAll('.quiz-option-btn');
+    optBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (this.isAnswered) return;
+        const idx = parseInt(btn.getAttribute('data-index'));
+        this.handleSelectOption(idx, optBtns);
+      });
+    });
   }
 
-  handleSelectOption(selectedIndex) {
-    if (this.hasAnswered) return;
-    this.hasAnswered = true;
-
+  handleSelectOption(selectedIndex, optBtns) {
+    this.isAnswered = true;
     const q = this.questions[this.currentIndex];
-    const selectedOption = q.options[selectedIndex];
-    const isCorrect = selectedOption.isCorrect;
+    const selectedOpt = q.options[selectedIndex];
+    const isCorrect = selectedOpt.isCorrect;
 
-    this.userAnswers.push({
-      question: q,
-      selectedIndex,
-      isCorrect
-    });
-
-    const allOptions = this.optionsContainer.querySelectorAll('.quiz-option-btn');
-    allOptions.forEach((btn, idx) => {
-      btn.disabled = true;
-      if (q.options[idx].isCorrect) {
-        btn.classList.add('correct-opt');
-      } else if (idx === selectedIndex && !isCorrect) {
-        btn.classList.add('wrong-opt');
+    optBtns.forEach((btn, i) => {
+      if (q.options[i].isCorrect) {
+        btn.classList.add('correct');
+      } else if (i === selectedIndex) {
+        btn.classList.add('incorrect');
       }
     });
-
-    const currentFp = document.getElementById(`fp-step-${this.currentIndex}`);
-    if (currentFp) {
-      currentFp.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
-    }
 
     if (isCorrect) {
-      this.score += 10;
-      window.dinoAudio.playSfx('correct');
-      this.updateMascotMood('happy');
-    } else {
-      window.dinoAudio.playSfx('wrong');
-      this.updateMascotMood('encouraging');
-    }
-
-    if (this.scoreBadgeEl) this.scoreBadgeEl.textContent = `Skor: ${this.score}`;
-
-    // Tampilkan penjelasan langkah guratan
-    if (this.explanationCard && this.explanationText) {
-      let strokeStepsHtml = '';
-      if (q.strokeSteps && q.strokeSteps.length > 0) {
-        strokeStepsHtml = `
-          <div class="stroke-steps-box">
-            <strong>🐾 Urutan Guratan Langkah demi Langkah:</strong>
-            <div class="stroke-steps-list">
-              ${q.strokeSteps.map(step => `<span class="stroke-step-pill">${step}</span>`).join('')}
-            </div>
-          </div>
-        `;
+      this.score += Math.round(100 / this.questions.length);
+      this.correctAnswersCount++;
+      if (window.dinoAudio) {
+        window.dinoAudio.playApplause();
       }
-
-      this.explanationText.innerHTML = `
-        <div class="exp-status ${isCorrect ? 'status-good' : 'status-bad'}">
-          ${isCorrect ? '🌟 Luar Biasa! Jawabanmu Benar!' : '💡 Belum Tepat, yuk pelajari pembahasannya!'}
-        </div>
-        <div class="exp-detail">${q.explanation}</div>
-        ${strokeStepsHtml}
-      `;
-      this.explanationCard.style.display = 'block';
-    }
-
-    if (this.btnNextQuestion) {
-      this.btnNextQuestion.textContent = (this.currentIndex === this.questions.length - 1) ? 'Lihat Rapor Kuis 🏆' : 'Soal Berikutnya ➔';
-      this.btnNextQuestion.style.display = 'inline-flex';
-    }
-  }
-
-  handleNextQuestion() {
-    this.currentIndex++;
-    if (this.currentIndex < this.questions.length) {
-      this.renderQuestion();
     } else {
-      this.showFinalResults();
+      if (window.dinoAudio) {
+        window.dinoAudio.playDinoRoar();
+      }
     }
+
+    // Lanjut ke soal berikutnya setelah jeda 1.2 detik
+    setTimeout(() => {
+      this.currentIndex++;
+      this.renderCurrentQuestion();
+    }, 1300);
   }
 
-  updateMascotMood(mood) {
-    if (!this.mascotReactionEl) return;
-    const avatar = this.mascotReactionEl.querySelector('.mascot-avatar');
-    const speech = this.mascotReactionEl.querySelector('.mascot-speech');
+  showFinalResult() {
+    if (this.questionCard) this.questionCard.style.display = 'none';
+    if (!this.resultCard) return;
 
-    if (mood === 'happy') {
-      if (avatar) avatar.textContent = '🦖🎉';
-      if (speech) speech.textContent = 'ROAR! Pintar sekali petualang cilik! Jawabanmu tepat!';
-    } else if (mood === 'encouraging') {
-      if (avatar) avatar.textContent = '🦕🌱';
-      if (speech) speech.textContent = 'Tidak apa-apa! Dinosaurus yang hebat terus belajar dari setiap langkah!';
-    } else {
-      if (avatar) avatar.textContent = '🦖';
-      if (speech) speech.textContent = 'Ayo pilih jawaban yang paling tepat!';
-    }
-  }
+    this.resultCard.style.display = 'block';
 
-  showFinalResults() {
-    if (this.quizContainer) this.quizContainer.style.display = 'none';
-    if (this.resultContainer) this.resultContainer.style.display = 'block';
+    const isPerfect = this.correctAnswersCount === this.questions.length;
+    const finalScoreValue = isPerfect ? 100 : Math.min(100, Math.round((this.correctAnswersCount / this.questions.length) * 100));
 
-    window.dinoAudio.playSfx('fanfare');
-
-    const totalQuestions = this.questions.length;
-    const maxScore = totalQuestions * 10;
-    const percentage = Math.round((this.score / maxScore) * 100);
-
-    if (this.finalScoreEl) this.finalScoreEl.textContent = `${this.score} / ${maxScore} (${percentage}%)`;
-
-    let rating = '⭐⭐⭐';
-    let rankTitle = '👑 Raja Rimba Dinosaurus Hanzi';
-    let detailMsg = 'Hebat luar biasa! Kamu telah menguasai jumlah guratan dan kosakata Han Yu 1 - 12 dengan sempurna!';
-
-    if (percentage < 60) {
-      rating = '⭐';
-      rankTitle = '🥚 Bayi Dinosaurus Baru Menetas';
-      detailMsg = 'Tetap semangat! Ulangi latihan menulis guratan dan bermain kuis untuk menambah pengetahuanmu!';
-    } else if (percentage < 85) {
-      rating = '⭐⭐';
-      rankTitle = '🦖 Pemburu Fosil Cerdas';
-      detailMsg = 'Bagus sekali! Pemahaman guratan dan kosakata Mandarinmu sudah sangat mantap!';
+    // Perayaan Khusus jika 100% Benar: Fanfare + Tepuk Tangan Meriah + Piala Emas
+    if (isPerfect) {
+      if (window.dinoAudio) {
+        window.dinoAudio.playFanfare();
+      }
+    } else if (finalScoreValue >= 70) {
+      if (window.dinoAudio) {
+        window.dinoAudio.playApplause();
+      }
     }
 
-    if (this.finalRatingEl) this.finalRatingEl.textContent = rating;
-    if (this.finalTitleEl) this.finalTitleEl.textContent = rankTitle;
-    if (this.finalDetailEl) this.finalDetailEl.textContent = detailMsg;
+    const scoreHighlight = document.getElementById('quiz-final-score');
+    if (scoreHighlight) {
+      scoreHighlight.textContent = `${finalScoreValue} / 100`;
+    }
 
-    // Review daftar soal yang dikerjakan
-    if (this.finalReviewList) {
-      this.finalReviewList.innerHTML = this.userAnswers.map((ans, idx) => `
-        <div class="review-item ${ans.isCorrect ? 'review-correct' : 'review-wrong'}">
-          <div class="review-status-icon">${ans.isCorrect ? '✅' : '❌'}</div>
-          <div class="review-body">
-            <div class="review-q-txt"><strong>Soal ${idx + 1}:</strong> ${ans.question.question}</div>
-            <div class="review-ans-row">
-              <span>Jawabanmu: <em>${ans.question.options[ans.selectedIndex].text}</em></span>
-              ${!ans.isCorrect ? `<span class="review-correct-ans">Kunci Benar: <strong>${ans.question.options.find(o => o.isCorrect).text}</strong></span>` : ''}
-            </div>
-            <div class="review-exp">${ans.question.explanation}</div>
-          </div>
-        </div>
-      `).join('');
+    const detailText = document.getElementById('quiz-final-detail');
+    if (detailText) {
+      if (isPerfect) {
+        detailText.innerHTML = `🏆 <strong>Sempurna!</strong> Kamu berhasil menjawab SEMUA ${this.questions.length} soal dengan benar! Kamu berhak mendapatkan Piala Dinosaurus Emas!`;
+      } else {
+        detailText.textContent = `Bagus! Kamu berhasil menjawab ${this.correctAnswersCount} dari ${this.questions.length} soal dengan benar. Teruslah berlatih!`;
+      }
     }
   }
 }
 
-// Global exposure
-window.DinoQuiz = DinoQuiz;
+// Global window exposure
+if (typeof window !== 'undefined') {
+  window.DinoQuiz = DinoQuiz;
+}

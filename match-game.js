@@ -1,399 +1,238 @@
 /**
- * Dino Mandarin Adventure - Matching Game Module
- * Game Mencocokkan Kosakata Han Yu 1 - 12 dengan Gambar, Pinyin, & Arti Indonesia
+ * Dino Mandarin Adventure - Match Game Module (Han Yu 1 s/d Han Yu 15)
+ * Permainan Kartu Mencocokkan Kata Hanzi & Gambar Berwarna
  */
 
 class DinoMatchGame {
   constructor() {
-    this.difficulty = 4; // 4, 6, or 8 pairs
-    this.selectedBook = 'all'; // 'all' or 1..12
     this.cards = [];
-    this.selectedCardA = null;
-    this.selectedCardB = null;
+    this.flippedCards = [];
     this.matchedPairs = 0;
-    this.moves = 0;
+    this.totalPairs = 4;
     this.score = 0;
-    this.streak = 0;
-    this.timer = 0;
-    this.timerInterval = null;
-    this.isGameActive = false;
-    this.isProcessing = false;
+    this.moves = 0;
+    this.selectedBook = 'all';
+    this.isLocked = false;
 
     this.init();
   }
 
   init() {
     this.cacheDom();
-    this.populateBookFilter();
     this.bindEvents();
 
     const params = new URLSearchParams(window.location.search);
     const mod = params.get('mod') || params.get('module');
-    const book = params.get('book');
+    const book = params.get('book') || 'all';
     const pairs = parseInt(params.get('pairs')) || 4;
 
-    if (mod === 'match' || book) {
-      if (book) {
-        this.selectedBook = book;
-        if (this.bookSelect) this.bookSelect.value = book;
-      }
-      this.difficulty = pairs;
-      this.diffButtons.forEach(btn => {
-        btn.classList.toggle('active', parseInt(btn.getAttribute('data-pairs')) === pairs);
-      });
-    }
+    this.selectedBook = book;
+    this.totalPairs = pairs;
 
-    this.startNewGame();
+    if (mod === 'match') {
+      this.startNewGame();
+    }
   }
 
   cacheDom() {
     this.boardEl = document.getElementById('match-board');
     this.scoreEl = document.getElementById('match-score');
     this.movesEl = document.getElementById('match-moves');
-    this.timerEl = document.getElementById('match-timer');
-    this.streakEl = document.getElementById('match-streak');
-    this.btnRestart = document.getElementById('btn-match-restart');
-    this.diffButtons = document.querySelectorAll('.diff-btn');
     this.bookSelect = document.getElementById('match-book-select');
-    
-    // Matched card popup toast / banner
-    this.matchToastEl = document.getElementById('match-success-toast');
-
-    // Win Modal
+    this.btnRestart = document.getElementById('btn-match-restart');
+    this.diffBtns = document.querySelectorAll('.diff-btn');
     this.winModal = document.getElementById('match-win-modal');
-    this.winScoreEl = document.getElementById('win-final-score');
-    this.winMovesEl = document.getElementById('win-final-moves');
-    this.winTimeEl = document.getElementById('win-final-time');
-    this.winSummaryList = document.getElementById('win-matched-vocab-list');
-    this.btnPlayAgain = document.getElementById('btn-match-play-again');
-  }
-
-  populateBookFilter() {
-    if (!this.bookSelect) return;
-    let html = `<option value="all">Semua Buku (Han Yu 1 - 12)</option>`;
-    window.DINO_DATA.books.forEach(b => {
-      html += `<option value="${b.id}">Han Yu ${b.id}</option>`;
-    });
-    this.bookSelect.innerHTML = html;
   }
 
   bindEvents() {
-    if (this.btnRestart) {
-      this.btnRestart.addEventListener('click', () => this.startNewGame());
-    }
-
-    if (this.btnPlayAgain) {
-      this.btnPlayAgain.addEventListener('click', () => {
-        if (this.winModal) this.winModal.classList.remove('show');
-        this.startNewGame();
-      });
-    }
-
-    this.diffButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const pairs = parseInt(e.currentTarget.getAttribute('data-pairs'));
-        this.diffButtons.forEach(b => b.classList.remove('active'));
-        e.currentTarget.classList.add('active');
-        this.difficulty = pairs;
-        this.startNewGame();
-      });
-    });
-
     if (this.bookSelect) {
       this.bookSelect.addEventListener('change', (e) => {
         this.selectedBook = e.target.value;
         this.startNewGame();
       });
     }
+
+    if (this.btnRestart) {
+      this.btnRestart.addEventListener('click', () => {
+        this.startNewGame();
+      });
+    }
+
+    if (this.diffBtns) {
+      this.diffBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.diffBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          this.totalPairs = parseInt(btn.getAttribute('data-pairs')) || 4;
+          this.startNewGame();
+        });
+      });
+    }
   }
 
   startNewGame() {
-    this.isProcessing = false;
-    this.selectedCardA = null;
-    this.selectedCardB = null;
+    this.flippedCards = [];
     this.matchedPairs = 0;
     this.moves = 0;
     this.score = 0;
-    this.streak = 0;
-    this.timer = 0;
-    this.isGameActive = true;
-
+    this.isLocked = false;
     this.updateStats();
-    this.startTimer();
 
-    // Pool kosakata bergambar
+    if (!window.DINO_DATA || !window.DINO_DATA.matchVocabItems) return;
+
     let pool = window.DINO_DATA.matchVocabItems;
     if (this.selectedBook !== 'all') {
-      const bookNum = parseInt(this.selectedBook);
-      const filtered = pool.filter(item => item.book === bookNum);
-      if (filtered.length >= this.difficulty) {
-        pool = filtered;
-      }
+      const bId = parseInt(this.selectedBook);
+      const filtered = pool.filter(item => item.book === bId);
+      if (filtered.length >= this.totalPairs) pool = filtered;
     }
 
-    // Acak dan ambil N pasangan
-    const shuffledItems = [...pool].sort(() => 0.5 - Math.random());
-    const selectedVocab = shuffledItems.slice(0, this.difficulty);
+    // Acak pool dan ambil sebanyak totalPairs
+    const shuffledPool = [...pool].sort(() => Math.random() - 0.5);
+    const chosenItems = shuffledPool.slice(0, this.totalPairs);
 
-    // Buat 2 pasang kartu per item: Kartu Gambar (IMAGE) dan Kartu Teks Hanzi+Pinyin (TEXT)
-    this.cards = [];
-    selectedVocab.forEach((item, index) => {
-      // 1. Kartu Gambar
-      this.cards.push({
-        uid: `img-${item.id}-${index}`,
-        vocabId: item.id,
+    // Gandakan menjadi 2 kartu: Kartu Gambar & Kartu Teks Hanzi
+    const deck = [];
+    chosenItems.forEach(item => {
+      deck.push({
+        id: `${item.id}-img`,
+        pairId: item.id,
         type: 'image',
-        svg: item.svg,
-        meaning: item.meaning,
-        hanzi: item.hanzi,
-        pinyin: item.pinyin,
-        matched: false
+        item: item
       });
-      // 2. Kartu Hanzi + Pinyin
-      this.cards.push({
-        uid: `text-${item.id}-${index}`,
-        vocabId: item.id,
+      deck.push({
+        id: `${item.id}-txt`,
+        pairId: item.id,
         type: 'text',
-        hanzi: item.hanzi,
-        pinyin: item.pinyin,
-        meaning: item.meaning,
-        svg: item.svg,
-        matched: false
+        item: item
       });
     });
 
-    // Acak tata letak kartu
-    this.cards.sort(() => 0.5 - Math.random());
-
+    // Acak posisi kartu di papan
+    this.cards = deck.sort(() => Math.random() - 0.5);
     this.renderBoard();
-  }
-
-  startTimer() {
-    if (this.timerInterval) clearInterval(this.timerInterval);
-    this.timerInterval = setInterval(() => {
-      if (this.isGameActive) {
-        this.timer++;
-        if (this.timerEl) {
-          const mins = Math.floor(this.timer / 60);
-          const secs = this.timer % 60;
-          this.timerEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-      }
-    }, 1000);
-  }
-
-  updateStats() {
-    if (this.scoreEl) this.scoreEl.textContent = this.score;
-    if (this.movesEl) this.movesEl.textContent = this.moves;
-    if (this.streakEl) this.streakEl.textContent = this.streak > 1 ? `🔥 x${this.streak}` : '-';
-    if (this.timerEl && this.timer === 0) this.timerEl.textContent = '0:00';
   }
 
   renderBoard() {
     if (!this.boardEl) return;
-    this.boardEl.innerHTML = '';
-    this.boardEl.className = `match-board-grid grid-pairs-${this.difficulty}`;
+    this.boardEl.className = `match-board-grid grid-pairs-${this.totalPairs}`;
+    
+    this.boardEl.innerHTML = this.cards.map((c, idx) => `
+      <div class="dino-card" data-index="${idx}" id="card-${idx}">
+        <div class="dino-card-inner">
+          <div class="dino-card-front">
+            <span class="card-pattern-icon">🦖</span>
+          </div>
+          <div class="dino-card-back">
+            ${c.type === 'image' ? `
+              <div class="card-svg-wrap">${c.item.svg}</div>
+              <div style="font-size: 0.82rem; font-weight: 700; color: #555; margin-top: 4px;">${c.item.meaning}</div>
+            ` : `
+              <div class="card-text-content">
+                <div class="card-hanzi">${c.item.hanzi}</div>
+                <div class="card-pinyin">${c.item.pinyin}</div>
+              </div>
+            `}
+          </div>
+        </div>
+      </div>
+    `).join('');
 
-    this.cards.forEach((card) => {
-      const cardEl = document.createElement('div');
-      cardEl.className = 'dino-card';
-      cardEl.setAttribute('data-uid', card.uid);
-      cardEl.setAttribute('data-id', card.vocabId);
-      cardEl.setAttribute('data-type', card.type);
-
-      let cardInner = '';
-      if (card.type === 'image') {
-        cardInner = `
-          <div class="card-front">
-            <div class="card-dino-back">
-              <span class="dino-egg-icon">🥚</span>
-              <span class="dino-hint-txt">Buka Gambar</span>
-            </div>
-          </div>
-          <div class="card-back card-image-content">
-            <div class="card-svg-wrap">${card.svg}</div>
-            <div class="card-sub-meaning-blur">???</div>
-          </div>
-        `;
-      } else {
-        cardInner = `
-          <div class="card-front">
-            <div class="card-dino-back">
-              <span class="dino-egg-icon">🦕</span>
-              <span class="dino-hint-txt">Buka Hanzi</span>
-            </div>
-          </div>
-          <div class="card-back card-text-content">
-            <div class="card-hanzi">${card.hanzi}</div>
-            <div class="card-pinyin">${card.pinyin}</div>
-            <button class="card-audio-mini" title="Dengarkan"><i class="icon-speaker">🔊</i></button>
-          </div>
-        `;
-      }
-
-      cardEl.innerHTML = cardInner;
-      cardEl.addEventListener('click', (e) => this.handleCardClick(card, cardEl, e));
-      this.boardEl.appendChild(cardEl);
+    const cardEls = this.boardEl.querySelectorAll('.dino-card');
+    cardEls.forEach(card => {
+      card.addEventListener('click', () => {
+        const idx = parseInt(card.getAttribute('data-index'));
+        this.flipCard(idx);
+      });
     });
   }
 
-  handleCardClick(card, cardEl, event) {
-    if (!this.isGameActive || this.isProcessing) return;
-    if (card.matched) return;
-    if (this.selectedCardA && this.selectedCardA.uid === card.uid) return;
+  flipCard(index) {
+    if (this.isLocked) return;
+    const card = this.cards[index];
+    const cardEl = document.getElementById(`card-${index}`);
 
-    if (event.target.closest('.card-audio-mini')) {
-      event.stopPropagation();
-      window.dinoAudio.speakMandarin(card.hanzi);
-      return;
-    }
+    if (!cardEl || cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
 
-    // Balik kartu
+    // Flip card
     cardEl.classList.add('flipped');
-    window.dinoAudio.playSfx('flip');
+    this.flippedCards.push({ index, card, el: cardEl });
 
-    if (card.type === 'text') {
-      window.dinoAudio.speakMandarin(card.hanzi);
-    }
+    if (window.dinoAudio) window.dinoAudio.playPop();
 
-    if (!this.selectedCardA) {
-      this.selectedCardA = { card, element: cardEl };
-    } else {
-      this.selectedCardB = { card, element: cardEl };
+    if (this.flippedCards.length === 2) {
       this.moves++;
-      this.isProcessing = true;
+      this.updateStats();
       this.checkMatch();
     }
   }
 
   checkMatch() {
-    const cardA = this.selectedCardA.card;
-    const cardB = this.selectedCardB.card;
-    const elA = this.selectedCardA.element;
-    const elB = this.selectedCardB.element;
+    this.isLocked = true;
+    const [c1, c2] = this.flippedCards;
 
-    const isMatch = (cardA.vocabId === cardB.vocabId) && (cardA.type !== cardB.type);
-
-    if (isMatch) {
-      // Cocok!
-      cardA.matched = true;
-      cardB.matched = true;
-      this.matchedPairs++;
-      this.streak++;
-
-      // Hitung skor
-      const basePoints = 100;
-      const streakBonus = (this.streak - 1) * 30;
-      this.score += (basePoints + streakBonus);
-
-      // Suara & status
-      window.dinoAudio.playSfx('correct');
-      window.dinoAudio.speakMandarin(cardA.hanzi);
-
-      // Update kedua kartu agar menampilkan informasi lengkap (Gambar + Hanzi + Pinyin + Arti Lengkap)
+    if (c1.card.pairId === c2.card.pairId) {
+      // COCOK!
       setTimeout(() => {
-        elA.classList.add('matched');
-        elB.classList.add('matched');
-
-        // Buka teks arti di kartu gambar
-        const meaningA = elA.querySelector('.card-sub-meaning-blur');
-        if (meaningA) {
-          meaningA.textContent = cardA.meaning;
-          meaningA.className = 'card-sub-meaning-revealed';
-        }
-        const meaningB = elB.querySelector('.card-sub-meaning-blur');
-        if (meaningB) {
-          meaningB.textContent = cardB.meaning;
-          meaningB.className = 'card-sub-meaning-revealed';
-        }
-
-        // Tampilkan Banner Pop-up Notifikasi Lengkap (Gambar + Hanzi + Pinyin + Arti)
-        this.showMatchSuccessToast(cardA);
-
-        this.selectedCardA = null;
-        this.selectedCardB = null;
-        this.isProcessing = false;
+        c1.el.classList.add('matched');
+        c2.el.classList.add('matched');
+        this.matchedPairs++;
+        this.score += 100;
         this.updateStats();
 
-        // Cek jika seluruh papan selesai dicocokkan
-        if (this.matchedPairs >= this.difficulty) {
-          this.handleGameWin();
+        // Audio: Tepuk tangan + lafalkan kata
+        if (window.dinoAudio) {
+          window.dinoAudio.playApplause();
+          window.dinoAudio.speakMandarinSlow(c1.card.item.hanzi);
         }
-      }, 400);
 
+        this.flippedCards = [];
+        this.isLocked = false;
+
+        if (this.matchedPairs >= this.totalPairs) {
+          this.handleWin();
+        }
+      }, 500);
     } else {
-      // Belum cocok
-      this.streak = 0;
-      this.updateStats();
-      window.dinoAudio.playSfx('wrong');
-
+      // TIDAK COCOK
       setTimeout(() => {
-        elA.classList.remove('flipped');
-        elB.classList.remove('flipped');
-        this.selectedCardA = null;
-        this.selectedCardB = null;
-        this.isProcessing = false;
+        c1.el.classList.remove('flipped');
+        c2.el.classList.remove('flipped');
+
+        if (window.dinoAudio) {
+          window.dinoAudio.playDinoRoar();
+        }
+
+        this.flippedCards = [];
+        this.isLocked = false;
       }, 1000);
     }
   }
 
-  showMatchSuccessToast(card) {
-    if (!this.matchToastEl) return;
-    this.matchToastEl.innerHTML = `
-      <div class="toast-card-success">
-        <div class="toast-svg-thumb">${card.svg}</div>
-        <div class="toast-info">
-          <div class="toast-hanzi-pinyin">
-            <span class="toast-hanzi">${card.hanzi}</span>
-            <span class="toast-pinyin">${card.pinyin}</span>
-          </div>
-          <div class="toast-meaning">✨ <strong>Arti:</strong> ${card.meaning}</div>
-        </div>
-        <button class="toast-audio-btn" onclick="window.dinoAudio.speakMandarin('${card.hanzi}')" title="Putar Suara">🔊</button>
-      </div>
-    `;
-    this.matchToastEl.classList.add('show');
-    setTimeout(() => {
-      this.matchToastEl.classList.remove('show');
-    }, 3200);
+  updateStats() {
+    if (this.scoreEl) this.scoreEl.textContent = this.score;
+    if (this.movesEl) this.movesEl.textContent = this.moves;
   }
 
-  handleGameWin() {
-    this.isGameActive = false;
-    if (this.timerInterval) clearInterval(this.timerInterval);
-
-    window.dinoAudio.playSfx('fanfare');
-    window.dinoAudio.playSfx('hatch');
-
-    const mins = Math.floor(this.timer / 60);
-    const secs = this.timer % 60;
-    const timeFormatted = `${mins}m ${secs}d`;
-
-    if (this.winScoreEl) this.winScoreEl.textContent = this.score;
-    if (this.winMovesEl) this.winMovesEl.textContent = this.moves;
-    if (this.winTimeEl) this.winTimeEl.textContent = timeFormatted;
-
-    // Tampilkan daftar ringkasan kosakata yang berhasil dicocokkan
-    if (this.winSummaryList) {
-      const uniqueMatched = this.cards.filter(c => c.type === 'text');
-      this.winSummaryList.innerHTML = uniqueMatched.map(item => `
-        <div class="win-vocab-row">
-          <div class="win-vocab-icon">${item.svg}</div>
-          <div class="win-vocab-text">
-            <span class="win-v-hanzi">${item.hanzi}</span>
-            <span class="win-v-pinyin">(${item.pinyin})</span>
-            <span class="win-v-meaning">= ${item.meaning}</span>
-          </div>
-          <button class="win-v-audio" onclick="window.dinoAudio.speakMandarin('${item.hanzi}')">🔊</button>
-        </div>
-      `).join('');
+  handleWin() {
+    if (window.dinoAudio) {
+      window.dinoAudio.playFanfare();
     }
 
-    setTimeout(() => {
-      if (this.winModal) this.winModal.classList.add('show');
-    }, 600);
+    const modal = document.getElementById('match-win-modal');
+    if (modal) {
+      const finalScore = document.getElementById('win-final-score');
+      const finalMoves = document.getElementById('win-final-moves');
+      if (finalScore) finalScore.textContent = this.score;
+      if (finalMoves) finalMoves.textContent = this.moves;
+
+      modal.classList.add('show');
+      modal.style.display = 'flex';
+    }
   }
 }
 
-// Global exposure
-window.DinoMatchGame = DinoMatchGame;
+// Global window exposure
+if (typeof window !== 'undefined') {
+  window.DinoMatchGame = DinoMatchGame;
+}

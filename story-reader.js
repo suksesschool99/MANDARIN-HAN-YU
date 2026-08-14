@@ -1,6 +1,6 @@
 /**
- * Dino Mandarin Adventure - Story & Text Reading Module
- * Modul Membaca Cerita & Teks Han Yu 1 s/d Han Yu 12 dengan Audio Suara Lamban (Slow Speed TTS)
+ * Dino Mandarin Adventure - Story Reader Module (Han Yu 1 s/d Han Yu 15)
+ * Membaca Teks Pelajaran & Cerita dengan Audio Tempo Lambat (~0.62x) & Intonasi Jelas
  */
 
 class DinoStoryReader {
@@ -15,14 +15,14 @@ class DinoStoryReader {
 
   init() {
     this.cacheDom();
-    this.populateBookSelect();
+    this.populateBookDropdown();
     this.bindEvents();
 
     const params = new URLSearchParams(window.location.search);
     const mod = params.get('mod') || params.get('module');
     const book = parseInt(params.get('book')) || 1;
 
-    if (mod === 'story' || (params.has('book') && !params.has('unit'))) {
+    if (mod === 'story') {
       this.loadBookStory(book);
     } else {
       this.loadBookStory(1);
@@ -41,7 +41,7 @@ class DinoStoryReader {
     this.btnStopStory = document.getElementById('btn-stop-story');
   }
 
-  populateBookSelect() {
+  populateBookDropdown() {
     if (!this.bookSelect) return;
     if (window.DINO_DATA && window.DINO_DATA.books) {
       this.bookSelect.innerHTML = window.DINO_DATA.books.map(b => `
@@ -122,7 +122,6 @@ class DinoStoryReader {
     if (!this.currentStory || !this.currentStory.sentences[index]) return;
     const s = this.currentStory.sentences[index];
 
-    // Highlight sentence card
     this.highlightSentence(index);
 
     if (window.dinoAudio) {
@@ -150,7 +149,9 @@ class DinoStoryReader {
 
     if (this.activeSentenceIndex >= this.currentStory.sentences.length) {
       this.stopStory();
-      if (window.dinoAudio) window.dinoAudio.playSfx('fanfare');
+      if (window.dinoAudio) {
+        window.dinoAudio.playApplause();
+      }
       return;
     }
 
@@ -164,7 +165,7 @@ class DinoStoryReader {
           this.activeSentenceIndex++;
           setTimeout(() => {
             this.playNextSentenceInSequence();
-          }, 800); // Jeda santai antar kalimat
+          }, 800); // Jeda santai antar-kalimat
         }
       });
     }
@@ -199,7 +200,7 @@ class DinoStoryReader {
   }
 }
 
-// Global exposure
+// Global window exposure
 if (typeof window !== 'undefined') {
   window.DinoStoryReader = DinoStoryReader;
 }
