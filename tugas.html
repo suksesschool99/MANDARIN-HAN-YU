@@ -2,74 +2,16 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Tugas Mandiri - Dino Mandarin Adventure (Han Yu 1-12)</title>
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <!-- HanziWriter CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
-  <!-- External Stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/components.css">
+  <meta http-equiv="refresh" content="0; url=murid.html">
+  <title>Mengarahkan ke Lembar Tugas Murid...</title>
+  <script>
+    // Teruskan query parameters ke murid.html secara otomatis
+    const search = window.location.search;
+    window.location.replace('murid.html' + search);
+  </script>
 </head>
-<body>
-
-  <!-- Header -->
-  <header class="dino-header">
-    <div class="header-container">
-      <a href="index.html" class="logo-brand">
-        <span class="brand-dino-avatar">🎒</span>
-        <div class="brand-title-wrap">
-          <span class="brand-main-title">PORTAL TUGAS SISWA</span>
-          <span class="brand-sub-title">Dino Mandarin Adventure • Kurikulum Han Yu 1 - 12</span>
-        </div>
-      </a>
-
-      <div class="header-action-controls">
-        <a href="index.html" class="audio-toggle-btn" style="text-decoration: none;">
-          🏠 Menu Utama
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Banner Instruksi Siswa -->
-  <aside class="student-task-banner" style="display: block;">
-    <div class="task-banner-container">
-      <div class="task-info-left">
-        <span class="task-badge-pill">🎒 TUGAS DARI GURU</span>
-        <span class="task-title-text" id="task-portal-title">Selamat Datang di Lembar Kerja Mandiri!</span>
-        <span class="task-target-desc" id="task-portal-desc">Selesaikan modul latihan di bawah ini dengan target KKM 70.</span>
-      </div>
-      <div>
-        <span style="font-size: 0.95rem; font-weight: 800; color: #e65100;">🦖 Raih Hadiah Piala Emas 🏆!</span>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Content Container -->
-  <main class="main-content" style="margin-top: 24px;">
-    <div style="background: white; border-radius: var(--radius-lg); padding: 30px; border: 2px solid var(--dino-slate-border); text-align: center; box-shadow: var(--shadow-sm);">
-      <div style="font-size: 4rem;">🦖🌟</div>
-      <h2 style="font-size: 1.6rem; color: var(--dino-green-deep); margin: 12px 0 8px;">Siap Memulai Petualangan Belajar?</h2>
-      <p style="color: var(--dino-text-muted); max-width: 600px; margin: 0 auto 24px;">
-        Silakan klik tombol di bawah untuk langsung menuju materi pelajaran yang ditugaskan oleh guru.
-      </p>
-      <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
-        <button class="dino-btn-action" onclick="window.location.href='index.html' + window.location.search">
-          🚀 Mulai Kerjakan Tugas Sekarang
-        </button>
-        <button class="dino-btn-outline" onclick="window.location.href='index.html'">
-          📚 Buka Seluruh Buku Han Yu 1-12
-        </button>
-      </div>
-    </div>
-  </main>
-
-  <footer class="dino-footer">
-    <p>🦖 <b>Dino Mandarin Adventure</b> • Portal Tugas Interaktif Han Yu 1 - 12</p>
-  </footer>
+<body style="font-family: sans-serif; text-align: center; padding: 50px;">
+  <p>🦖 Mengalihkan ke Halaman Lembar Tugas Murid...</p>
+  <p><a href="murid.html">Klik di sini jika tidak beralih otomatis</a></p>
 </body>
 </html>
