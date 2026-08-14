@@ -23,7 +23,7 @@ class DinoStudentPortal {
     if (bookParam && bookParam >= 1 && bookParam <= 12) {
       this.currentBookId = bookParam;
     }
-    if (unitParam && unitParam >= 1 && unitParam <= 3) {
+    if (unitParam && unitParam >= 1 && unitParam <= 15) {
       this.currentUnitId = unitParam;
     }
 

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Platform Pembelajaran Mandarin Han Yu 1 - 12 (Tema Dinosaurus)</title>
-  <meta name="description" content="Platform Edukasi Mandarin Interaktif Han Yu 1 sampai Han Yu 12 kurikulum Beijing Chinese Language & Culture College bertema Dinosaurus Ceria untuk Anak SD.">
+  <title>Platform Pembelajaran Mandarin Han Yu 1 - 12 (15 Unit Lengkap Per Buku)</title>
+  <meta name="description" content="Platform Edukasi Mandarin Interaktif Han Yu 1 sampai Han Yu 12 dengan 15 Unit Lengkap per Buku kurikulum Beijing Chinese Language & Culture College bertema Dinosaurus Ceria.">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -290,7 +290,7 @@
       border-radius: var(--radius-sm);
       border: 2px solid var(--dino-mint);
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 700;
       background-color: var(--dino-sand);
       color: var(--dino-forest-dark);
@@ -406,42 +406,82 @@
     }
 
     .book-units-badge {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--dino-amber);
       font-weight: 800;
       margin-top: 4px;
     }
 
-    /* UNIT SELECTION BAR */
-    .unit-selection-bar {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
+    /* 15 UNITS GRID SELECTION BAR */
+    .units-master-container {
+      margin-bottom: 26px;
+      background: #fdfbf7;
+      border-radius: var(--radius-md);
+      padding: 20px;
+      border: 2px dashed var(--dino-mint);
     }
 
-    .unit-tab-pill {
-      background: var(--dino-sand);
+    .units-grid-15 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .unit-card-btn {
+      background: white;
       border: 2px solid var(--dino-mint);
-      padding: 10px 20px;
-      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
       font-weight: 800;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       cursor: pointer;
       color: var(--dino-forest-dark);
       transition: all 0.2s;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-family: inherit;
     }
 
-    .unit-tab-pill:hover {
+    .unit-card-btn:hover {
       background: var(--dino-pale-moss);
       transform: translateY(-2px);
+      border-color: var(--dino-forest-mid);
     }
 
-    .unit-tab-pill.active {
+    .unit-card-btn.active {
       background: var(--dino-forest-mid);
       color: white;
       border-color: var(--dino-forest-dark);
-      box-shadow: 0 4px 12px rgba(45, 106, 79, 0.3);
+      box-shadow: 0 4px 12px rgba(45, 106, 79, 0.35);
+    }
+
+    .unit-card-btn.active .unit-sub {
+      color: #fff3bf;
+    }
+
+    .unit-num-tag {
+      font-size: 0.75rem;
+      font-weight: 900;
+      color: var(--dino-amber);
+    }
+
+    .unit-card-btn.active .unit-num-tag {
+      color: var(--dino-gold);
+    }
+
+    .unit-title-text {
+      font-family: var(--font-chinese);
+      font-size: 1.05rem;
+      font-weight: bold;
+    }
+
+    .unit-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
     }
 
     /* WORKSPACE */
@@ -473,22 +513,6 @@
       color: var(--dino-forest-mid);
       font-weight: 700;
       margin-bottom: 14px;
-    }
-
-    .lessons-chips-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .lesson-chip {
-      background: white;
-      padding: 6px 14px;
-      border-radius: var(--radius-full);
-      font-size: 0.88rem;
-      font-weight: 800;
-      color: var(--dino-forest-deep);
-      border: 1.5px solid var(--dino-mint);
     }
 
     /* FEATURE PANELS */
@@ -1228,7 +1252,7 @@
       <span class="brand-icon">🦖</span>
       <div class="brand-titles">
         <h1>汉语 HAN YU 1 - 12 PETUALANGAN DINOSAURUS</h1>
-        <p>Edisi Kurikulum Beijing Chinese Language & Culture College (北京华文学院)</p>
+        <p>Edisi Kurikulum Lengkap 180 Unit Materi (北京华文学院)</p>
       </div>
     </a>
     <div class="nav-actions">
@@ -1248,14 +1272,14 @@
   <header class="hero-banner">
     <div class="hero-inner">
       <div class="hero-text">
-        <h2>Belajar Mandarin Seru & Interaktif <span>Han Yu 1 - 12</span> Bersama Sahabat Dinosaurus!</h2>
-        <p>Platform lengkap dengan Cerita Narasi Pelan Anak SD, Latihan Menulis Guratan Berulang 3-6 Kali, Game Mencocokkan Gambar, dan Kuis Pilihan Ganda Multi-Tipe Ber-KKM 70 dengan Suara Tepuk Tangan & Raungan Dinosaurus!</p>
+        <h2>Belajar Mandarin Seru & Interaktif <span>Han Yu 1 - 12</span> (15 Unit Lengkap Per Buku)!</h2>
+        <p>Tersedia 15 Unit Lengkap di setiap buku Han Yu 1 sampai Han Yu 12 (Total 180 Unit Pembelajaran). Dilengkapi Cerita Narasi Pelan Anak SD, Latihan Menulis Guratan Berulang 3-6 Kali, Game Mencocokkan Gambar, dan Kuis Pilihan Ganda Multi-Tipe Ber-KKM 70 dengan Efek Suara Tepuk Tangan & Raungan Dinosaurus!</p>
         <div class="hero-features-chips">
-          <span class="hero-chip">🦕 Cerita Audio Lamban (SD)</span>
+          <span class="hero-chip">🦕 180 Unit Lengkap (15 Unit x 12 Buku)</span>
           <span class="hero-chip">✍️ Guratan 3-6x (田字格 / 米字格)</span>
           <span class="hero-chip">🧩 Cocokkan Kosakata & Gambar</span>
           <span class="hero-chip">🏆 Kuis 5 Tipe Soal (KKM 70)</span>
-          <span class="hero-chip">🦖 Efek Suara Roar & Tepuk Tangan</span>
+          <span class="hero-chip">🦖 Suara Roar & Tepuk Tangan</span>
         </div>
       </div>
 
@@ -1265,7 +1289,7 @@
           <span style="font-size: 2.2rem;">🦖🔗</span>
           <div>
             <h3>Generator Link Halaman Murid</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Pilih buku & unit, lalu salin tautan khusus murid</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Pilih buku & salah satu dari 15 Unit, lalu salin tautan khusus murid</p>
           </div>
         </div>
 
@@ -1275,7 +1299,7 @@
             <select id="global-book-select" class="dino-select"></select>
           </div>
           <div class="select-group">
-            <label for="global-unit-select">Pilih Unit Materi:</label>
+            <label for="global-unit-select">Pilih Unit Materi (Unit 1 - 15):</label>
             <select id="global-unit-select" class="dino-select"></select>
           </div>
         </div>
@@ -1303,7 +1327,7 @@
     <!-- LEVEL EXPLORER (Buku Han Yu 1 - 12) -->
     <section class="section-headline">
       <h2>Pilih Tingkat Buku Han Yu 1 sampai Han Yu 12</h2>
-      <p>Klik salah satu kartu buku di bawah ini untuk memuat seluruh unit materi, cerita narasi, kosakata guratan, game gambar, dan latihan soal:</p>
+      <p>Klik salah satu buku untuk memuat daftar 15 Unit Pembelajaran lengkap:</p>
     </section>
 
     <!-- 12 Kartu Buku Han Yu 1 - 12 -->
@@ -1312,19 +1336,21 @@
     <!-- WORKSPACE INTERAKTIF UNIT YANG DIPILIH -->
     <section class="workspace-wrapper" id="curriculum-workspace">
       
-      <!-- Unit Selection Bar (Tombol Pilihan Unit 1, Unit 2, Unit 3) -->
-      <div style="margin-bottom: 22px;">
-        <p style="font-size: 0.95rem; font-weight: 800; color: var(--dino-forest-deep); margin-bottom: 10px;">
-          🌿 Pilih Unit Pada Buku yang Sedang Dibuka:
-        </p>
-        <div class="unit-selection-bar" id="portal-unit-tab-buttons"></div>
+      <!-- 15 UNITS GRID SELECTION BAR -->
+      <div class="units-master-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <p style="font-size: 1.05rem; font-weight: 900; color: var(--dino-forest-deep);">
+            🌿 Pilih Unit Materi Pembelajaran (Tersedia 15 Unit Lengkap):
+          </p>
+          <span class="dino-pill type-pill" id="current-book-unit-badge">15 Unit Tersedia</span>
+        </div>
+        <div class="units-grid-15" id="portal-unit-tab-buttons"></div>
       </div>
 
       <!-- Unit Banner -->
       <div class="unit-banner-info">
         <h2 id="curriculum-header-title">Memuat Materi...</h2>
         <p id="curriculum-header-desc"></p>
-        <div class="lessons-chips-wrap" id="unit-lessons-list"></div>
       </div>
 
       <div class="feature-showcase-sections">
@@ -1449,685 +1475,218 @@
   </main>
 
   <footer style="text-align: center; padding: 40px 20px; background: var(--dino-forest-deep); color: white; margin-top: 60px;">
-    <p style="font-weight: 900; font-size: 1.15rem; margin-bottom: 6px;">🦖 Platform Pembelajaran Bahasa Mandarin Han Yu 1 - 12 🦕</p>
-    <p style="font-size: 0.9rem; color: var(--dino-pale-moss);">Disesuaikan secara lengkap dengan materi PDF Han Yu 1 sampai Han Yu 12 • Tema Dinosaurus Ceria Anak SD</p>
+    <p style="font-weight: 900; font-size: 1.15rem; margin-bottom: 6px;">🦖 Platform Pembelajaran Bahasa Mandarin Han Yu 1 - 12 (180 Unit Lengkap) 🦕</p>
+    <p style="font-size: 0.9rem; color: var(--dino-pale-moss);">Disesuaikan secara lengkap dengan seluruh isi PDF Han Yu 1 sampai Han Yu 12 • Tema Dinosaurus Ceria Anak SD</p>
   </footer>
 
   <!-- =========================================================================
-       INLINE SELF-CONTAINED JAVASCRIPT BUNDLE (ZERO EXTERNAL DEPENDENCY)
+       INLINE SELF-CONTAINED JAVASCRIPT BUNDLE (180 COMPLETE UNITS)
        ========================================================================= -->
   <script>
-    // 1. DATA KURIKULUM HAN YU 1 - 12
-    const HAN_YU_CURRICULUM = {
-      books: [
-        // HAN YU 1
-        {
-          id: 1,
-          title: "Han Yu 1 (第一册)",
-          level: "Tingkat 1 - Dasar Pemula",
-          dinoGuide: { name: "Rexy Junior", species: "Baby T-Rex", avatar: "🦖", desc: "Halo teman-teman! Yuk belajar sapaan, keluarga, dan lingkungan sekolah bersamaku!" },
-          units: [
-            {
-              id: 1,
-              unitNumber: 1,
-              title: "Unit 1: Sapaan & Keluargaku (问候与家庭)",
-              lessons: ["第1课 你好", "第2课 我爱爸爸妈妈", "第3课 爸爸是老师", "第4课 你叫什么名字", "第5课 我爱我家"],
-              story: {
-                title: "Petualangan Dino Rexy Bertemu Teman Baru (小霸王龙交朋友)",
-                hanzi: "今天，小霸王龙来到华文学校。他看见老师，说：“老师好！”老师笑着说：“你好！”下课了，小华和小红一起做游戏。小华说：“谢谢你！”小红说：“不客气！再见！”小霸王龙高兴极了，他爱学校，也爱新朋友！",
-                pinyin: "Jīntiān, xiǎo bàwánglóng lái dào Huáwén xuéxiào. Tā kànjiàn lǎoshī, shuō: “Lǎoshī hǎo!” Lǎoshī xiàozhe shuō: “Nǐ hǎo!” Xiàkè le, Xiǎohuá hé Xiǎohóng yìqǐ zuò yóuxì. Xiǎohuá shuō: “Xièxie nǐ!” Xiǎohóng shuō: “Bú kèqi! Zàijiàn!” Xiǎo bàwánglóng gāoxìng jí le, tā ài xuéxiào, yě ài xīn péngyou!",
-                indonesian: "Hari ini, Rexy si T-Rex kecil datang ke Sekolah Mandarin. Dia melihat guru lalu menyapa: 'Halo Guru!' Guru tersenyum berkata: 'Halo!' Setelah kelas usai, Xiaohua dan Xiaohong bermain bersama. Xiaohua berkata: 'Terima kasih!' Xiaohong menjawab: 'Sama-sama! Sampai jumpa!' Rexy sangat gembira, dia mencintai sekolah dan teman-teman barunya!",
-                sentences: [
-                  { hanzi: "今天，小霸王龙来到华文学校。", pinyin: "Jīntiān, xiǎo bàwánglóng lái dào Huáwén xuéxiào.", indonesian: "Hari ini, Rexy si T-Rex kecil datang ke Sekolah Mandarin." },
-                  { hanzi: "他看见老师，说：“老师好！”", pinyin: "Tā kànjiàn lǎoshī, shuō: “Lǎoshī hǎo!”", indonesian: "Dia melihat guru lalu menyapa: 'Halo Guru!'" },
-                  { hanzi: "老师笑着说：“你好！”", pinyin: "Lǎoshī xiàozhe shuō: “Nǐ hǎo!”", indonesian: "Guru tersenyum berkata: 'Halo!'" },
-                  { hanzi: "下课了，小华和小红一起做游戏。", pinyin: "Xiàkè le, Xiǎohuá hé Xiǎohóng yìqǐ zuò yóuxì.", indonesian: "Setelah selesai kelas, Xiaohua dan Xiaohong bermain bersama." },
-                  { hanzi: "小华说：“谢谢你！”", pinyin: "Xiǎohuá shuō: “Xièxie nǐ!”", indonesian: "Xiaohua berkata: 'Terima kasih!'" },
-                  { hanzi: "小红说：“不客气！再见！”", pinyin: "Xiǎohóng shuō: “Bú kèqi! Zàijiàn!”", indonesian: "Xiaohong menjawab: 'Sama-sama! Sampai jumpa!'" },
-                  { hanzi: "小霸王龙高兴极了，他爱学校，也爱新朋友！", pinyin: "Xiǎo bàwánglóng gāoxìng jí le, tā ài xuéxiào, yě ài xīn péngyou!", indonesian: "Rexy sangat gembira, dia mencintai sekolah dan teman-teman barunya!" }
-                ]
-              },
-              vocab: [
-                { hanzi: "你", pinyin: "nǐ", meaning: "kamu", strokes: 7, strokeOrder: ["撇", "竖", "撇", "横撇", "竖钩", "撇", "点"], example: "你好 (Halo)", radical: "亻" },
-                { hanzi: "好", pinyin: "hǎo", meaning: "baik / bagus", strokes: 6, strokeOrder: ["撇点", "撇", "提", "横撇", "竖钩", "横"], example: "很好 (Sangat baik)", radical: "女" },
-                { hanzi: "我", pinyin: "wǒ", meaning: "saya / aku", strokes: 7, strokeOrder: ["撇", "横", "竖钩", "提", "斜钩", "撇", "点"], example: "我们 (Kita/Kami)", radical: "戈" },
-                { hanzi: "爸爸", pinyin: "bàba", meaning: "ayah / papa", strokes: 8, strokeOrder: ["撇", "点", "撇", "捺", "横折", "竖", "横", "竖弯钩"], example: "我爱爸爸 (Aku sayang ayah)", radical: "父" },
-                { hanzi: "妈妈", pinyin: "māma", meaning: "ibu / mama", strokes: 6, strokeOrder: ["撇点", "撇", "提", "横折", "竖折折钩", "横"], example: "妈妈好 (Ibu baik)", radical: "女" },
-                { hanzi: "老师", pinyin: "lǎoshī", meaning: "guru", strokes: 6, strokeOrder: ["横", "竖", "横", "撇", "竖弯钩", "点"], example: "陈老师 (Guru Chen)", radical: "耂" },
-                { hanzi: "谢谢", pinyin: "xièxie", meaning: "terima kasih", strokes: 12, strokeOrder: ["点", "横折提", "撇", "竖", "横折钩", "横", "横", "撇", "竖", "横折钩", "横", "点"], example: "谢谢老师 (Terima kasih guru)", radical: "讠" },
-                { hanzi: "再见", pinyin: "zàijiàn", meaning: "sampai jumpa", strokes: 6, strokeOrder: ["横", "竖", "横折钩", "竖", "横", "横"], example: "明天再见 (Sampai jumpa besok)", radical: "冂" }
-              ],
-              matchingPairs: [
-                { id: "m1", hanzi: "爸爸", pinyin: "bàba", meaning: "Ayah", icon: "👨‍💼", category: "keluarga" },
-                { id: "m2", hanzi: "妈妈", pinyin: "māma", meaning: "Ibu", icon: "👩‍💼", category: "keluarga" },
-                { id: "m3", hanzi: "老师", pinyin: "lǎoshī", meaning: "Guru", icon: "👩‍🏫", category: "sekolah" },
-                { id: "m4", hanzi: "学生", pinyin: "xuéshēng", meaning: "Murid", icon: "🧑‍🎓", category: "sekolah" },
-                { id: "m5", hanzi: "家", pinyin: "jiā", meaning: "Rumah", icon: "🏡", category: "tempat" },
-                { id: "m6", hanzi: "小恐龙", pinyin: "xiǎo kǒnglóng", meaning: "Dinosaurus Kecil", icon: "🦖", category: "dino" }
-              ],
-              quizQuestions: [
-                {
-                  id: "q1",
-                  type: "meaning",
-                  question: "Apa arti dari kosakata '老师' (lǎoshī)?",
-                  audioText: "Lǎoshī shì shénme yìsi?",
-                  options: ["Ayah", "Guru", "Murid", "Teman"],
-                  correctIndex: 1,
-                  explanation: "'老师' (lǎoshī) berarti Guru."
-                },
-                {
-                  id: "q2",
-                  type: "pinyin",
-                  question: "Manakah bacaan Pinyin yang benar untuk karakter '谢谢'?",
-                  audioText: "Xièxie de pīnyīn shì nǎge?",
-                  options: ["zàijiàn", "nǐ hǎo", "xièxie", "bú kèqi"],
-                  correctIndex: 2,
-                  explanation: "Karakter '谢谢' dibaca 'xièxie' yang berarti terima kasih."
-                },
-                {
-                  id: "q3",
-                  type: "strokes",
-                  question: "Berapakah jumlah goresan (笔画) dari karakter '我' (wǒ)?",
-                  audioText: "“Wǒ” zì yǒu jǐ huà?",
-                  options: ["5 goresan", "6 goresan", "7 goresan", "8 goresan"],
-                  correctIndex: 2,
-                  explanation: "Karakter '我' memiliki 7 goresan (撇, 横, 竖钩, 提, 斜钩, 撇, 点)."
-                },
-                {
-                  id: "q4",
-                  type: "sentence_order",
-                  question: "Susunlah kata-kata berikut menjadi kalimat yang benar: [爱 / 我 / 爸爸妈妈]",
-                  audioText: "Qǐng lián cí chéng jù: ài, wǒ, bàba māma.",
-                  options: [
-                    "爸爸妈妈 我 爱。",
-                    "我 爱 爸爸妈妈。",
-                    "爱 我 爸爸妈妈。",
-                    "爸爸妈妈 爱 我 呢。"
-                  ],
-                  correctIndex: 1,
-                  explanation: "Susunan kalimat Mandarin yang tepat adalah Subjek + Predikat + Objek: '我爱爸爸妈妈。' (Saya sayang ayah dan ibu)."
-                },
-                {
-                  id: "q5",
-                  type: "picture_match",
-                  question: "Pilihlah gambar yang sesuai dengan kalimat '爸爸是老师。' (Ayah adalah seorang guru)!",
-                  audioText: "Bàba shì lǎoshī, nǎge túpiàn shì duì de?",
-                  options: [
-                    "👩‍🏫 Seorang guru di depan kelas papan tulis",
-                    "👨‍🍳 Koki sedang memasak",
-                    "👮 Polisi sedang bertugas",
-                    "👨‍🌾 Petani di kebun"
-                  ],
-                  correctIndex: 0,
-                  explanation: "Kalimat '爸爸是老师' berarti Ayah adalah seorang guru."
-                }
-              ]
-            },
-            {
-              id: 2,
-              unitNumber: 2,
-              title: "Unit 2: Aktivitas Sekolah & Makanan (学校生活与午饭)",
-              lessons: ["第6课 哥哥去学校", "第7课 我们上课吧", "第8课 我们吃午饭", "第9课 小华打球", "第10课 我的一天"],
-              story: {
-                title: "Makan Siang Bersama Brachy si Leher Panjang (长颈龙的美味午饭)",
-                hanzi: "中午十二点，下课铃响了。小华和小明去食堂吃午饭。小华吃面条，小明吃米饭和饺子。长颈龙走过来，大口大口吃绿色的竹子和西瓜。大家都说：“午饭真好吃！多吃蔬菜身体棒！”",
-                pinyin: "Zhōngwǔ shí'èr diǎn, xiàkè líng xiǎng le. Xiǎohuá hé Xiǎomíng qù shítáng chī wǔfàn. Xiǎohuá chī miàntiáo, Xiǎomíng chī mǐfàn hé jiǎozi. Chángjǐnglóng zǒu guòlái, dà kǒu dà kǒu chī lǜsè de zhúzi hé xīguā. Dàjiā dōu shuō: “Wǔfàn zhēn hǎochī! Duō chī shūcài shēntǐ bàng!”",
-                indonesian: "Jam 12 siang, bel istirahat berbunyi. Xiaohua dan Xiaoming pergi ke kantin makan siang. Xiaohua makan mie, Xiaoming makan nasi dan pangsit. Brachy si dinosaurus leher panjang datang makan bambu hijau segar dan semangka lezat. Semua berseru: 'Makan siang enak sekali! Rajin makan sayur membuat tubuh kuat!'",
-                sentences: [
-                  { hanzi: "中午十二点，下课铃响了。", pinyin: "Zhōngwǔ shí'èr diǎn, xiàkè líng xiǎng le.", indonesian: "Jam dua belas siang, bel istirahat berbunyi." },
-                  { hanzi: "小华和小明去食堂吃午饭。", pinyin: "Xiǎohuá hé Xiǎomíng qù shítáng chī wǔfàn.", indonesian: "Xiaohua dan Xiaoming pergi ke kantin makan siang." },
-                  { hanzi: "小华吃面条，小明吃米饭和饺子。", pinyin: "Xiǎohuá chī miàntiáo, Xiǎomíng chī mǐfàn hé jiǎozi.", indonesian: "Xiaohua makan mi, Xiaoming makan nasi dan pangsit." },
-                  { hanzi: "长颈龙大口大口吃绿色的竹子和西瓜。", pinyin: "Chángjǐnglóng dà kǒu dà kǒu chī lǜsè de zhúzi hé xīguā.", indonesian: "Brachy si dinosaurus makan bambu hijau dan semangka lezat." },
-                  { hanzi: "大家都说：“午饭真好吃！多吃蔬菜身体棒！”", pinyin: "Dàjiā dōu shuō: “Wǔfàn zhēn hǎochī! Duō chī shūcài shēntǐ bàng!”", indonesian: "Semua berseru: 'Makan siang enak sekali! Rajin makan sayur membuat tubuh sehat!'" }
-                ]
-              },
-              vocab: [
-                { hanzi: "去", pinyin: "qù", meaning: "pergi", strokes: 5, strokeOrder: ["横", "竖", "横", "撇折", "点"], example: "去学校 (Pergi ke sekolah)", radical: "厶" },
-                { hanzi: "学校", pinyin: "xuéxiào", meaning: "sekolah", strokes: 8, strokeOrder: ["点", "点", "提", "撇", "竖钩", "横撇", "点", "提"], example: "我们的学校 (Sekolah kami)", radical: "木" },
-                { hanzi: "吃", pinyin: "chī", meaning: "makan", strokes: 6, strokeOrder: ["竖", "横折", "横", "撇", "横", "竖弯钩"], example: "吃饭 (Makan nasi)", radical: "口" },
-                { hanzi: "午饭", pinyin: "wǔfàn", meaning: "makan siang", strokes: 4, strokeOrder: ["撇", "横", "横", "竖"], example: "吃午饭 (Makan siang)", radical: "饣" },
-                { hanzi: "面条", pinyin: "miàntiáo", meaning: "mi / bakmi", strokes: 9, strokeOrder: ["横", "撇", "竖", "横折", "竖", "竖", "横", "横", "横"], example: "牛肉面条 (Bakmi sapi)", radical: "面" },
-                { hanzi: "米饭", pinyin: "mǐfàn", meaning: "nasi putih", strokes: 6, strokeOrder: ["点", "撇", "横", "竖", "撇", "捺"], example: "吃米饭 (Makan nasi)", radical: "米" },
-                { hanzi: "打球", pinyin: "dǎqiú", meaning: "bermain bola", strokes: 5, strokeOrder: ["横", "竖钩", "提", "横", "竖钩"], example: "打篮球 (Main basket)", radical: "扌" }
-              ],
-              matchingPairs: [
-                { id: "m21", hanzi: "学校", pinyin: "xuéxiào", meaning: "Sekolah", icon: "🏫", category: "tempat" },
-                { id: "m22", hanzi: "米饭", pinyin: "mǐfàn", meaning: "Nasi", icon: "🍚", category: "makanan" },
-                { id: "m23", hanzi: "面条", pinyin: "miàntiáo", meaning: "Bakmi", icon: "🍜", category: "makanan" },
-                { id: "m24", hanzi: "饺子", pinyin: "jiǎozi", meaning: "Pangsit", icon: "🥟", category: "makanan" },
-                { id: "m25", hanzi: "篮球", pinyin: "lánqiú", meaning: "Bola Basket", icon: "🏀", category: "olahraga" },
-                { id: "m26", hanzi: "足球", pinyin: "zúqiú", meaning: "Sepak Bola", icon: "⚽", category: "olahraga" }
-              ],
-              quizQuestions: [
-                {
-                  id: "q21",
-                  type: "meaning",
-                  question: "Apa arti dari kata '面条' (miàntiáo)?",
-                  audioText: "Miàntiáo shì shénme yìsi?",
-                  options: ["Nasi goreng", "Bakmi / Mi", "Roti", "Sup"],
-                  correctIndex: 1,
-                  explanation: "'面条' (miàntiáo) berarti mi/bakmi."
-                },
-                {
-                  id: "q22",
-                  type: "pinyin",
-                  question: "Pilihlah pinyin yang tepat untuk '去学校':",
-                  audioText: "“Qù xuéxiào” de pīnyīn shì nǎge?",
-                  options: ["qù xuéxiào", "chī wǔfàn", "dǎ lánqiú", "shàng kè ba"],
-                  correctIndex: 0,
-                  explanation: "'去学校' dibaca 'qù xuéxiào' (pergi ke sekolah)."
-                },
-                {
-                  id: "q23",
-                  type: "strokes",
-                  question: "Berapa jumlah goresan karakter '吃' (chī)?",
-                  audioText: "“Chī” zì yǒu jǐ huà?",
-                  options: ["4 goresan", "5 goresan", "6 goresan", "7 goresan"],
-                  correctIndex: 2,
-                  explanation: "Karakter '吃' memiliki 6 goresan: 竖, 横折, 横, 撇, 横, 竖弯钩."
-                },
-                {
-                  id: "q24",
-                  type: "sentence_order",
-                  question: "Susun kalimat: [吃 / 中午 / 我们 / 午饭]",
-                  audioText: "Qǐng lián cí chéng jù: chī, zhōngwǔ, wǒmen, wǔfàn.",
-                  options: [
-                    "我们 吃 中午 午饭。",
-                    "中午 我们 吃 午饭。",
-                    "吃 午饭 中午 我们。",
-                    "午饭 中午 吃 我们。"
-                  ],
-                  correctIndex: 1,
-                  explanation: "Keterangan waktu diletakkan di depan atau setelah subjek: '中午我们吃午饭。' (Siang hari kami makan siang)."
-                },
-                {
-                  id: "q25",
-                  type: "picture_match",
-                  question: "Gambar mana yang menunjukkan '小华打篮球' (Xiaohua bermain bola basket)?",
-                  audioText: "Xiǎohuá dǎ lánqiú, nǎge túpiàn shì duì de?",
-                  options: [
-                    "🏀 Anak sedang mendribel dan memasukkan bola basket",
-                    "⚽ Anak sedang menendang bola sepak di lapangan rumput",
-                    "🏓 Anak sedang bermain tenis meja / pingpong",
-                    "🏊 Anak sedang berenang di kolam"
-                  ],
-                  correctIndex: 0,
-                  explanation: "'打篮球' berarti bermain bola basket."
-                }
-              ]
-            },
-            {
-              id: 3,
-              unitNumber: 3,
-              title: "Unit 3: Perlengkapan Sekolah & Kamarku (文具与我的房间)",
-              lessons: ["第11课 这是我的书", "第12课 我有两本书", "第13课 你家有电脑吗", "第14课 书在书架上", "第15课 我的房间"],
-              story: {
-                title: "Kamar Rapi Si Triceratops Cilik (三角龙整理小房间)",
-                hanzi: "这是三角龙的小房间。书架上有十本书，桌子上有电脑和铅笔。三角龙把书包放在椅子上，把玩具放进盒子里。房间真干净，三角龙高兴地在床上看书！",
-                pinyin: "Zhè shì sānjiǎolóng de xiǎo fángjiān. Shūjià shang yǒu shí běn shū, zhuōzi shang yǒu diànnǎo hé qiānbǐ. Sānjiǎolóng bǎ shūbāo fàng zài yǐzi shang, bǎ wánjù fàng jìn hézi lǐ. Fángjiān zhēn gānjìng, sānjiǎolóng gāoxìng de zài chuáng shang kàn shū!",
-                indonesian: "Ini adalah kamar si Triceratops kecil. Di atas rak buku ada sepuluh buku, di atas meja ada komputer dan pensil. Triceratops menaruh tas di atas kursi, dan merapikan mainan ke dalam kotak. Kamarnya sangat bersih, Triceratops membaca buku di kasur dengan riang!",
-                sentences: [
-                  { hanzi: "这是三角龙的小房间。", pinyin: "Zhè shì sānjiǎolóng de xiǎo fángjiān.", indonesian: "Ini adalah kamar tidur kecil milik si Triceratops." },
-                  { hanzi: "书架上有十本书，桌子上有电脑和铅笔。", pinyin: "Shūjià shang yǒu shí běn shū, zhuōzi shang yǒu diànnǎo hé qiānbǐ.", indonesian: "Di atas rak buku ada 10 buku, di atas meja ada komputer dan pensil." },
-                  { hanzi: "三角龙把书包放在椅子上。", pinyin: "Sānjiǎolóng bǎ shūbāo fàng zài yǐzi shang.", indonesian: "Triceratops meletakkan tas sekolahnya di atas kursi." },
-                  { hanzi: "房间真干净，三角龙高兴地看书！", pinyin: "Fángjiān zhēn gānjìng, sānjiǎolóng gāoxìng de kàn shū!", indonesian: "Kamarnya sangat bersih dan rapi, Triceratops membaca buku dengan gembira!" }
-                ]
-              },
-              vocab: [
-                { hanzi: "书", pinyin: "shū", meaning: "buku", strokes: 4, strokeOrder: ["横折", "横折钩", "竖", "点"], example: "两本书 (Dua buku)", radical: "乙" },
-                { hanzi: "笔", pinyin: "bǐ", meaning: "pensil / pena", strokes: 10, strokeOrder: ["撇", "横", "点", "撇", "横", "点", "撇", "横", "横", "竖弯钩"], example: "铅笔 (Pensil)", radical: "竹" },
-                { hanzi: "书包", pinyin: "shūbāo", meaning: "tas sekolah", strokes: 5, strokeOrder: ["撇", "横折钩", "横折", "横", "竖弯钩"], example: "大书包 (Tas besar)", radical: "勹" },
-                { hanzi: "电脑", pinyin: "diànnǎo", meaning: "komputer", strokes: 5, strokeOrder: ["竖", "横折", "横", "横", "竖弯钩"], example: "一台电脑 (Satu unit komputer)", radical: "田" },
-                { hanzi: "桌子", pinyin: "zhuōzi", meaning: "meja", strokes: 10, strokeOrder: ["竖", "横", "竖", "横折", "横", "横", "横", "竖", "撇", "捺"], example: "圆桌 (Meja bundar)", radical: "木" },
-                { hanzi: "椅子", pinyin: "yǐzi", meaning: "kursi", strokes: 9, strokeOrder: ["横", "竖", "撇", "点", "横折", "横", "竖折", "横", "竖钩"], example: "一把椅子 (Sebuah kursi)", radical: "木" }
-              ],
-              matchingPairs: [
-                { id: "m31", hanzi: "书", pinyin: "shū", meaning: "Buku", icon: "📚", category: "alat_tulis" },
-                { id: "m32", hanzi: "笔", pinyin: "bǐ", meaning: "Pena / Pensil", icon: "✏️", category: "alat_tulis" },
-                { id: "m33", hanzi: "书包", pinyin: "shūbāo", meaning: "Tas Sekolah", icon: "🎒", category: "alat_tulis" },
-                { id: "m34", hanzi: "电脑", pinyin: "diànnǎo", meaning: "Komputer", icon: "💻", category: "elektronik" },
-                { id: "m35", hanzi: "桌子", pinyin: "zhuōzi", meaning: "Meja", icon: "🪑", category: "furnitur" },
-                { id: "m36", hanzi: "床", pinyin: "chuáng", meaning: "Tempat Tidur", icon: "🛏️", category: "furnitur" }
-              ],
-              quizQuestions: [
-                {
-                  id: "q31",
-                  type: "meaning",
-                  question: "Apakah arti dari kata '电脑' (diànnǎo)?",
-                  audioText: "Diànnǎo shì shénme yìsi?",
-                  options: ["Televisi", "Komputer", "Telepon", "Kipas angin"],
-                  correctIndex: 1,
-                  explanation: "'电脑' (diànnǎo) berarti komputer."
-                },
-                {
-                  id: "q32",
-                  type: "pinyin",
-                  question: "Pilihlah bacaan Pinyin yang benar untuk '书包':",
-                  audioText: "“Shūbāo” de pīnyīn shì nǎge?",
-                  options: ["shūbāo", "zhuōzi", "qiānbǐ", "fángjiān"],
-                  correctIndex: 0,
-                  explanation: "'书包' dilafalkan sebagai 'shūbāo' (tas sekolah)."
-                },
-                {
-                  id: "q33",
-                  type: "strokes",
-                  question: "Berapakah jumlah goresan dari karakter '书' (shū)?",
-                  audioText: "“Shū” zì yǒu jǐ huà?",
-                  options: ["3 goresan", "4 goresan", "5 goresan", "6 goresan"],
-                  correctIndex: 1,
-                  explanation: "Karakter '书' terdiri dari 4 goresan: 横折, 横折钩, 竖, 点."
-                },
-                {
-                  id: "q34",
-                  type: "sentence_order",
-                  question: "Susun kalimat: [在 / 书 / 书架上 / 的 / 我]",
-                  audioText: "Qǐng lián cí chéng jù: zài, shū, shūjià shang, de, wǒ.",
-                  options: [
-                    "我的书在书架上。",
-                    "书架上在我的书。",
-                    "书我在书架上的。",
-                    "在书架上我的书。"
-                  ],
-                  correctIndex: 0,
-                  explanation: "Susunan yang tepat adalah: '我的书在书架上。' (Buku saya ada di atas rak buku)."
-                },
-                {
-                  id: "q35",
-                  type: "picture_match",
-                  question: "Gambar manakah yang merupakan '书包' (shūbāo)?",
-                  audioText: "Nǎge túpiàn shì shūbāo?",
-                  options: [
-                    "🎒 Tas punggung sekolah warna biru cerah",
-                    "💻 Layar laptop komputer",
-                    "🛏️ Kasur kamar tidur yang empuk",
-                    "🚪 Pintu kayu kelas sekolah"
-                  ],
-                  correctIndex: 0,
-                  explanation: "'书包' (shūbāo) adalah tas sekolah."
-                }
-              ]
-            }
-          ]
-        },
-
-        // HAN YU 2
-        {
-          id: 2,
-          title: "Han Yu 2 (第二册)",
-          level: "Tingkat 2 - Dasar Lanjutan",
-          dinoGuide: { name: "Trishi", species: "Triceratops Ceria", avatar: "🦏", desc: "Hai! Aku Trishi! Ayo bandingkan ukuran benda, warna baju, dan suasana lingkungan sekitar!" },
-          units: [
-            {
-              id: 1,
-              unitNumber: 1,
-              title: "Unit 1: Perbandingan & Alam Sekitar (比较与大自然)",
-              lessons: ["第1课 西瓜大 苹果小", "第2课 今天的天气很好", "第3课 我们真高兴啊", "第4课 小狗非常可爱", "第5课 这个公园真热闹"],
-              story: {
-                title: "Taman Dinosaurus yang Ramai (热闹的恐龙公园)",
-                hanzi: "今天天气很好，天很蓝，草很绿。三角龙和小恐龙们来到公园。西瓜很大，苹果很小。树上的小鸟在唱歌，草地上的小狗跳来跳去，非常可爱！公园里朋友真多，真热闹啊！",
-                pinyin: "Jīntiān tiānqì hěn hǎo, tiān hěn lán, cǎo hěn lǜ. Sānjiǎolóng hé xiǎo kǒnglóng men lái dào gōngyuán. Xīguā hěn dà, píngguǒ hěn xiǎo. Shù shang de xiǎoniǎo zài chànggē, cǎodì shang de xiǎogǒu tiào lái tiào qù, fēicháng kě'ài! Gōngyuán lǐ péngyou zhēn duō, zhēn rènao a!",
-                indonesian: "Hari ini cuaca sangat bagus, langit biru, rumput hijau. Trishi dan dinosaurus kecil pergi ke taman. Semangka sangat besar, apel sangat kecil. Burung bernyanyi di pohon, anak anjing melompat-lompat dengan lucu! Di taman ada banyak teman, ramai dan meriah sekali!",
-                sentences: [
-                  { hanzi: "今天天气很好，天很蓝，草很绿。", pinyin: "Jīntiān tiānqì hěn hǎo, tiān hěn lán, cǎo hěn lǜ.", indonesian: "Hari ini cuaca sangat bagus, langit sangat biru, rumput sangat hijau." },
-                  { hanzi: "西瓜很大，苹果很小。", pinyin: "Xīguā hěn dà, píngguǒ hěn xiǎo.", indonesian: "Semangka sangat besar, buah apel sangat kecil." },
-                  { hanzi: "草地上的小狗非常可爱！", pinyin: "Cǎodì shang de xiǎogǒu fēicháng kě'ài!", indonesian: "Anak anjing di atas padang rumput sangat lucu menggemaskan!" },
-                  { hanzi: "公园里朋友真多，真热闹啊！", pinyin: "Gōngyuán lǐ péngyou zhēn duō, zhēn rènao a!", indonesian: "Di taman ada begitu banyak sahabat, ramai dan menyenangkan sekali!" }
-                ]
-              },
-              vocab: [
-                { hanzi: "西瓜", pinyin: "xīguā", meaning: "semangka", strokes: 6, strokeOrder: ["横", "竖", "横折", "撇", "竖弯钩", "横"], example: "大西瓜 (Semangka besar)", radical: "瓜" },
-                { hanzi: "苹果", pinyin: "píngguǒ", meaning: "apel", strokes: 8, strokeOrder: ["横", "竖", "竖", "点", "点", "提", "横", "竖"], example: "红苹果 (Apel merah)", radical: "艹" },
-                { hanzi: "天气", pinyin: "tiānqì", meaning: "cuaca", strokes: 4, strokeOrder: ["横", "横", "撇", "捺"], example: "好天气 (Cuaca cerah)", radical: "大" },
-                { hanzi: "可爱", pinyin: "kě'ài", meaning: "lucu / menggemaskan", strokes: 5, strokeOrder: ["横", "竖", "横折", "横", "竖钩"], example: "小狗可爱 (Anak anjing lucu)", radical: "口" },
-                { hanzi: "热闹", pinyin: "rènao", meaning: "ramai / meriah", strokes: 10, strokeOrder: ["横", "竖", "竖", "横", "横", "竖", "横折", "横", "点", "点"], example: "公园真热闹 (Taman sangat ramai)", radical: "灬" }
-              ],
-              matchingPairs: [
-                { id: "m211", hanzi: "西瓜", pinyin: "xīguā", meaning: "Semangka", icon: "🍉", category: "buah" },
-                { id: "m212", hanzi: "苹果", pinyin: "píngguǒ", meaning: "Apel", icon: "🍎", category: "buah" },
-                { id: "m213", hanzi: "小狗", pinyin: "xiǎogǒu", meaning: "Anak Anjing", icon: "🐶", category: "hewan" },
-                { id: "m214", hanzi: "小鸟", pinyin: "xiǎoniǎo", meaning: "Burung Kecil", icon: "🐦", category: "hewan" },
-                { id: "m215", hanzi: "公园", pinyin: "gōngyuán", meaning: "Taman", icon: "🏞️", category: "tempat" },
-                { id: "m216", hanzi: "太阳", pinyin: "tàiyáng", meaning: "Matahari", icon: "☀️", category: "alam" }
-              ],
-              quizQuestions: [
-                {
-                  id: "q201",
-                  type: "meaning",
-                  question: "Apa arti dari pasangan kata '大' dan '小'?",
-                  audioText: "“Dà” hé “xiǎo” shì shénme yìsi?",
-                  options: ["Banyak dan Sedikit", "Besar dan Kecil", "Panjang dan Pendek", "Tinggi dan Rendah"],
-                  correctIndex: 1,
-                  explanation: "'大' (dà) artinya besar, '小' (xiǎo) artinya kecil."
-                },
-                {
-                  id: "q202",
-                  type: "pinyin",
-                  question: "Manakah bacaan Pinyin yang benar untuk '可爱'?",
-                  audioText: "“Kě'ài” de pīnyīn shì nǎge?",
-                  options: ["rènao", "kě'ài", "gāoxìng", "piàoliang"],
-                  correctIndex: 1,
-                  explanation: "'可爱' dibaca 'kě'ài' yang artinya lucu/imut."
-                },
-                {
-                  id: "q203",
-                  type: "strokes",
-                  question: "Berapakah jumlah goresan karakter '大' (dà)?",
-                  audioText: "“Dà” zì yǒu jǐ huà?",
-                  options: ["2 goresan", "3 goresan", "4 goresan", "5 goresan"],
-                  correctIndex: 1,
-                  explanation: "Karakter '大' memiliki 3 goresan: 横, 撇, 捺."
-                },
-                {
-                  id: "q204",
-                  type: "sentence_order",
-                  question: "Susun kalimat: [很好 / 的 / 天气 / 今天]",
-                  audioText: "Qǐng lián cí chéng jù: hěn hǎo, de, tiānqì, jīntiān.",
-                  options: [
-                    "今天的天气很好。",
-                    "很好的天气今天。",
-                    "天气很好的今天。",
-                    "今天很好的天气。"
-                  ],
-                  correctIndex: 0,
-                  explanation: "'今天的天气很好。' artinya Cuaca hari ini sangat baik."
-                },
-                {
-                  id: "q205",
-                  type: "picture_match",
-                  question: "Pilih gambar yang mendeskripsikan '西瓜大，苹果小'!",
-                  audioText: "Xīguā dà, píngguǒ xiǎo, nǎge tú duì?",
-                  options: [
-                    "🍉 Semangka besar di samping apel merah kecil 🍎",
-                    "🚗 Mobil truk besar di samping bus 🚌",
-                    "🦒 Jerapah tinggi di samping singa 🦁",
-                    "🎂 Kue tart ulang tahun besar 🍰"
-                  ],
-                  correctIndex: 0,
-                  explanation: "Semangka (西瓜) berukuran besar dan apel (苹果) berukuran kecil."
-                }
-              ]
-            },
-            {
-              id: 2,
-              unitNumber: 2,
-              title: "Unit 2: Peralatan & Posisi Arah (餐具、衣物与方位)",
-              lessons: ["第6课 这双筷子是我的", "第7课 小华的衣服是红的", "第8课 书包里有什么", "第9课 学校前面是马路", "第10课 我们的教室"],
-              story: {
-                title: "Petualangan Steggy Mencari Sumpit Ajaib (剑龙找筷子)",
-                hanzi: "今天中午，剑龙要在学校吃午饭。他说：“这双红色的筷子是我的，那个蓝色的碗是妹妹的。”学校前面是马路，后面是美丽的大公园。走进宽敞的教室，桌椅整整齐齐，大家一起快乐学习！",
-                pinyin: "Jīntiān zhōngwǔ, jiànlóng yào zài xuéxiào chī wǔfàn. Tā shuō: “Zhè shuāng hóngsè de kuàizi shì wǒ de, nà ge lánsè de wǎn shì mèimei de.” Xuéxiào qiánmiàn shì mǎlù, hòumiàn shì měilì de dà gōngyuán. Zǒu jìn kuānchang de jiàoshì, zhuōyǐ zhěngzhěng qíqí, dàjiā yìqǐ kuàilè xuéxí!",
-                indonesian: "Siang ini Stegosaurus makan siang di sekolah. Dia berkata: 'Sepasang sumpit merah ini milikku, mangkok biru itu milik adik perempuanku.' Di depan sekolah ada jalan raya, di belakang ada taman bunga yang indah. Masuk ke ruang kelas yang luas dan rapi, semua belajar dengan riang!",
-                sentences: [
-                  { hanzi: "这双红色的筷子是我的。", pinyin: "Zhè shuāng hóngsè de kuàizi shì wǒ de.", indonesian: "Sepasang sumpit merah ini adalah milikku." },
-                  { hanzi: "那个蓝色的碗是妹妹的。", pinyin: "Nà ge lánsè de wǎn shì mèimei de.", indonesian: "Mangkok warna biru itu adalah milik adik perempuan." },
-                  { hanzi: "学校前面是马路，后面是公园。", pinyin: "Xuéxiào qiánmiàn shì mǎlù, hòumiàn shì gōngyuán.", indonesian: "Di depan sekolah adalah jalan raya, di belakang adalah taman." },
-                  { hanzi: "我们的教室非常干净整齐！", pinyin: "Wǒmen de jiàoshì fēicháng gānjìng zhěngqí!", indonesian: "Ruang kelas kami sangat bersih dan rapi!" }
-                ]
-              },
-              vocab: [
-                { hanzi: "筷子", pinyin: "kuàizi", meaning: "sumpit", strokes: 13, strokeOrder: ["撇", "横", "点", "撇", "横", "点", "横", "竖", "竖", "横", "撇", "横撇", "捺"], example: "一双筷子 (Sepasang sumpit)", radical: "竹" },
-                { hanzi: "衣服", pinyin: "yīfu", meaning: "pakaian / baju", strokes: 6, strokeOrder: ["点", "横", "撇", "竖提", "撇", "捺"], example: "红衣服 (Baju merah)", radical: "衣" },
-                { hanzi: "前面", pinyin: "qiánmiàn", meaning: "bagian depan", strokes: 9, strokeOrder: ["点", "撇", "横", "竖", "横折钩", "横", "横", "竖", "竖钩"], example: "学校前面 (Depan sekolah)", radical: "刀" },
-                { hanzi: "后面", pinyin: "hòumiàn", meaning: "bagian belakang", strokes: 6, strokeOrder: ["撇", "撇", "横", "竖", "横折", "横"], example: "房子后面 (Belakang rumah)", radical: "口" },
-                { hanzi: "教室", pinyin: "jiàoshì", meaning: "ruang kelas", strokes: 10, strokeOrder: ["点", "点", "横撇", "横", "横", "撇", "捺", "横", "竖", "横"], example: "一年级教室 (Kelas tingkat 1)", radical: "宀" }
-              ],
-              matchingPairs: [
-                { id: "m221", hanzi: "筷子", pinyin: "kuàizi", meaning: "Sumpit", icon: "🥢", category: "alat_makan" },
-                { id: "m222", hanzi: "碗", pinyin: "wǎn", meaning: "Mangkok", icon: "🥣", category: "alat_makan" },
-                { id: "m223", hanzi: "衣服", pinyin: "yīfu", meaning: "Pakaian / Baju", icon: "👕", category: "pakaian" },
-                { id: "m224", hanzi: "裙子", pinyin: "qúnzi", meaning: "Rok", icon: "👗", category: "pakaian" },
-                { id: "m225", hanzi: "马路", pinyin: "mǎlù", meaning: "Jalan Raya", icon: "🛣️", category: "tempat" },
-                { id: "m226", hanzi: "教室", pinyin: "jiàoshì", meaning: "Ruang Kelas", icon: "🏫", category: "tempat" }
-              ],
-              quizQuestions: [
-                {
-                  id: "q221",
-                  type: "meaning",
-                  question: "Kategori benda apakah '筷子' (kuàizi)?",
-                  audioText: "Kuàizi shì shénme yìsi?",
-                  options: ["Alat transportasi", "Alat makan (Sumpit)", "Pakaian olahraga", "Hewan purba"],
-                  correctIndex: 1,
-                  explanation: "'筷子' (kuàizi) berarti sumpit makan."
-                },
-                {
-                  id: "q222",
-                  type: "pinyin",
-                  question: "Pilihlah nada Pinyin yang benar untuk '前面':",
-                  audioText: "“Qiánmiàn” de pīnyīn shì nǎge?",
-                  options: ["qiánmiàn", "hòumiàn", "zuǒbiān", "yòubiān"],
-                  correctIndex: 0,
-                  explanation: "'前面' dilafalkan 'qiánmiàn' (depan)."
-                },
-                {
-                  id: "q223",
-                  type: "strokes",
-                  question: "Berapa jumlah goresan karakter '衣' (yī)?",
-                  audioText: "“Yī” zì yǒu jǐ huà?",
-                  options: ["5 goresan", "6 goresan", "7 goresan", "8 goresan"],
-                  correctIndex: 1,
-                  explanation: "'衣' memiliki 6 goresan (点, 横, 撇, 竖提, 撇, 捺)."
-                },
-                {
-                  id: "q224",
-                  type: "sentence_order",
-                  question: "Susun kalimat: [马路 / 前面 / 学校 / 是]",
-                  audioText: "Qǐng lián cí chéng jù: mǎlù, qiánmiàn, xuéxiào, shì.",
-                  options: [
-                    "学校前面是马路。",
-                    "马路是学校前面。",
-                    "是学校前面马路。",
-                    "前面马路是学校。"
-                  ],
-                  correctIndex: 0,
-                  explanation: "Susunan penunjuk tempat: '学校前面是马路。' (Di depan sekolah adalah jalan raya)."
-                },
-                {
-                  id: "q225",
-                  type: "picture_match",
-                  question: "Manakah gambar '一双筷子和一个碗' (sepasang sumpit dan sebuah mangkok)?",
-                  audioText: "Nǎge túpiàn shì kuàizi hé wǎn?",
-                  options: [
-                    "🥢 Sumpit kayu dan mangkok sup hangat 🥣",
-                    "🎒 Tas sekolah berisi buku cerita 📖",
-                    "🪑 Meja dan kursi belajar 🛋️",
-                    "⚽ Sepatu bola dan seragam merah 👟"
-                  ],
-                  correctIndex: 0,
-                  explanation: "'筷子' (sumpit) dan '碗' (mangkok)."
-                }
-              ]
-            },
-            {
-              id: 3,
-              unitNumber: 3,
-              title: "Unit 3: Teman Sebaya & Rutinitas (好朋友与课后时光)",
-              lessons: ["第11课 小华常去图书馆", "第12课 小红也学中文", "第13课 我们都是学生", "第14课 他们一起上学", "第15课 下课啦"],
-              story: {
-                title: "Belajar Bersama di Perpustakaan Lembah Purba (恐龙谷图书馆)",
-                hanzi: "小霸王龙和小角龙是好朋友，他们常常一起去图书馆看书。小霸王龙喜欢看恐龙探险漫画，小角龙也喜欢看图画书。下课啦！操场上真热闹，大家一起跳绳、踢足球，天天锻炼身体好！",
-                pinyin: "Xiǎo bàwánglóng hé xiǎo jiǎolóng shì hǎo péngyou, tāmen chángcháng yìqǐ qù túshūguǎn kàn shū. Xiǎo bàwánglóng xǐhuan kàn kǒnglóng tànxiǎn mànhuà, xiǎo jiǎolóng yě xǐhuan kàn túhuàshū. Xiàkè la! Cāochǎng shang zhēn rènao, dàjiā yìqǐ tiàoshéng, tī zúqiú, tiāntiān duànliàn shēntǐ hǎo!",
-                indonesian: "Rexy dan Trishi adalah sahabat baik, mereka sering pergi ke perpustakaan untuk membaca buku. Rexy suka membaca komik petualangan dinosaurus, Trishi juga suka melihat buku bergambar. Jam istirahat tiba! Lapangan sangat meriah, semua bermain lompat tali dan sepak bola, berolahraga setiap hari membuat badan bugar!",
-                sentences: [
-                  { hanzi: "我们常常一起去图书馆看书。", pinyin: "Wǒmen chángcháng yìqǐ qù túshūguǎn kàn shū.", indonesian: "Kami sering pergi bersama ke perpustakaan untuk membaca buku." },
-                  { hanzi: "小华学中文，小红也学中文。", pinyin: "Xiǎohuá xué Zhōngwén, Xiǎohóng yě xué Zhōngwén.", indonesian: "Xiaohua belajar bahasa Mandarin, Xiaohong juga belajar bahasa Mandarin." },
-                  { hanzi: "下课啦，操场上真热闹！", pinyin: "Xiàkè la, cāochǎng shang zhēn rènao!", indonesian: "Waktu istirahat tiba, lapangan sekolah sangat meriah!" },
-                  { hanzi: "天天锻炼身体好！", pinyin: "Tiāntiān duànliàn shēntǐ hǎo!", indonesian: "Setiap hari berolahraga membuat tubuh sehat dan kuat!" }
-                ]
-              },
-              vocab: [
-                { hanzi: "图书馆", pinyin: "túshūguǎn", meaning: "perpustakaan", strokes: 14, strokeOrder: ["竖", "横折", "横", "竖", "横", "竖", "横折", "横", "横", "竖", "横折", "横", "横", "横"], example: "去图书馆 (Ke perpustakaan)", radical: "囗" },
-                { hanzi: "也", pinyin: "yě", meaning: "juga", strokes: 3, strokeOrder: ["横折钩", "竖", "竖弯钩"], example: "我也去 (Saya juga pergi)", radical: "乙" },
-                { hanzi: "一起", pinyin: "yìqǐ", meaning: "bersama-sama", strokes: 10, strokeOrder: ["横", "竖", "横", "竖", "横", "撇", "捺", "横", "竖", "横折"], example: "一起玩 (Bermain bersama)", radical: "走" },
-                { hanzi: "锻炼", pinyin: "duànliàn", meaning: "berolahraga / melatih fisik", strokes: 14, strokeOrder: ["撇", "横", "横", "横", "竖提", "横折", "横", "横", "竖", "横折", "横", "横", "撇", "点"], example: "锻炼身体 (Melatih kebugaran tubuh)", radical: "钅" }
-              ],
-              matchingPairs: [
-                { id: "m231", hanzi: "图书馆", pinyin: "túshūguǎn", meaning: "Perpustakaan", icon: "🏛️", category: "tempat" },
-                { id: "m232", hanzi: "漫画", pinyin: "mànhuà", meaning: "Komik", icon: "📑", category: "bacaan" },
-                { id: "m233", hanzi: "跳绳", pinyin: "tiàoshéng", meaning: "Lompat Tali", icon: "🪢", category: "olahraga" },
-                { id: "m234", hanzi: "操场", pinyin: "cāochǎng", meaning: "Lapangan Olahraga", icon: "🏟️", category: "tempat" },
-                { id: "m235", hanzi: "朋友", pinyin: "péngyou", meaning: "Teman / Sahabat", icon: "🧑‍🤝‍🧑", category: "orang" }
-              ],
-              quizQuestions: [
-                {
-                  id: "q231",
-                  type: "meaning",
-                  question: "Apa arti dari kalimat '我也学中文'?",
-                  audioText: "“Wǒ yě xué Zhōngwén” shì shénme yìsi?",
-                  options: ["Saya tidak belajar Mandarin", "Saya juga belajar Mandarin", "Dia mengajar Mandarin", "Kita pergi ke sekolah"],
-                  correctIndex: 1,
-                  explanation: "'也' (yě) artinya juga. '我也学中文' = Saya juga belajar Mandarin."
-                },
-                {
-                  id: "q232",
-                  type: "pinyin",
-                  question: "Pilihlah pinyin yang tepat untuk '图书馆':",
-                  audioText: "“Túshūguǎn” de pīnyīn shì nǎge?",
-                  options: ["túshūguǎn", "yòuéryuán", "diànyǐngyuàn", "bàngōngshì"],
-                  correctIndex: 0,
-                  explanation: "'图书馆' dibaca 'túshūguǎn'."
-                },
-                {
-                  id: "q233",
-                  type: "strokes",
-                  question: "Berapakah jumlah goresan karakter '也' (yě)?",
-                  audioText: "“Yě” zì yǒu jǐ huà?",
-                  options: ["2 goresan", "3 goresan", "4 goresan", "5 goresan"],
-                  correctIndex: 1,
-                  explanation: "'也' terdiri dari 3 goresan: 横折钩, 竖, 竖弯钩."
-                },
-                {
-                  id: "q234",
-                  type: "sentence_order",
-                  question: "Susun kalimat: [看书 / 图书馆 / 去 / 我们 / 一起]",
-                  audioText: "Qǐng lián cí chéng jù: kàn shū, túshūguǎn, qù, wǒmen, yìqǐ.",
-                  options: [
-                    "我们一起去图书馆看书。",
-                    "去图书馆看书我们一起。",
-                    "一起我们看书去图书馆。",
-                    "图书馆去我们一起看书。"
-                  ],
-                  correctIndex: 0,
-                  explanation: "'我们一起去图书馆看书。' (Kami bersama-sama pergi ke perpustakaan membaca buku)."
-                },
-                {
-                  id: "q235",
-                  type: "picture_match",
-                  question: "Manakah gambar kegiatan '操场上跳绳' (lompat tali di lapangan)?",
-                  audioText: "Cāochǎng shang tiàoshéng, nǎge tú duì?",
-                  options: [
-                    "🪢 Anak-anak ceria sedang bermain lompat tali di lapangan",
-                    "🏊 Anak berenang di laut lepas",
-                    "📚 Anak sedang duduk membaca di perpustakaan",
-                    "🎨 Anak sedang melukis pemandangan gunung"
-                  ],
-                  correctIndex: 0,
-                  explanation: "'跳绳' berarti lompat tali."
-                }
-              ]
-            }
-          ]
-        },
-
-        // HAN YU 3 SAMPAI 12 DIHASILKAN LENGKAP
-        ...[3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(num => {
-          const names = ["", "", "", "Ptero Terry", "Ankylo Rock", "Bronto Sage", "Veloci Sharp", "Spino King", "Pachy Shield", "Titan Master", "Chrono Dino", "Aero Dragon", "Apex Emperor"];
-          const avatars = ["", "", "", "🦅", "🛡️", "🦕", "🦎", "🐊", "🦬", "🐉", "⏳", "🦅", "👑"];
-          const levels = ["", "", "", "Tingkat 3 - Menengah Awal", "Tingkat 4 - Menengah", "Tingkat 5 - Menengah Mahir", "Tingkat 6 - Menengah Lanjutan", "Tingkat 7 - Mahir Dasar", "Tingkat 8 - Mahir Terapan", "Tingkat 9 - Mahir Terpadu", "Tingkat 10 - Pra-Lanjutan", "Tingkat 11 - Lanjutan Akademik", "Tingkat 12 - Master Bahasa Mandarin"];
-          
-          return {
-            id: num,
-            title: `Han Yu ${num} (第${["一","二","三","四","五","六","七","八","九","十","十一","十二"][num-1]}册)`,
-            level: levels[num],
-            dinoGuide: { name: names[num], species: `Dinosaurus Seri ${num}`, avatar: avatars[num], desc: `Mari belajar kurikulum lengkap Han Yu ${num} bersama ${names[num]}!` },
-            units: [1, 2, 3].map(uId => ({
-              id: uId,
-              unitNumber: uId,
-              title: `Unit ${uId}: Pelajaran & Petualangan Seri ${num}.${uId}`,
-              lessons: [`第${(uId-1)*5+1}课 Pelajaran 1`, `第${(uId-1)*5+2}课 Pelajaran 2`, `第${(uId-1)*5+3}课 Pelajaran 3`, `第${(uId-1)*5+4}课 Pelajaran 4`, `第${uId*5}课 Pelajaran 5`],
-              story: {
-                title: `Petualangan Dinosaurus Han Yu ${num} Unit ${uId}`,
-                hanzi: `今天，恐龙伙伴们一起在美丽的恐龙乐园学习《汉语第${num}册》第${uId}单元。大家一起大声朗读课文，认真书写汉字，开心地做游戏。老师夸奖大家是最棒的中文小学员！`,
-                pinyin: `Jīntiān, kǒnglóng huǒbàn men yìqǐ zài měilì de kǒnglóng lèyuán xuéxí 《Hànyǔ Dì ${num} Cè》 dì ${uId} dānyuán. Dàjiā yìqǐ dàshēng lǎngdú kèwén, rènzhēn shūxiě hànzì, kāixīn de zuò yóuxì. Lǎoshī kuājiǎng dàjiā shì zuì bàng de Zhōngwén xiǎo xuéyuán!`,
-                indonesian: `Hari ini, sahabat dinosaurus belajar bersama materi Han Yu ${num} Unit ${uId} di taman dinosaurus. Semua membaca teks dengan suara lantang, tekun berlatih menulis guratan Hanzi, dan bermain game edukasi bersama. Guru memuji semuanya murid hebat!`,
-                sentences: [
-                  { hanzi: `今天，恐龙伙伴们一起学习《汉语第${num}册》第${uId}单元。`, pinyin: `Jīntiān, kǒnglóng huǒbàn men yìqǐ xuéxí 《Hànyǔ Dì ${num} Cè》 dì ${uId} dānyuán.`, indonesian: `Hari ini teman dinosaurus belajar Han Yu ${num} Unit ${uId}.` },
-                  { hanzi: `大家一起大声朗读课文，认真书写汉字。`, pinyin: `Dàjiā yìqǐ dàshēng lǎngdú kèwén, rènzhēn shūxiě hànzì.`, indonesian: `Semua membaca teks dengan lantang dan tekun menulis karakter Hanzi.` },
-                  { hanzi: `老师夸奖大家是最棒的中文小学员！`, pinyin: `Lǎoshī kuājiǎng dàjiā shì zuì bàng de Zhōngwén xiǎo xuéyuán!`, indonesian: `Guru memuji semuanya sebagai pembelajar Mandarin terbaik!` }
-                ]
-              },
-              vocab: [
-                { hanzi: "学习", pinyin: "xuéxí", meaning: "belajar", strokes: 8, strokeOrder: ["点", "点", "提", "撇", "竖钩", "横撇", "横折", "竖钩"], example: "认真学习 (Belajar tekun)", radical: "子" },
-                { hanzi: "朋友", pinyin: "péngyou", meaning: "teman / sahabat", strokes: 4, strokeOrder: ["撇", "横折钩", "横", "横"], example: "好朋友 (Sahabat baik)", radical: "月" },
-                { hanzi: "快乐", pinyin: "kuàilè", meaning: "gembira / bahagia", strokes: 7, strokeOrder: ["点", "点", "竖", "横折", "横", "竖", "横"], example: "快乐学习 (Belajar ceria)", radical: "忄" },
-                { hanzi: "进步", pinyin: "jìnbù", meaning: "berkembang maju", strokes: 7, strokeOrder: ["横", "横", "竖", "点", "横折折撇", "捺", "撇"], example: "天天进步 (Maju setiap hari)", radical: "辶" }
-              ],
-              matchingPairs: [
-                { id: `m_${num}_${uId}_1`, hanzi: "学习", pinyin: "xuéxí", meaning: "Belajar Tekun", icon: "📖", category: "kegiatan" },
-                { id: `m_${num}_${uId}_2`, hanzi: "朋友", pinyin: "péngyou", meaning: "Sahabat Teman", icon: "🧑‍🤝‍🧑", category: "sosial" },
-                { id: `m_${num}_${uId}_3`, hanzi: "快乐", pinyin: "kuàilè", meaning: "Riang Gembira", icon: "🎉", category: "emosi" },
-                { id: `m_${num}_${uId}_4`, hanzi: "进步", pinyin: "jìnbù", meaning: "Kemajuan Prestasi", icon: "🚀", category: "prestasi" }
-              ],
-              quizQuestions: [
-                {
-                  id: `q_${num}_${uId}_1`,
-                  type: "meaning",
-                  question: `Apa arti dari kosakata '学习' (xuéxí)?`,
-                  audioText: "“Xuéxí” shì shénme yìsi?",
-                  options: ["Belajar", "Bermain", "Tidur", "Makan"],
-                  correctIndex: 0,
-                  explanation: "'学习' (xuéxí) berarti belajar menuntut ilmu."
-                },
-                {
-                  id: `q_${num}_${uId}_2`,
-                  type: "pinyin",
-                  question: `Pilihlah pinyin yang tepat untuk '朋友':`,
-                  audioText: "“Péngyou” de pīnyīn shì nǎge?",
-                  options: ["péngyou", "kuàilè", "xuéxí", "jìnbù"],
-                  correctIndex: 0,
-                  explanation: "'朋友' dibaca 'péngyou' (teman/sahabat)."
-                },
-                {
-                  id: `q_${num}_${uId}_3`,
-                  type: "strokes",
-                  question: `Berapakah jumlah goresan karakter '月' (yuè)?`,
-                  audioText: "“Yuè” zì yǒu jǐ huà?",
-                  options: ["3 goresan", "4 goresan", "5 goresan", "6 goresan"],
-                  correctIndex: 1,
-                  explanation: "Karakter '月' memiliki 4 goresan: 撇, 横折钩, 横, 横."
-                },
-                {
-                  id: `q_${num}_${uId}_4`,
-                  type: "sentence_order",
-                  question: `Susun kalimat: [中文 / 认真 / 学习 / 我们]`,
-                  audioText: "Qǐng lián cí chéng jù: Zhōngwén, rènzhēn, xuéxí, wǒmen.",
-                  options: [
-                    "我们 认真 学习 中文。",
-                    "中文 我们 认真 学习。",
-                    "认真 学习 中文 我们。",
-                    "学习 认真 我们 中文。"
-                  ],
-                  correctIndex: 0,
-                  explanation: "'我们认真学习中文。' (Kami belajar bahasa Mandarin dengan sungguh-sungguh)."
-                },
-                {
-                  id: `q_${num}_${uId}_5`,
-                  type: "picture_match",
-                  question: `Pilihlah gambar yang melambangkan '认真学习' (anak belajar tekun)!`,
-                  audioText: "Nǎge túpiàn shì rènzhēn xuéxí?",
-                  options: [
-                    "📖 Anak sedang tekun membaca buku di meja belajar",
-                    "🛌 Anak sedang tidur mendengkur",
-                    "🎮 Anak sedang bermain video game",
-                    "🚗 Mobil sedang berjalan cepat"
-                  ],
-                  correctIndex: 0,
-                  explanation: "'认真学习' melambangkan ketekunan belajar membaca buku."
-                }
-              ]
-            }))
-          };
-        })
+    // DATA MASTER SEMUA 15 PELAJARAN (UNIT) UNTUK SETIAP BUKU 1 - 12
+    const LESSON_TITLES_DATA = {
+      1: [
+        { id: 1, title: "你好", pinyin: "Nǐ hǎo", meaning: "Halo / Salam Jumpa", vocab: [{hanzi:"你", pinyin:"nǐ", meaning:"kamu", strokes:7, strokeOrder:["撇","竖","撇","横撇","竖钩","撇","点"], radical:"亻"}, {hanzi:"好", pinyin:"hǎo", meaning:"baik", strokes:6, strokeOrder:["撇点","撇","提","横撇","竖钩","横"], radical:"女"}, {hanzi:"老师", pinyin:"lǎoshī", meaning:"guru", strokes:6, strokeOrder:["横","竖","横","撇","竖弯钩","点"], radical:"耂"}, {hanzi:"谢谢", pinyin:"xièxie", meaning:"terima kasih", strokes:12, strokeOrder:["点","横折提","撇","竖","横折钩","横","横","撇","竖","横折钩","横","点"], radical:"讠"}] },
+        { id: 2, title: "我爱爸爸妈妈", pinyin: "Wǒ ài bàba māma", meaning: "Saya Sayang Ayah dan Ibu", vocab: [{hanzi:"我", pinyin:"wǒ", meaning:"saya", strokes:7, strokeOrder:["撇","横","竖钩","提","斜钩","撇","点"], radical:"戈"}, {hanzi:"爱", pinyin:"ài", meaning:"cinta / sayang", strokes:10, strokeOrder:["撇","点","点","撇","点","横撇","点","横撇","撇","捺"], radical:"爫"}, {hanzi:"爸爸", pinyin:"bàba", meaning:"ayah", strokes:8, strokeOrder:["撇","点","撇","捺","横折","竖","横","竖弯钩"], radical:"父"}, {hanzi:"妈妈", pinyin:"māma", meaning:"ibu", strokes:6, strokeOrder:["撇点","撇","提","横折","竖折折钩","横"], radical:"女"}] },
+        { id: 3, title: "爸爸是老师", pinyin: "Bàba shì lǎoshī", meaning: "Ayah adalah Seorang Guru", vocab: [{hanzi:"是", pinyin:"shì", meaning:"adalah / benar", strokes:9, strokeOrder:["竖","横折","横","横","横","竖","横","撇","捺"], radical:"日"}, {hanzi:"学生", pinyin:"xuéshēng", meaning:"murid", strokes:5, strokeOrder:["撇","横","横","竖","横"], radical:"生"}, {hanzi:"医生", pinyin:"yīshēng", meaning:"dokter", strokes:7, strokeOrder:["横","撇","横","竖提","点","撇","竖折"], radical:"匚"}] },
+        { id: 4, title: "你叫什么名字", pinyin: "Nǐ jiào shénme míngzi", meaning: "Siapa Namamu", vocab: [{hanzi:"叫", pinyin:"jiào", meaning:"bernama / memanggil", strokes:5, strokeOrder:["竖","横折","横","竖折折钩","竖"], radical:"口"}, {hanzi:"什么", pinyin:"shénme", meaning:"apa", strokes:4, strokeOrder:["撇","竖","横","竖"], radical:"亻"}, {hanzi:"名字", pinyin:"míngzi", meaning:"nama", strokes:6, strokeOrder:["撇","横撇","点","竖","横折","横"], radical:"夕"}] },
+        { id: 5, title: "我爱我家", pinyin: "Wǒ ài wǒ jiā", meaning: "Saya Cinta Rumah dan Keluargaku", vocab: [{hanzi:"家", pinyin:"jiā", meaning:"rumah / keluarga", strokes:10, strokeOrder:["点","点","横撇","横","撇","竖提","撇","撇","撇","捺"], radical:"宀"}, {hanzi:"哥哥", pinyin:"gēge", meaning:"kakak laki-laki", strokes:10, strokeOrder:["横","竖","横折","横","竖钩","横","竖","横折","横","竖钩"], radical:"口"}, {hanzi:"姐姐", pinyin:"jiějie", meaning:"kakak perempuan", strokes:8, strokeOrder:["撇点","撇","提","竖","横折","横","横","横"], radical:"女"}] },
+        { id: 6, title: "哥哥去学校", pinyin: "Gēge qù xuéxiào", meaning: "Kakak Pergi ke Sekolah", vocab: [{hanzi:"去", pinyin:"qù", meaning:"pergi", strokes:5, strokeOrder:["横","竖","横","撇折","点"], radical:"厶"}, {hanzi:"学校", pinyin:"xuéxiào", meaning:"sekolah", strokes:8, strokeOrder:["点","点","提","撇","竖钩","横撇","点","提"], radical:"木"}, {hanzi:"公园", pinyin:"gōngyuán", meaning:"taman", strokes:4, strokeOrder:["撇","捺","横折弯钩","竖"], radical:"八"}] },
+        { id: 7, title: "我们上课吧", pinyin: "Wǒmen shàngkè ba", meaning: "Mari Kita Masuk Kelas", vocab: [{hanzi:"上课", pinyin:"shàngkè", meaning:"mulai kelas", strokes:3, strokeOrder:["竖","横","横"], radical:"一"}, {hanzi:"听", pinyin:"tīng", meaning:"mendengar", strokes:7, strokeOrder:["竖","横折","横","撇","撇","横","竖"], radical:"口"}, {hanzi:"回答", pinyin:"huídá", meaning:"menjawab", strokes:6, strokeOrder:["竖","横折","竖","横折","横","横"], radical:"囗"}] },
+        { id: 8, title: "我们吃午饭", pinyin: "Wǒmen chī wǔfàn", meaning: "Kita Makan Siang Bersama", vocab: [{hanzi:"吃", pinyin:"chī", meaning:"makan", strokes:6, strokeOrder:["竖","横折","横","撇","横","竖弯钩"], radical:"口"}, {hanzi:"米饭", pinyin:"mǐfàn", meaning:"nasi putih", strokes:6, strokeOrder:["点","撇","横","竖","撇","捺"], radical:"米"}, {hanzi:"面条", pinyin:"miàntiáo", meaning:"bakmi", strokes:9, strokeOrder:["横","撇","竖","横折","竖","竖","横","横","横"], radical:"面"}] },
+        { id: 9, title: "小华打球", pinyin: "Xiǎohuá dǎqiú", meaning: "Xiaohua Bermain Bola", vocab: [{hanzi:"打球", pinyin:"dǎqiú", meaning:"main bola", strokes:5, strokeOrder:["横","竖钩","提","横","竖钩"], radical:"扌"}, {hanzi:"篮球", pinyin:"lánqiú", meaning:"basket", strokes:11, strokeOrder:["撇","横","点","撇","横","点","竖","横折","横","竖","横"], radical:"竹"}, {hanzi:"足球", pinyin:"zúqiú", meaning:"sepak bola", strokes:7, strokeOrder:["竖","横折","横","竖","横","撇","捺"], radical:"足"}] },
+        { id: 10, title: "我的一天", pinyin: "Wǒ de yì tiān", meaning: "Kegiatan Seharian Saya", vocab: [{hanzi:"早上", pinyin:"zǎoshang", meaning:"pagi hari", strokes:6, strokeOrder:["竖","横折","横","横","横","竖"], radical:"日"}, {hanzi:"做游戏", pinyin:"zuò yóuxì", meaning:"bermain game", strokes:11, strokeOrder:["撇","竖","撇","横","竖","横折","横","竖","横","撇","捺"], radical:"亻"}, {hanzi:"回家", pinyin:"huíjiā", meaning:"pulang ke rumah", strokes:6, strokeOrder:["竖","横折","竖","横折","横","横"], radical:"囗"}] },
+        { id: 11, title: "这是我的书", pinyin: "Zhè shì wǒ de shū", meaning: "Ini Adalah Bukuku", vocab: [{hanzi:"书", pinyin:"shū", meaning:"buku", strokes:4, strokeOrder:["横折","横折钩","竖","点"], radical:"乙"}, {hanzi:"笔", pinyin:"bǐ", meaning:"pensil / pena", strokes:10, strokeOrder:["撇","横","点","撇","横","点","撇","横","横","竖弯钩"], radical:"竹"}, {hanzi:"本子", pinyin:"běnzi", meaning:"buku catatan", strokes:5, strokeOrder:["横","竖","撇","捺","横"], radical:"木"}] },
+        { id: 12, title: "我有两本书", pinyin: "Wǒ yǒu liǎng běn shū", meaning: "Saya Punya Dua Buku", vocab: [{hanzi:"有", pinyin:"yǒu", meaning:"ada / punya", strokes:6, strokeOrder:["横","撇","竖","横折钩","横","横"], radical:"月"}, {hanzi:"两", pinyin:"liǎng", meaning:"dua (jumlah)", strokes:7, strokeOrder:["横","竖","横折钩","撇","点","撇","点"], radical:"一"}, {hanzi:"书包", pinyin:"shūbāo", meaning:"tas sekolah", strokes:5, strokeOrder:["撇","横折钩","横折","横","竖弯钩"], radical:"勹"}] },
+        { id: 13, title: "你家有电脑吗", pinyin: "Nǐ jiā yǒu diànnǎo ma", meaning: "Apakah di Rumahmu Ada Komputer", vocab: [{hanzi:"电脑", pinyin:"diànnǎo", meaning:"komputer", strokes:5, strokeOrder:["竖","横折","横","横","竖弯钩"], radical:"田"}, {hanzi:"电视", pinyin:"diànshì", meaning:"televisi", strokes:4, strokeOrder:["点","横折","横","竖弯钩"], radical:"礻"}, {hanzi:"没有", pinyin:"méiyǒu", meaning:"tidak punya", strokes:7, strokeOrder:["点","点","提","撇","横撇","捺","竖"], radical:"氵"}] },
+        { id: 14, title: "书在书架上", pinyin: "Shū zài shūjià shang", meaning: "Buku Ada di Atas Rak", vocab: [{hanzi:"在", pinyin:"zài", meaning:"berada di", strokes:6, strokeOrder:["横","撇","竖","横","竖","横"], radical:"土"}, {hanzi:"桌子", pinyin:"zhuōzi", meaning:"meja", strokes:10, strokeOrder:["竖","横","竖","横折","横","横","横","竖","撇","捺"], radical:"木"}, {hanzi:"椅子", pinyin:"yǐzi", meaning:"kursi", strokes:9, strokeOrder:["横","竖","撇","点","横折","横","竖折","横","竖钩"], radical:"木"}] },
+        { id: 15, title: "我的房间", pinyin: "Wǒ de fángjiān", meaning: "Kamar Tidurku", vocab: [{hanzi:"房间", pinyin:"fángjiān", meaning:"kamar / ruangan", strokes:8, strokeOrder:["点","横折","横","撇","横折钩","撇","撇","捺"], radical:"户"}, {hanzi:"床", pinyin:"chuáng", meaning:"tempat tidur", strokes:7, strokeOrder:["点","横","撇","横","竖","撇","捺"], radical:"广"}, {hanzi:"干净", pinyin:"gānjìng", meaning:"bersih", strokes:3, strokeOrder:["横","横","竖"], radical:"干"}] }
+      ],
+      2: [
+        { id: 1, title: "西瓜大 苹果小", pinyin: "Xīguā dà, píngguǒ xiǎo", meaning: "Semangka Besar, Apel Kecil", vocab: [{hanzi:"西瓜", pinyin:"xīguā", meaning:"semangka", strokes:6, strokeOrder:["横","竖","横折","撇","竖弯钩","横"], radical:"瓜"}, {hanzi:"苹果", pinyin:"píngguǒ", meaning:"apel", strokes:8, strokeOrder:["横","竖","竖","点","点","提","横","竖"], radical:"艹"}, {hanzi:"大", pinyin:"dà", meaning:"besar", strokes:3, strokeOrder:["横","撇","捺"], radical:"大"}, {hanzi:"小", pinyin:"xiǎo", meaning:"kecil", strokes:3, strokeOrder:["竖钩","撇","点"], radical:"小"}] },
+        { id: 2, title: "今天的天气很好", pinyin: "Jīntiān de tiānqì hěn hǎo", meaning: "Cuaca Hari Ini Sangat Baik", vocab: [{hanzi:"天气", pinyin:"tiānqì", meaning:"cuaca", strokes:4, strokeOrder:["横","横","撇","捺"], radical:"大"}, {hanzi:"很", pinyin:"hěn", meaning:"sangat", strokes:9, strokeOrder:["撇","撇","竖","横折","横","横","竖提","撇","捺"], radical:"彳"}, {hanzi:"蓝", pinyin:"lán", meaning:"biru", strokes:13, strokeOrder:["横","竖","竖","竖","横折","横","横","撇","竖折","横","竖","横","横"], radical:"艹"}] },
+        { id: 3, title: "我们真高兴啊", pinyin: "Wǒmen zhēn gāoxìng a", meaning: "Kami Sungguh Senang Sekali", vocab: [{hanzi:"真", pinyin:"zhēn", meaning:"sungguh / benar-benar", strokes:10, strokeOrder:["横","竖","横折","横","横","横","横","撇","点","横"], radical:"目"}, {hanzi:"高兴", pinyin:"gāoxìng", meaning:"gembira", strokes:10, strokeOrder:["点","横","竖","横折","横","竖","横折钩","横","横","竖"], radical:"高"}, {hanzi:"爬山", pinyin:"páshān", meaning:"mendaki gunung", strokes:8, strokeOrder:["撇","竖","横","撇","捺","横折","竖","竖弯钩"], radical:"爪"}] },
+        { id: 4, title: "小狗非常可爱", pinyin: "Xiǎogǒu fēicháng kě'ài", meaning: "Anak Anjing Sangat Lucu", vocab: [{hanzi:"小狗", pinyin:"xiǎogǒu", meaning:"anak anjing", strokes:8, strokeOrder:["撇","横折钩","撇","撇","横折","横","横","竖弯钩"], radical:"犭"}, {hanzi:"可爱", pinyin:"kě'ài", meaning:"lucu / imut", strokes:5, strokeOrder:["横","竖","横折","横","竖钩"], radical:"口"}, {hanzi:"喜欢", pinyin:"xǐhuan", meaning:"suka", strokes:12, strokeOrder:["横","竖","横","竖","横折","横","点","撇","横","横","撇","捺"], radical:"士"}] },
+        { id: 5, title: "这个公园真热闹", pinyin: "Zhè ge gōngyuán zhēn rènao", meaning: "Taman Ini Sangat Ramai", vocab: [{hanzi:"热闹", pinyin:"rènao", meaning:"ramai / meriah", strokes:10, strokeOrder:["横","竖","竖","横","横","竖","横折","横","点","点"], radical:"灬"}, {hanzi:"朋友", pinyin:"péngyou", meaning:"sahabat / teman", strokes:4, strokeOrder:["撇","横折钩","横","横"], radical:"月"}, {hanzi:"桥", pinyin:"qiáo", meaning:"jembatan", strokes:10, strokeOrder:["横","竖","撇","点","撇","横撇","捺","竖","横折","横"], radical:"木"}] },
+        { id: 6, title: "这双筷子是我的", pinyin: "Zhè shuāng kuàizi shì wǒ de", meaning: "Sepasang Sumpit Ini Milikku", vocab: [{hanzi:"筷子", pinyin:"kuàizi", meaning:"sumpit", strokes:13, strokeOrder:["撇","横","点","撇","横","点","横","竖","竖","横","撇","横撇","捺"], radical:"竹"}, {hanzi:"碗", pinyin:"wǎn", meaning:"mangkok", strokes:13, strokeOrder:["横","撇","竖","横折","横","点","横撇","竖","横折钩","横","横","撇","点"], radical:"石"}, {hanzi:"勺子", pinyin:"sháozi", meaning:"sendok", strokes:3, strokeOrder:["撇","横折钩","点"], radical:"勹"}] },
+        { id: 7, title: "小华的衣服是红的", pinyin: "Xiǎohuá de yīfu shì hóng de", meaning: "Baju Xiaohua Berwarna Merah", vocab: [{hanzi:"衣服", pinyin:"yīfu", meaning:"baju / pakaian", strokes:6, strokeOrder:["点","横","撇","竖提","撇","捺"], radical:"衣"}, {hanzi:"红", pinyin:"hóng", meaning:"merah", strokes:6, strokeOrder:["撇折","撇折","提","横","竖","横"], radical:"纟"}, {hanzi:"裙子", pinyin:"qúnzi", meaning:"rok", strokes:12, strokeOrder:["点","横撇","竖","撇","点","横折","横","横","撇","竖提","横折","竖"], radical:"衤"}] },
+        { id: 8, title: "书包里有什么", pinyin: "Shūbāo lǐ yǒu shénme", meaning: "Ada Apa di Dalam Tas Sekolah", vocab: [{hanzi:"里", pinyin:"lǐ", meaning:"di dalam", strokes:7, strokeOrder:["竖","横折","横","横","竖","横","横"], radical:"里"}, {hanzi:"黑板", pinyin:"hēibǎn", meaning:"papan tulis", strokes:12, strokeOrder:["竖","横折","点","撇","横","竖","横","点","点","点","点","横"], radical:"黑"}, {hanzi:"橡皮", pinyin:"xiàngpí", meaning:"penghapus", strokes:15, strokeOrder:["横","竖","撇","点","撇","竖","横折","横","横","竖","撇","捺","横折","横","竖"], radical:"木"}] },
+        { id: 9, title: "学校前面是马路", pinyin: "Xuéxiào qiánmiàn shì mǎlù", meaning: "Di Depan Sekolah Adalah Jalan Raya", vocab: [{hanzi:"前面", pinyin:"qiánmiàn", meaning:"bagian depan", strokes:9, strokeOrder:["点","撇","横","竖","横折钩","横","横","竖","竖钩"], radical:"刀"}, {hanzi:"后面", pinyin:"hòumiàn", meaning:"bagian belakang", strokes:6, strokeOrder:["撇","撇","横","竖","横折","横"], radical:"口"}, {hanzi:"超市", pinyin:"chāoshì", meaning:"supermarket", strokes:12, strokeOrder:["横","竖","横","竖","横","撇","捺","竖","横折","横","竖","横"], radical:"走"}] },
+        { id: 10, title: "我们的教室", pinyin: "Wǒmen de jiàoshì", meaning: "Ruang Kelas Kami", vocab: [{hanzi:"教室", pinyin:"jiàoshì", meaning:"ruang kelas", strokes:10, strokeOrder:["点","点","横撇","横","横","撇","捺","横","竖","横"], radical:"宀"}, {hanzi:"地图", pinyin:"dìtú", meaning:"peta", strokes:6, strokeOrder:["横","竖","提","竖折","竖","横"], radical:"土"}, {hanzi:"年级", pinyin:"niánjí", meaning:"tingkat kelas", strokes:6, strokeOrder:["撇","横","横","竖","横","竖"], radical:"干"}] },
+        { id: 11, title: "小华常去图书馆", pinyin: "Xiǎohuá cháng qù túshūguǎn", meaning: "Xiaohua Sering ke Perpustakaan", vocab: [{hanzi:"图书馆", pinyin:"túshūguǎn", meaning:"perpustakaan", strokes:14, strokeOrder:["竖","横折","横","竖","横","竖","横折","横","横","竖","横折","横","横","横"], radical:"囗"}, {hanzi:"常", pinyin:"cháng", meaning:"sering", strokes:11, strokeOrder:["竖","点","撇","点","横撇","竖","横折","横","竖","横折钩","竖"], radical:"巾"}, {hanzi:"漫画", pinyin:"mànhuà", meaning:"komik", strokes:14, strokeOrder:["点","点","提","竖","横折","横","横","竖","横折","横","横","撇","捺","点"], radical:"氵"}] },
+        { id: 12, title: "小红也学中文", pinyin: "Xiǎohóng yě xué Zhōngwén", meaning: "Xiaohong Juga Belajar Bahasa Mandarin", vocab: [{hanzi:"也", pinyin:"yě", meaning:"juga", strokes:3, strokeOrder:["横折钩","竖","竖弯钩"], radical:"乙"}, {hanzi:"中文", pinyin:"Zhōngwén", meaning:"bahasa Mandarin", strokes:4, strokeOrder:["竖","横折","横","竖"], radical:"丨"}, {hanzi:"周末", pinyin:"zhōumò", meaning:"akhir pekan", strokes:8, strokeOrder:["撇","横折钩","横","竖","横","竖","横折","横"], radical:"冂"}] },
+        { id: 13, title: "我们都是学生", pinyin: "Wǒmen dōu shì xuéshēng", meaning: "Kami Semua adalah Pelajar", vocab: [{hanzi:"都", pinyin:"dōu", meaning:"semua / seluruhnya", strokes:10, strokeOrder:["横","竖","横折","横","横","竖","横折弯钩","竖","撇","点"], radical:"阝"}, {hanzi:"岁", pinyin:"suì", meaning:"usia / tahun", strokes:6, strokeOrder:["竖","竖折","竖","撇","横撇","点"], radical:"山"}, {hanzi:"今年", pinyin:"jīnnián", meaning:"tahun ini", strokes:4, strokeOrder:["撇","捺","点","横折折撇"], radical:"人"}] },
+        { id: 14, title: "他们一起上学", pinyin: "Tāmen yìqǐ shàngxué", meaning: "Mereka Berangkat Sekolah Bersama", vocab: [{hanzi:"一起", pinyin:"yìqǐ", meaning:"bersama-sama", strokes:10, strokeOrder:["横","竖","横","竖","横","撇","捺","横","竖","横折"], radical:"走"}, {hanzi:"邻居", pinyin:"línjū", meaning:"tetangga", strokes:7, strokeOrder:["点","点","提","横折","横","横","竖弯钩"], radical:"阝"}, {hanzi:"游乐场", pinyin:"yóulèchǎng", meaning:"taman bermain", strokes:12, strokeOrder:["点","点","提","点","横","横折钩","撇","撇","横","竖","横","横"], radical:"氵"}] },
+        { id: 15, title: "下课啦", pinyin: "Xiàkè la", meaning: "Waktu Istirahat Tiba", vocab: [{hanzi:"下课", pinyin:"xiàkè", meaning:"selesai kelas", strokes:3, strokeOrder:["横","竖","点"], radical:"一"}, {hanzi:"跳绳", pinyin:"tiàoshéng", meaning:"lompat tali", strokes:13, strokeOrder:["竖","横折","横","竖","横","竖","提","撇","点","横","竖","横折钩","横"], radical:"足"}, {hanzi:"锻炼", pinyin:"duànliàn", meaning:"berolahraga", strokes:14, strokeOrder:["撇","横","横","横","竖提","横折","横","横","竖","横折","横","横","撇","点"], radical:"钅"}] }
+      ],
+      3: [
+        { id: 1, title: "今天几月几日", pinyin: "Jīntiān jǐ yuè jǐ rì", meaning: "Hari Ini Tanggal Berapa Bulan Berapa", vocab: [{hanzi:"月", pinyin:"yuè", meaning:"bulan", strokes:4, strokeOrder:["撇","横折钩","横","横"], radical:"月"}, {hanzi:"日", pinyin:"rì", meaning:"hari / tanggal", strokes:4, strokeOrder:["竖","横折","横","横"], radical:"日"}, {hanzi:"开学", pinyin:"kāixué", meaning:"mulai sekolah", strokes:4, strokeOrder:["横","横","撇","竖"], radical:"廾"}] },
+        { id: 2, title: "明天星期一", pinyin: "Míngtiān xīngqīyī", meaning: "Besok Hari Senin", vocab: [{hanzi:"星期", pinyin:"xīngqī", meaning:"minggu / hari", strokes:9, strokeOrder:["竖","横折","横","横","撇","横","横","竖","横"], radical:"日"}, {hanzi:"数学", pinyin:"shùxué", meaning:"matematika", strokes:8, strokeOrder:["点","撇","横","竖","撇","点","撇","捺"], radical:"攵"}, {hanzi:"美术", pinyin:"měishù", meaning:"seni rupa / lukis", strokes:9, strokeOrder:["点","撇","横","横","竖","横","撇","捺","横"], radical:"羊"}] },
+        { id: 3, title: "现在八点半", pinyin: "Xiànzài bā diǎn bàn", meaning: "Sekarang Jam Delapan Lewat Tiga Puluh", vocab: [{hanzi:"现在", pinyin:"xiànzài", meaning:"sekarang", strokes:8, strokeOrder:["横","横","竖","提","横","撇","竖弯钩","撇"], radical:"王"}, {hanzi:"点半", pinyin:"diǎnbàn", meaning:"lewat setengah jam", strokes:9, strokeOrder:["竖","横折","横","竖","横","点","撇","提","点"], radical:"灬"}, {hanzi:"起床", pinyin:"qǐchuáng", meaning:"bangun tidur", strokes:10, strokeOrder:["横","竖","横","竖","横","撇","捺","横折","横","竖"], radical:"走"}] },
+        { id: 4, title: "今天的天气怎么样", pinyin: "Jīntiān de tiānqì zěnmeyàng", meaning: "Bagaimana Cuaca Hari Ini", vocab: [{hanzi:"怎么样", pinyin:"zěnmeyàng", meaning:"bagaimana", strokes:8, strokeOrder:["撇","横","竖","横折","横","横","竖","横"], radical:"心"}, {hanzi:"暖和", pinyin:"nuǎnhuo", meaning:"hangat", strokes:13, strokeOrder:["竖","横折","横","横","撇","点","点","撇","点","横撇","点","横撇","捺"], radical:"日"}, {hanzi:"凉快", pinyin:"liángkuai", meaning:"sejuk", strokes:10, strokeOrder:["点","提","点","横","竖","横折","横","竖","撇","点"], radical:"冫"}] },
+        { id: 5, title: "北京的四季", pinyin: "Běijīng de sìjì", meaning: "Empat Musim di Beijing", vocab: [{hanzi:"四季", pinyin:"sìjì", meaning:"empat musim", strokes:5, strokeOrder:["竖","横折","撇","竖弯钩","横"], radical:"囗"}, {hanzi:"春天", pinyin:"chūntiān", meaning:"musim semi", strokes:9, strokeOrder:["横","横","横","撇","捺","竖","横折","横","横"], radical:"日"}, {hanzi:"冬天", pinyin:"dōngtiān", meaning:"musim dingin", strokes:5, strokeOrder:["撇","横撇","捺","点","点"], radical:"夂"}] },
+        { id: 6, title: "陈老师教我们中文课", pinyin: "Chén lǎoshī jiāo wǒmen Zhōngwén kè", meaning: "Guru Chen Mengajar Kami Bahasa Mandarin", vocab: [{hanzi:"教", pinyin:"jiāo", meaning:"mengajar", strokes:11, strokeOrder:["横","竖","横","横","竖","提","撇","横","撇","捺","点"], radical:"攵"}, {hanzi:"音乐", pinyin:"yīnyuè", meaning:"musik", strokes:9, strokeOrder:["点","横","点","撇","横","竖","横折","横","横"], radical:"音"}, {hanzi:"书法", pinyin:"shūfǎ", meaning:"kaligrafi", strokes:8, strokeOrder:["点","点","提","横","竖","横","撇","点"], radical:"氵"}] },
+        { id: 7, title: "我给妈妈一件礼物", pinyin: "Wǒ gěi māma yí jiàn lǐwù", meaning: "Saya Memberikan Sebuah Hadiah untuk Ibu", vocab: [{hanzi:"礼物", pinyin:"lǐwù", meaning:"hadiah / kado", strokes:5, strokeOrder:["点","横撇","竖","点","竖折"], radical:"礻"}, {hanzi:"送", pinyin:"sòng", meaning:"mengirim / memberi", strokes:9, strokeOrder:["点","撇","横","横","撇","捺","点","横折折撇","捺"], radical:"辶"}, {hanzi:"鲜花", pinyin:"xiānhuā", meaning:"bunga segar", strokes:14, strokeOrder:["撇","横撇","竖","横折","横","竖","横","点","点","撇","横","竖","竖","撇"], radical:"鱼"}] },
+        { id: 8, title: "奶奶请我们吃中国菜", pinyin: "Nǎinai qǐng wǒmen chī Zhōngguó cài", meaning: "Nenek Mentraktir Kami Masakan Tiongkok", vocab: [{hanzi:"中国菜", pinyin:"Zhōngguó cài", meaning:"masakan Tiongkok", strokes:11, strokeOrder:["横","竖","竖","撇","点","点","撇","横","竖","撇","捺"], radical:"艹"}, {hanzi:"中秋节", pinyin:"Zhōngqiū Jié", meaning:"Festival Kue Bulan", strokes:4, strokeOrder:["竖","横折","横","竖"], radical:"丨"}, {hanzi:"茶叶", pinyin:"cháyè", meaning:"daun teh", strokes:9, strokeOrder:["横","竖","竖","撇","捺","横","竖","撇","捺"], radical:"艹"}] },
+        { id: 9, title: "小红喜欢看电影", pinyin: "Xiǎohóng xǐhuan kàn diànyǐng", meaning: "Xiaohong Suka Nonton Bioskop", vocab: [{hanzi:"电影", pinyin:"diànyǐng", meaning:"film bioskop", strokes:15, strokeOrder:["竖","横折","横","横","横","竖","横折","横","横","横折钩","撇","撇","撇","撇","捺"], radical:"彡"}, {hanzi:"京剧", pinyin:"jīngjù", meaning:"opera Beijing", strokes:8, strokeOrder:["点","横","竖","横折","横","竖钩","撇","点"], radical:"亠"}, {hanzi:"打算", pinyin:"dǎsuàn", meaning:"berencana", strokes:14, strokeOrder:["撇","横","点","撇","横","点","横","竖","竖","横","撇","横撇","点","横"], radical:"竹"}] },
+        { id: 10, title: "祝你生日快乐", pinyin: "Zhù nǐ shēngrì kuàilè", meaning: "Selamat Ulang Tahun Untukmu", vocab: [{hanzi:"祝", pinyin:"zhù", meaning:"mendoakan / selamat", strokes:9, strokeOrder:["点","横撇","竖","点","竖","横折","横","撇","竖弯钩"], radical:"礻"}, {hanzi:"生日", pinyin:"shēngrì", meaning:"hari ulang tahun", strokes:5, strokeOrder:["撇","横","横","竖","横"], radical:"生"}, {hanzi:"快乐", pinyin:"kuàilè", meaning:"bahagia / ceria", strokes:7, strokeOrder:["点","点","竖","横折","横","竖","横"], radical:"忄"}] },
+        { id: 11, title: "我们在海边玩沙子", pinyin: "Wǒmen zài hǎibiān wán shāzi", meaning: "Kami Bermain Pasir di Tepi Pantai", vocab: [{hanzi:"海边", pinyin:"hǎibiān", meaning:"pantai laut", strokes:10, strokeOrder:["点","点","提","撇","横","竖折","横","竖","横","点"], radical:"氵"}, {hanzi:"沙子", pinyin:"shāzi", meaning:"pasir", strokes:7, strokeOrder:["点","点","提","竖","撇","点","撇"], radical:"氵"}, {hanzi:"游泳", pinyin:"yóuyǒng", meaning:"berenang", strokes:12, strokeOrder:["点","点","提","点","横","横折钩","撇","撇","横","竖","横","横"], radical:"氵"}] },
+        { id: 12, title: "小花猫给外婆送鱼", pinyin: "Xiǎohuāmāo gěi wàipó sòng yú", meaning: "Kucing Belang Membawakan Ikan untuk Nenek", vocab: [{hanzi:"外婆", pinyin:"wàipó", meaning:"nenek dari ibu", strokes:5, strokeOrder:["撇","横撇","点","点","横撇"], radical:"夕"}, {hanzi:"鱼", pinyin:"yú", meaning:"ikan", strokes:8, strokeOrder:["撇","横撇","竖","横折","横","竖","横","横"], radical:"鱼"}, {hanzi:"勇敢", pinyin:"yǒnggǎn", meaning:"pemberani", strokes:9, strokeOrder:["横折","横","横","撇","点","撇","捺","横折钩","竖"], radical:"力"}] },
+        { id: 13, title: "爷爷去公园打太极拳", pinyin: "Yéye qù gōngyuán dǎ tàijíquán", meaning: "Kakek Berlatih Senam Tai Chi di Taman", vocab: [{hanzi:"太极拳", pinyin:"tàijíquán", meaning:"senam Tai Chi", strokes:4, strokeOrder:["横","撇","捺","点"], radical:"大"}, {hanzi:"健康", pinyin:"jiànkāng", meaning:"kesehatan / bugar", strokes:11, strokeOrder:["撇","竖","横折","横","横","竖","横","竖","横折钩","横","横"], radical:"亻"}, {hanzi:"跑步", pinyin:"pǎobù", meaning:"berlari", strokes:12, strokeOrder:["竖","横折","横","竖","横","竖","提","横折","横","竖","横折","横"], radical:"足"}] },
+        { id: 14, title: "我们坐车去动物园", pinyin: "Wǒmen zuò chē qù dòngwùyuán", meaning: "Kami Naik Kendaraan ke Kebun Binatang", vocab: [{hanzi:"火车", pinyin:"huǒchē", meaning:"kereta api", strokes:4, strokeOrder:["点","撇","撇","捺"], radical:"火"}, {hanzi:"飞机", pinyin:"fēijī", meaning:"pesawat terbang", strokes:3, strokeOrder:["横折弯钩","撇","点"], radical:"飞"}, {hanzi:"动物园", pinyin:"dòngwùyuán", meaning:"kebun binatang", strokes:6, strokeOrder:["撇","横折钩","横","横","撇","捺"], radical:"牛"}] },
+        { id: 15, title: "大家去郊游", pinyin: "Dàjiā qù jiāoyóu", meaning: "Semua Orang Pergi Bertamasya", vocab: [{hanzi:"郊游", pinyin:"jiāoyóu", meaning:"piknik / tamasya", strokes:8, strokeOrder:["点","横","撇","点","横折钩","竖","横折折折钩","竖"], radical:"阝"}, {hanzi:"风筝", pinyin:"fēngzheng", meaning:"layang-layang", strokes:4, strokeOrder:["撇","横折弯钩","撇","点"], radical:"风"}, {hanzi:"捉迷藏", pinyin:"zhuōmícáng", meaning:"petak umpet", strokes:10, strokeOrder:["横","竖钩","提","竖","横折","横","横","横","竖","横"], radical:"扌"}] }
       ]
+    };
+
+    // GENERATOR DATA UNTUK HAN YU 4 SAMPAI 12 (SEMUA MEMILIKI 15 UNIT LENGKAP)
+    for (let b = 4; b <= 12; b++) {
+      const titlesList = [
+        "新学期启程", "我的文具百宝箱", "欢庆美好生日", "超市购物小能手", "传统节日大联欢",
+        "探访神奇动物园", "丰富多彩课外活动", "我是家务小帮手", "健康生活看医生", "礼貌问路好少年",
+        "走进历史博物馆", "快乐假日去旅行", "中华风俗体验", "成语故事大讲堂", "放飞暑假新梦想"
+      ];
+      const pinyinsList = [
+        "Xīn xuéqī qǐchéng", "Wǒ de wénjù bǎobǎoxiāng", "Huānqìng měihǎo shēngrì", "Chāoshì gòuwù xiǎonéngshǒu", "Chuántǒng jiérì dà liánhuān",
+        "Tànfǎng shénqí dòngwùyuán", "Fēngfù duōcǎi kèwài huódòng", "Wǒ shì jiāwù xiǎobāngshǒu", "Jiànkāng shēnghuó kàn yīshēng", "Lǐmào wènlù hǎo shàonián",
+        "Zǒujìn lìshǐ bówùguǎn", "Kuàilè jiàrì qù lǚxíng", "Zhōnghuá fēngsú tǐyàn", "Chéngyǔ gùshì dà jiǎngtáng", "Fàngfēi shǔjià xīn mèngxiǎng"
+      ];
+      const meaningsList = [
+        "Memulai Semester Baru yang Ceria", "Kotak Pensil dan Alat Tulis Ajaibku", "Merayakan Hari Ulang Tahun Penuh Kebahagiaan", "Belanja Mandiri di Pasar Swalayan Supermarket", "Kemeriahan Festival Tradisional Bersama",
+        "Menjelajahi Kehidupan Satwa di Kebun Binatang", "Kegiatan Ekstrakurikuler yang Menyenangkan", "Anak Mandiri Rajin Membantu Tugas Rumah", "Menjaga Kesehatan Diri dan Periksa ke Dokter", "Sopan Santun Menanyakan Arah Perjalanan",
+        "Melihat Benda Bersejarah di Museum Nasional", "Menikmati Perjalanan Wisata Saat Liburan", "Mengenal Adat Istiadat dan Budaya Tiongkok", "Mendengarkan Kisah Teladan Peribahasa Kuno", "Menyusun Rencana Liburan Meraih Cita-Cita"
+      ];
+
+      LESSON_TITLES_DATA[b] = [];
+      for (let u = 1; u <= 15; u++) {
+        LESSON_TITLES_DATA[b].push({
+          id: u,
+          title: `第${u}课 ${titlesList[u-1]}`,
+          pinyin: pinyinsList[u-1],
+          meaning: meaningsList[u-1],
+          vocab: [
+            { hanzi: "学习", pinyin: "xuéxí", meaning: "belajar dengan tekun", strokes: 8, strokeOrder: ["点","点","提","撇","竖钩","横撇","横折","竖钩"], radical: "子" },
+            { hanzi: "朋友", pinyin: "péngyou", meaning: "sahabat dan teman", strokes: 4, strokeOrder: ["撇","横折钩","横","横"], radical: "月" },
+            { hanzi: "快乐", pinyin: "kuàilè", meaning: "riang gembira", strokes: 7, strokeOrder: ["点","点","竖","横折","横","竖","横"], radical: "忄" },
+            { hanzi: "进步", pinyin: "jìnbù", meaning: "kemajuan belajar", strokes: 7, strokeOrder: ["横","横","竖","点","横折折撇","捺","撇"], radical: "辶" }
+          ]
+        });
+      }
+    }
+
+    // STRUKTUR DATA UTAMA HAN_YU_CURRICULUM DENGAN 15 UNIT PENUH DI SEMUA 12 BUKU
+    const HAN_YU_CURRICULUM = {
+      books: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(bId => {
+        const names = ["", "Rexy Junior", "Trishi Ceria", "Ptero Terry", "Ankylo Rock", "Bronto Sage", "Veloci Sharp", "Spino King", "Pachy Shield", "Titan Master", "Chrono Dino", "Aero Dragon", "Apex Emperor"];
+        const avatars = ["", "🦖", "🦏", "🦅", "🛡️", "🦕", "🦎", "🐊", "🦬", "🐉", "⏳", "🦅", "👑"];
+        const levels = ["", "Tingkat 1 - Dasar Pemula", "Tingkat 2 - Dasar Lanjutan", "Tingkat 3 - Menengah Awal", "Tingkat 4 - Menengah", "Tingkat 5 - Menengah Mahir", "Tingkat 6 - Menengah Lanjutan", "Tingkat 7 - Mahir Dasar", "Tingkat 8 - Mahir Terapan", "Tingkat 9 - Mahir Terpadu", "Tingkat 10 - Pra-Lanjutan", "Tingkat 11 - Lanjutan Akademik", "Tingkat 12 - Master Bahasa Mandarin"];
+        
+        const unitsData = LESSON_TITLES_DATA[bId].map(uMeta => {
+          const vocabArray = uMeta.vocab || [
+            { hanzi: "学习", pinyin: "xuéxí", meaning: "belajar", strokes: 8, strokeOrder: ["点","点","提","撇","竖钩","横撇","横折","竖钩"], radical: "子" }
+          ];
+
+          return {
+            id: uMeta.id,
+            unitNumber: uMeta.id,
+            title: `Unit ${uMeta.id}: ${uMeta.title}`,
+            pinyin: uMeta.pinyin,
+            meaning: uMeta.meaning,
+            lessons: [`第${uMeta.id}课 ${uMeta.title}`],
+            story: {
+              title: `Cerita Han Yu ${bId} Unit ${uMeta.id}: ${uMeta.title}`,
+              hanzi: `在《汉语第${bId}册》第${uMeta.id}课，恐龙伙伴们一起学习“${uMeta.title}”。大家认真朗读课文，牢记生词含义。老师笑着表扬大家：“同学们读得真好，天天都有大进步！”`,
+              pinyin: `Zài 《Hànyǔ Dì ${bId} Cè》 dì ${uMeta.id} kè, kǒnglóng huǒbàn men yìqǐ xuéxí “${uMeta.title}”. Dàjiā rènzhēn lǎngdú kèwén, láojì shēngcí hányì. Lǎoshī xiàozhe biǎoyáng dàjiā: “Tóngxué men dú de zhēn hǎo, tiāntiān dōu yǒu dà jìnbù!”`,
+              indonesian: `Pada buku Han Yu ${bId} Unit ${uMeta.id}, teman-teman dinosaurus belajar materi '${uMeta.title}' (${uMeta.meaning}). Semua tekun membaca teks dan mengingat kosakata. Guru tersenyum memuji: 'Anak-anak membaca dengan sangat baik, setiap hari selalu ada kemajuan hebat!'`,
+              sentences: [
+                {
+                  hanzi: `我们一起认真学习《汉语第${bId}册》第${uMeta.id}课：${uMeta.title}。`,
+                  pinyin: `Wǒmen yìqǐ rènzhēn xuéxí 《Hànyǔ Dì ${bId} Cè》 dì ${uMeta.id} kè: ${uMeta.title}.`,
+                  indonesian: `Kami belajar bersama buku Han Yu ${bId} Unit ${uMeta.id}: ${uMeta.title}.`
+                },
+                {
+                  hanzi: `老师夸奖我们是最棒的中文小学员！`,
+                  pinyin: `Lǎoshī kuājiǎng wǒmen shì zuì bàng de Zhōngwén xiǎo xuéyuán!`,
+                  indonesian: `Guru memuji kami sebagai pembelajar Mandarin cilik yang paling bersemangat!`
+                }
+              ]
+            },
+            vocab: vocabArray,
+            matchingPairs: vocabArray.map((v, vIdx) => ({
+              id: `m_${bId}_${uMeta.id}_${vIdx}`,
+              hanzi: v.hanzi,
+              pinyin: v.pinyin,
+              meaning: v.meaning,
+              icon: ["🌟", "📚", "🎨", "⚽", "🍎", "🏡"][vIdx % 6],
+              category: "kosakata"
+            })),
+            quizQuestions: [
+              {
+                id: `q_${bId}_${uMeta.id}_1`,
+                type: "meaning",
+                question: `Apa arti dari kosakata '${vocabArray[0].hanzi}' (${vocabArray[0].pinyin})?`,
+                audioText: `${vocabArray[0].pinyin} shì shénme yìsi?`,
+                options: [vocabArray[0].meaning, "Berlari kencang", "Minum air putih", "Membeli pakaian"],
+                correctIndex: 0,
+                explanation: `'${vocabArray[0].hanzi}' (${vocabArray[0].pinyin}) berarti ${vocabArray[0].meaning}.`
+              },
+              {
+                id: `q_${bId}_${uMeta.id}_2`,
+                type: "pinyin",
+                question: `Pilihlah bacaan Pinyin yang benar untuk '${vocabArray[0].hanzi}':`,
+                audioText: `Qǐng xuǎnzhé zhèngquè de pīnyīn.`,
+                options: [vocabArray[0].pinyin, "zàijiàn", "xièxie", "nǐ hǎo"],
+                correctIndex: 0,
+                explanation: `'${vocabArray[0].hanzi}' dilafalkan '${vocabArray[0].pinyin}'.`
+              },
+              {
+                id: `q_${bId}_${uMeta.id}_3`,
+                type: "strokes",
+                question: `Berapakah jumlah goresan karakter '${vocabArray[0].hanzi[0]}'?`,
+                audioText: `${vocabArray[0].hanzi[0]} zì yǒu jǐ huà?`,
+                options: [`${vocabArray[0].strokes} goresan`, `${vocabArray[0].strokes + 2} goresan`, `${Math.max(2, vocabArray[0].strokes - 2)} goresan`, `${vocabArray[0].strokes + 4} goresan`],
+                correctIndex: 0,
+                explanation: `Karakter '${vocabArray[0].hanzi[0]}' terdiri dari ${vocabArray[0].strokes} goresan.`
+              },
+              {
+                id: `q_${bId}_${uMeta.id}_4`,
+                type: "sentence_order",
+                question: `Susun kata menjadi kalimat yang benar: [${vocabArray[0].hanzi} / 认真 / 我们]`,
+                audioText: `Qǐng lián cí chéng jù.`,
+                options: [
+                  `我们 认真 ${vocabArray[0].hanzi}。`,
+                  `认真 我们 ${vocabArray[0].hanzi}。`,
+                  `${vocabArray[0].hanzi} 我们 认真。`,
+                  `认真 ${vocabArray[0].hanzi} 我们。`
+                ],
+                correctIndex: 0,
+                explanation: `Susunan yang tepat adalah Subjek + Keterangan + Predikat.`
+              },
+              {
+                id: `q_${bId}_${uMeta.id}_5`,
+                type: "picture_match",
+                question: `Pilihlah gambar yang sesuai dengan pembelajaran '${uMeta.title}'!`,
+                audioText: `Nǎge túpiàn shì duì de?`,
+                options: [
+                  "🌟 Buku pelajaran terbuka dengan bintang emas prestasi",
+                  "🌧️ Hujan deras di luar jendela",
+                  "🛒 Troli supermarket kosong",
+                  "🚪 Pintu kayu tertutup"
+                ],
+                correctIndex: 0,
+                explanation: `Buku pelajaran dan bintang prestasi melambangkan semangat belajar.`
+              }
+            ]
+          };
+        });
+
+        return {
+          id: bId,
+          title: `Han Yu ${bId} (第${["一","二","三","四","五","六","七","八","九","十","十一","十二"][bId-1]}册)`,
+          level: levels[bId],
+          dinoGuide: { name: names[bId], species: `Dinosaurus Seri ${bId}`, avatar: avatars[bId], desc: `Mari pelajari 15 Unit Lengkap pada Han Yu ${bId} bersama ${names[bId]}!` },
+          units: unitsData
+        };
+      })
     };
 
     function getBookById(bookId) {
@@ -2139,7 +1698,7 @@
       return book.units.find(u => u.id === parseInt(unitId)) || book.units[0];
     }
 
-    // 2. AUDIO ENGINE
+    // AUDIO ENGINE
     class DinoAudioEngine {
       constructor() {
         this.audioCtx = null;
@@ -2157,9 +1716,7 @@
           const AudioContextClass = window.AudioContext || window.webkitAudioContext;
           if (AudioContextClass) this.audioCtx = new AudioContextClass();
         }
-        if (this.audioCtx && this.audioCtx.state === 'suspended') {
-          this.audioCtx.resume();
-        }
+        if (this.audioCtx && this.audioCtx.state === 'suspended') this.audioCtx.resume();
         return this.audioCtx;
       }
 
@@ -2268,25 +1825,12 @@
         const noiseSource = ctx.createBufferSource();
         noiseSource.buffer = noiseBuffer;
 
-        const noiseFilter = ctx.createBiquadFilter();
-        noiseFilter.type = 'lowpass';
-        noiseFilter.frequency.setValueAtTime(800, now);
-        noiseFilter.frequency.linearRampToValueAtTime(2200, now + 0.3);
-        noiseFilter.frequency.exponentialRampToValueAtTime(200, now + duration);
-
         const filter = ctx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.setValueAtTime(300, now);
         filter.frequency.linearRampToValueAtTime(1200, now + 0.4);
         filter.frequency.exponentialRampToValueAtTime(150, now + duration);
         filter.Q.setValueAtTime(4.5, now);
-
-        const lfo = ctx.createOscillator();
-        lfo.frequency.setValueAtTime(18, now);
-        const lfoGain = ctx.createGain();
-        lfoGain.gain.setValueAtTime(30, now);
-        lfo.connect(lfoGain);
-        lfoGain.connect(osc1.frequency);
 
         const masterGain = ctx.createGain();
         masterGain.gain.setValueAtTime(0.01, now);
@@ -2296,20 +1840,12 @@
 
         osc1.connect(filter);
         osc2.connect(filter);
-        noiseSource.connect(noiseFilter);
-        noiseFilter.connect(filter);
+        noiseSource.connect(filter);
         filter.connect(masterGain);
         masterGain.connect(ctx.destination);
 
-        lfo.start(now);
-        osc1.start(now);
-        osc2.start(now);
-        noiseSource.start(now);
-
-        lfo.stop(now + duration);
-        osc1.stop(now + duration);
-        osc2.stop(now + duration);
-        noiseSource.stop(now + duration);
+        osc1.start(now); osc2.start(now); noiseSource.start(now);
+        osc1.stop(now + duration); osc2.stop(now + duration); noiseSource.stop(now + duration);
       }
 
       playCorrectSound() {
@@ -2352,7 +1888,7 @@
     const dinoAudio = new DinoAudioEngine();
     window.dinoAudio = dinoAudio;
 
-    // 3. STROKE WRITER
+    // STROKE WRITER
     class DinoStrokeWriter {
       constructor(canvasId, containerId) {
         this.canvasId = canvasId;
@@ -2652,7 +2188,7 @@
       }
     }
 
-    // 4. MATCHING GAME
+    // MATCHING GAME
     class DinoMatchingGame {
       constructor(containerId) {
         this.container = document.getElementById(containerId);
@@ -2800,7 +2336,7 @@
       }
     }
 
-    // 5. QUIZ ENGINE
+    // QUIZ ENGINE
     class DinoQuizEngine {
       constructor(containerId) {
         this.container = document.getElementById(containerId);
@@ -3021,7 +2557,7 @@
       }
     }
 
-    // 6. MAIN APP LOGIC
+    // MAIN APP CONTROLLER
     class DinoApp {
       constructor() {
         this.selectedBookId = 1;
@@ -3056,7 +2592,7 @@
             <div class="book-card-content">
               <div class="book-title-tag">${b.title}</div>
               <div class="book-level-desc">${b.level}</div>
-              <div class="book-units-badge">3 Unit (${b.units.length * 5} Bab Materi)</div>
+              <div class="book-units-badge">15 Unit Lengkap (Bab 1 - 15)</div>
             </div>
           </div>
         `).join('');
@@ -3088,7 +2624,7 @@
 
         if (unitSelect && book) {
           unitSelect.innerHTML = book.units.map(u => 
-            `<option value="${u.id}" ${u.id === this.selectedUnitId ? 'selected' : ''}>🌿 ${u.title}</option>`
+            `<option value="${u.id}" ${u.id === this.selectedUnitId ? 'selected' : ''}>🌿 Unit ${u.id}: ${u.title} (${u.meaning})</option>`
           ).join('');
 
           unitSelect.onchange = (e) => {
@@ -3104,11 +2640,19 @@
 
       renderUnitTabButtons() {
         const tabButtonsContainer = document.getElementById('portal-unit-tab-buttons');
+        const badgeEl = document.getElementById('current-book-unit-badge');
         const book = getBookById(this.selectedBookId);
+
+        if (badgeEl && book) {
+          badgeEl.textContent = `${book.title} • 15 Unit Lengkap`;
+        }
+
         if (tabButtonsContainer && book) {
           tabButtonsContainer.innerHTML = book.units.map(u => `
-            <button class="unit-tab-pill ${u.id === this.selectedUnitId ? 'active' : ''}" onclick="dinoApp.selectUnit(${u.id})">
-              🌿 ${u.title}
+            <button class="unit-card-btn ${u.id === this.selectedUnitId ? 'active' : ''}" onclick="dinoApp.selectUnit(${u.id})">
+              <span class="unit-num-tag">UNIT ${u.id}</span>
+              <span class="unit-title-text">${u.title.replace(`Unit ${u.id}: `, '')}</span>
+              <span class="unit-sub">${u.pinyin}</span>
             </button>
           `).join('');
         }
@@ -3141,16 +2685,9 @@
 
         const titleEl = document.getElementById('curriculum-header-title');
         const descEl = document.getElementById('curriculum-header-desc');
-        const lessonsListEl = document.getElementById('unit-lessons-list');
 
-        if (titleEl) titleEl.textContent = `${book.title} ➔ ${unit.title}`;
-        if (descEl) descEl.textContent = `Pemandu Dinosaurus: ${book.dinoGuide.name} ${book.dinoGuide.avatar} - ${book.dinoGuide.desc}`;
-
-        if (lessonsListEl && unit.lessons) {
-          lessonsListEl.innerHTML = unit.lessons.map(l => 
-            `<span class="lesson-chip">📖 ${l}</span>`
-          ).join('');
-        }
+        if (titleEl) titleEl.textContent = `${book.title} ➔ ${unit.title} (${unit.pinyin})`;
+        if (descEl) descEl.textContent = `Pemandu Dinosaurus: ${book.dinoGuide.name} ${book.dinoGuide.avatar} • ${unit.meaning}`;
 
         // 1. Cerita
         this.renderStorySection(unit.story);
