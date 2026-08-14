@@ -376,6 +376,14 @@ class DinoMuridController {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  window.dinoMurid = new DinoMuridController();
-});
+function startDinoMurid() {
+  if (!window.dinoMurid) {
+    window.dinoMurid = new DinoMuridController();
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startDinoMurid);
+} else {
+  startDinoMurid();
+}

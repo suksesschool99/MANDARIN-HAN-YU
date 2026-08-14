@@ -235,7 +235,15 @@ class DinoApp {
   }
 }
 
-// Inisialisasi Otomatis saat DOM Siap
-document.addEventListener('DOMContentLoaded', () => {
-  window.dinoApp = new DinoApp();
-});
+// Inisialisasi Otomatis yang Kebal Lifecycle
+function startDinoApp() {
+  if (!window.dinoApp) {
+    window.dinoApp = new DinoApp();
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startDinoApp);
+} else {
+  startDinoApp();
+}
