@@ -1,6 +1,7 @@
 /**
  * Dino Mandarin Adventure - Multiple Choice Quiz Module (Han Yu 1 s/d Han Yu 15)
- * Kuis Pilihan Berganda Ber-Audio Mandarin + Piala Emas & Tepuk Tangan Meriah
+ * Kuis Pilihan Berganda Ber-Audio Mandarin Sesuai Unit Pembelajaran
+ * Dielengkapi Audio Bacaan Soal, Tepuk Tangan & Piala Emas Juara 🏆
  */
 
 class DinoQuiz {
@@ -9,7 +10,8 @@ class DinoQuiz {
     this.currentIndex = 0;
     this.score = 0;
     this.correctAnswersCount = 0;
-    this.filterType = 'all';
+    this.currentBookId = 1;
+    this.currentUnitId = 'all';
     this.userAnswers = [];
     this.isAnswered = false;
 
@@ -18,15 +20,20 @@ class DinoQuiz {
 
   init() {
     this.cacheDom();
+    this.populateDropdowns();
     this.bindEvents();
 
     const params = new URLSearchParams(window.location.search);
     const mod = params.get('mod') || params.get('module');
-    const book = params.get('book') || 'all';
+    const book = parseInt(params.get('book')) || 1;
+    const unit = params.get('unit') || 'all';
 
-    if (book !== 'all') {
-      this.filterType = `book-${book}`;
-    }
+    this.currentBookId = book;
+    this.currentUnitId = unit;
+
+    if (this.bookSelect) this.bookSelect.value = this.currentBookId;
+    this.updateUnitDropdown();
+    if (this.unitSelect) this.unitSelect.value = this.currentUnitId;
 
     if (mod === 'quiz') {
       this.startQuiz();
@@ -35,16 +42,50 @@ class DinoQuiz {
 
   cacheDom() {
     this.wrapperEl = document.getElementById('quiz-wrapper-card');
-    this.filterSelect = document.getElementById('quiz-filter-select');
+    this.bookSelect = document.getElementById('quiz-book-select');
+    this.unitSelect = document.getElementById('quiz-unit-select');
     this.btnRestart = document.getElementById('btn-restart-quiz');
     this.resultCard = document.getElementById('quiz-result-card');
     this.questionCard = document.getElementById('quiz-question-box');
   }
 
+  populateDropdowns() {
+    if (this.bookSelect && window.DINO_DATA && window.DINO_DATA.books) {
+      this.bookSelect.innerHTML = window.DINO_DATA.books.map(b => `
+        <option value="${b.id}">${b.title}</option>
+      `).join('');
+    }
+    this.updateUnitDropdown();
+  }
+
+  updateUnitDropdown() {
+    if (!this.unitSelect) return;
+    const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[this.currentBookId]) || {};
+    const unitKeys = Object.keys(unitMap);
+
+    let html = '<option value="all">Semua Pelajaran (Kuis Lengkap)</option>';
+    if (unitKeys.length > 0) {
+      unitKeys.forEach(u => {
+        const title = unitMap[u] || `Unit ${u}`;
+        html += `<option value="${u}">Pelajaran ${u} (${title})</option>`;
+      });
+    }
+    this.unitSelect.innerHTML = html;
+  }
+
   bindEvents() {
-    if (this.filterSelect) {
-      this.filterSelect.addEventListener('change', (e) => {
-        this.filterType = e.target.value;
+    if (this.bookSelect) {
+      this.bookSelect.addEventListener('change', (e) => {
+        this.currentBookId = parseInt(e.target.value) || 1;
+        this.currentUnitId = 'all';
+        this.updateUnitDropdown();
+        this.startQuiz();
+      });
+    }
+
+    if (this.unitSelect) {
+      this.unitSelect.addEventListener('change', (e) => {
+        this.currentUnitId = e.target.value;
         this.startQuiz();
       });
     }
@@ -70,13 +111,20 @@ class DinoQuiz {
 
     let pool = window.DINO_DATA.strokeCountQuestions;
 
-    if (this.filterType.startsWith('book-')) {
-      const bId = parseInt(this.filterType.replace('book-', ''));
-      const filtered = pool.filter(q => q.book === bId);
-      if (filtered.length > 0) pool = filtered;
+    // Filter by Book
+    let filtered = pool.filter(q => q.book === this.currentBookId);
+    if (filtered.length === 0) filtered = pool;
+
+    // Filter by Unit
+    if (this.currentUnitId !== 'all') {
+      const uId = parseInt(this.currentUnitId);
+      const unitFiltered = filtered.filter(q => q.unit === uId);
+      if (unitFiltered.length > 0) {
+        filtered = unitFiltered;
+      }
     }
 
-    this.questions = [...pool].sort(() => Math.random() - 0.5);
+    this.questions = [...filtered].sort(() => Math.random() - 0.5);
     this.renderCurrentQuestion();
   }
 
@@ -97,129 +145,212 @@ class DinoQuiz {
       <div class="quiz-question-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <span style="font-weight: 800; color: var(--dino-green-deep); font-size: 0.95rem;">
-            Soal ${this.currentIndex + 1} dari ${this.questions.length}
+            Soal ${this.currentIndex + 1} dari ${this.questions.length} (Buku ${q.book} • Pelajaran ${q.unit || 1})
           </span>
-          <span style="font-weight: 700; color: var(--dino-amber-deep); background: var(--dino-amber-soft); padding: 4px 12px; border-radius: var(--radius-pill);">
-            Buku Han Yu ${q.book || 1}
-          </span>
+          <span class="quiz-badge-type">Pilihan Berganda</span>
         </div>
 
-        <div class="quiz-audio-prompt-row">
-          <button class="dino-btn-audio-pill" id="btn-play-quiz-audio" title="Dengarkan Soal Hanzi">
-            🔊 Dengarkan Soal Hanzi
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px;">
+          <h3 class="quiz-question-text">${q.question}</h3>
+          <button class="dino-btn-audio-circle" id="btn-speak-question" title="Dengarkan Soal dalam Bahasa Mandarin">
+            🔊
           </button>
         </div>
 
-        <div class="quiz-question-text">${q.question}</div>
-
         ${q.hanzi ? `
-          <div class="quiz-char-large-display">${q.hanzi}</div>
-          <div style="text-align: center; font-size: 1.1rem; color: var(--dino-blue); font-weight: 700; margin-bottom: 14px;">
-            ${q.pinyin || ''}
+          <div style="text-align: center; margin-bottom: 16px; background: #fafafa; padding: 14px; border-radius: var(--radius-md); border: 1.5px solid #eee;">
+            <div style="font-size: 2.4rem; font-weight: 900; font-family: var(--font-chinese); color: var(--dino-green-deep);">${q.hanzi}</div>
+            <div style="font-size: 1.1rem; color: #d84315; font-weight: 700; font-family: var(--font-pinyin);">${q.pinyin || ''}</div>
           </div>
         ` : ''}
 
-        <div class="quiz-options-grid">
+        <div class="quiz-options-list">
           ${q.options.map((opt, i) => `
-            <button class="quiz-option-btn" data-index="${i}">
-              <span class="opt-badge">${optLetters[i]}</span>
-              <span class="opt-text">${opt.text}</span>
+            <button class="quiz-opt-btn" data-index="${i}">
+              <span class="quiz-opt-letter">${optLetters[i]}</span>
+              <span class="quiz-opt-text">${opt.text}</span>
             </button>
           `).join('')}
+        </div>
+
+        <div id="quiz-feedback-box" class="quiz-feedback" style="display: none;"></div>
+
+        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+          <button class="dino-btn-primary" id="btn-next-question" style="display: none;">
+            Soal Selanjutnya ➡️
+          </button>
         </div>
       </div>
     `;
 
-    // Bind Audio Button
-    const btnAudio = this.questionCard.querySelector('#btn-play-quiz-audio');
-    if (btnAudio) {
-      btnAudio.addEventListener('click', () => {
-        const textToRead = q.audioText || q.hanzi || q.question;
-        if (window.dinoAudio) window.dinoAudio.speakMandarinSlow(textToRead);
+    // Speak question audio
+    const btnSpeak = this.questionCard.querySelector('#btn-speak-question');
+    if (btnSpeak) {
+      btnSpeak.addEventListener('click', () => {
+        if (window.dinoAudio) {
+          window.dinoAudio.speakMandarin(q.audioText || q.hanzi || q.question);
+        }
       });
+      // Auto speak first time gently
+      if (window.dinoAudio && window.dinoAudio.voiceEnabled) {
+        setTimeout(() => {
+          window.dinoAudio.speakMandarin(q.audioText || q.hanzi || q.question);
+        }, 300);
+      }
     }
 
-    // Bind Option Clicks
-    const optBtns = this.questionCard.querySelectorAll('.quiz-option-btn');
+    // Option clicks
+    const optBtns = this.questionCard.querySelectorAll('.quiz-opt-btn');
     optBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         if (this.isAnswered) return;
-        const idx = parseInt(btn.getAttribute('data-index'));
-        this.handleSelectOption(idx, optBtns);
+        const optIdx = parseInt(btn.getAttribute('data-index'));
+        this.handleAnswer(optIdx, btn, optBtns);
       });
     });
   }
 
-  handleSelectOption(selectedIndex, optBtns) {
+  handleAnswer(chosenIdx, chosenBtn, allOptBtns) {
     this.isAnswered = true;
     const q = this.questions[this.currentIndex];
-    const selectedOpt = q.options[selectedIndex];
-    const isCorrect = selectedOpt.isCorrect;
+    const isCorrect = q.options[chosenIdx].isCorrect;
 
-    optBtns.forEach((btn, i) => {
-      if (q.options[i].isCorrect) {
+    const feedbackBox = this.questionCard.querySelector('#quiz-feedback-box');
+    const btnNext = this.questionCard.querySelector('#btn-next-question');
+
+    allOptBtns.forEach((btn, idx) => {
+      btn.disabled = true;
+      if (q.options[idx].isCorrect) {
         btn.classList.add('correct');
-      } else if (i === selectedIndex) {
-        btn.classList.add('incorrect');
       }
     });
 
     if (isCorrect) {
+      chosenBtn.classList.add('correct');
       this.score += Math.round(100 / this.questions.length);
       this.correctAnswersCount++;
-      if (window.dinoAudio) {
-        window.dinoAudio.playApplause();
+      if (window.dinoAudio) window.dinoAudio.playApplause();
+
+      if (feedbackBox) {
+        feedbackBox.className = 'quiz-feedback correct';
+        feedbackBox.style.display = 'block';
+        feedbackBox.innerHTML = `
+          <strong>👏 Jawaban Kamu Benar Sekali!</strong><br>
+          ${q.explanation || ''}
+        `;
       }
     } else {
-      if (window.dinoAudio) {
-        window.dinoAudio.playDinoRoar();
+      chosenBtn.classList.add('incorrect');
+      if (window.dinoAudio) window.dinoAudio.playDinoRoar();
+
+      if (feedbackBox) {
+        feedbackBox.className = 'quiz-feedback incorrect';
+        feedbackBox.style.display = 'block';
+        feedbackBox.innerHTML = `
+          <strong>🦖 Oops, Jawaban Kurang Tepat!</strong><br>
+          ${q.explanation || ''}
+        `;
       }
     }
 
-    // Lanjut ke soal berikutnya setelah jeda 1.2 detik
-    setTimeout(() => {
-      this.currentIndex++;
-      this.renderCurrentQuestion();
-    }, 1300);
+    if (btnNext) {
+      btnNext.style.display = 'inline-flex';
+      btnNext.onclick = () => {
+        this.currentIndex++;
+        this.renderCurrentQuestion();
+      };
+    }
   }
 
   showFinalResult() {
-    if (this.questionCard) this.questionCard.style.display = 'none';
-    if (!this.resultCard) return;
+    if (!this.resultCard || !this.questionCard) return;
 
+    this.questionCard.style.display = 'none';
     this.resultCard.style.display = 'block';
 
-    const isPerfect = this.correctAnswersCount === this.questions.length;
-    const finalScoreValue = isPerfect ? 100 : Math.min(100, Math.round((this.correctAnswersCount / this.questions.length) * 100));
+    const finalScore = Math.min(100, Math.round((this.correctAnswersCount / this.questions.length) * 100));
+    const scoreValEl = document.getElementById('quiz-final-score');
+    const scoreMsgEl = document.getElementById('quiz-final-message');
+    const btnCert = document.getElementById('btn-show-certificate');
 
-    // Perayaan Khusus jika 100% Benar: Fanfare + Tepuk Tangan Meriah + Piala Emas
-    if (isPerfect) {
+    if (scoreValEl) scoreValEl.textContent = `${finalScore} / 100`;
+
+    if (finalScore === 100) {
       if (window.dinoAudio) {
         window.dinoAudio.playFanfare();
+        setTimeout(() => { if (window.dinoAudio) window.dinoAudio.playApplause(); }, 1200);
       }
-    } else if (finalScoreValue >= 70) {
-      if (window.dinoAudio) {
-        window.dinoAudio.playApplause();
+      if (scoreMsgEl) {
+        scoreMsgEl.innerHTML = `
+          <span style="color: #2e7d32; font-weight: 800; font-size: 1.2rem;">
+            🏆 LUAR BIASA SEMPURNA! SELURUH JAWABAN BENAR 100%!
+          </span><br>
+          Kamu mendapatkan Piala Emas Dinosaurus Juara Mandarin!
+        `;
       }
+      if (btnCert) btnCert.style.display = 'inline-flex';
+    } else if (finalScore >= 70) {
+      if (window.dinoAudio) window.dinoAudio.playApplause();
+      if (scoreMsgEl) {
+        scoreMsgEl.innerHTML = `
+          <span style="color: #ef6c00; font-weight: 800;">
+            🌟 Hebat! Kamu Menjawab ${this.correctAnswersCount} dari ${this.questions.length} Soal dengan Benar!
+          </span><br>
+          Ayo ulangi lagi untuk meraih nilai 100 dan Piala Emas!
+        `;
+      }
+      if (btnCert) btnCert.style.display = 'none';
+    } else {
+      if (window.dinoAudio) window.dinoAudio.playDinoRoar();
+      if (scoreMsgEl) {
+        scoreMsgEl.innerHTML = `
+          <span style="color: #c62828; font-weight: 800;">
+            🦖 Terus Berlatih! Kamu Menjawab ${this.correctAnswersCount} dari ${this.questions.length} Soal.
+          </span><br>
+          Dengarkan audio Mandarin lagi dan coba kembali!
+        `;
+      }
+      if (btnCert) btnCert.style.display = 'none';
     }
 
-    const scoreHighlight = document.getElementById('quiz-final-score');
-    if (scoreHighlight) {
-      scoreHighlight.textContent = `${finalScoreValue} / 100`;
+    if (btnCert) {
+      btnCert.onclick = () => {
+        this.openCertificateModal(finalScore);
+      };
+    }
+  }
+
+  openCertificateModal(score) {
+    const modal = document.getElementById('quiz-cert-modal');
+    if (!modal) return;
+
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+
+    const certDate = document.getElementById('cert-date-text');
+    if (certDate) {
+      const now = new Date();
+      certDate.textContent = now.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
-    const detailText = document.getElementById('quiz-final-detail');
-    if (detailText) {
-      if (isPerfect) {
-        detailText.innerHTML = `🏆 <strong>Sempurna!</strong> Kamu berhasil menjawab SEMUA ${this.questions.length} soal dengan benar! Kamu berhak mendapatkan Piala Dinosaurus Emas!`;
-      } else {
-        detailText.textContent = `Bagus! Kamu berhasil menjawab ${this.correctAnswersCount} dari ${this.questions.length} soal dengan benar. Teruslah berlatih!`;
-      }
+    const btnCloseCert = document.getElementById('btn-close-cert-modal');
+    if (btnCloseCert) {
+      btnCloseCert.onclick = () => {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+      };
+    }
+
+    const btnPrint = document.getElementById('btn-print-certificate');
+    if (btnPrint) {
+      btnPrint.onclick = () => {
+        window.print();
+      };
     }
   }
 }
 
-// Global window exposure
+// Global exposure
 if (typeof window !== 'undefined') {
   window.DinoQuiz = DinoQuiz;
 }

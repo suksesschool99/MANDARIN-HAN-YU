@@ -133,8 +133,24 @@ function parseStudentUrlParams() {
       }
     } else if (mod === 'match') {
       switchTab('module-match');
+      if (window.dinoMatch) {
+        window.dinoMatch.currentBookId = book;
+        window.dinoMatch.currentUnitId = unit.toString();
+        if (window.dinoMatch.bookSelect) window.dinoMatch.bookSelect.value = book;
+        window.dinoMatch.updateUnitDropdown();
+        if (window.dinoMatch.unitSelect) window.dinoMatch.unitSelect.value = unit.toString();
+        window.dinoMatch.startNewGame();
+      }
     } else if (mod === 'quiz') {
       switchTab('module-quiz');
+      if (window.dinoQuiz) {
+        window.dinoQuiz.currentBookId = book;
+        window.dinoQuiz.currentUnitId = unit.toString();
+        if (window.dinoQuiz.bookSelect) window.dinoQuiz.bookSelect.value = book;
+        window.dinoQuiz.updateUnitDropdown();
+        if (window.dinoQuiz.unitSelect) window.dinoQuiz.unitSelect.value = unit.toString();
+        window.dinoQuiz.startQuiz();
+      }
     }
   }
 }
@@ -240,11 +256,18 @@ function updateTeacherUnits() {
 
   const bookId = parseInt(bookSelect.value) || 1;
   const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[bookId]) || {};
+  const unitKeys = Object.keys(unitMap);
 
   let html = '';
-  for (let u = 1; u <= 10; u++) {
-    const title = unitMap[u] || `Unit ${u}`;
-    html += `<option value="${u}">Unit ${u} (${title})</option>`;
+  if (unitKeys.length > 0) {
+    unitKeys.forEach(u => {
+      const title = unitMap[u] || `Unit ${u}`;
+      html += `<option value="${u}">Pelajaran ${u} (${title})</option>`;
+    });
+  } else {
+    for (let u = 1; u <= 10; u++) {
+      html += `<option value="${u}">Pelajaran ${u}</option>`;
+    }
   }
   unitSelect.innerHTML = html;
 }

@@ -15,7 +15,7 @@
   <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
 
   <!-- External Stylesheet -->
-      <!-- EMBEDDED COMPLETE STYLING (100% STANDALONE & OFFLINE READY) -->
+            <!-- EMBEDDED COMPLETE STYLING (100% STANDALONE & OFFLINE READY) -->
   <style>
 /**
  * Dino Mandarin Adventure - Design System & Component Styles
@@ -1742,14 +1742,17 @@ body.student-page .nav-tabs-bar {
 
       <div class="match-stats-bar">
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-          <label for="match-book-select" class="filter-label">📚 Level:</label>
-          <select id="match-book-select" class="dino-select-primary">
-            <option value="all">Semua Buku (Acak)</option>
-            <option value="1">Han Yu 1</option>
-            <option value="2">Han Yu 2</option>
-          </select>
+          <div class="filter-select-item">
+            <label for="match-book-select" class="filter-label">📖 Buku:</label>
+            <select id="match-book-select" class="dino-select-primary"></select>
+          </div>
 
-          <div style="display: flex; gap: 6px;">
+          <div class="filter-select-item">
+            <label for="match-unit-select" class="filter-label">📑 Unit:</label>
+            <select id="match-unit-select" class="dino-select-primary"></select>
+          </div>
+
+          <div style="display: flex; gap: 6px; margin-left: 6px;">
             <button class="dino-btn-outline diff-btn active" data-pairs="4">🐣 4 Pasang</button>
             <button class="dino-btn-outline diff-btn" data-pairs="6">🦖 6 Pasang</button>
             <button class="dino-btn-outline diff-btn" data-pairs="8">👑 8 Pasang</button>
@@ -1782,13 +1785,16 @@ body.student-page .nav-tabs-bar {
 
       <div class="quiz-wrapper" id="quiz-wrapper-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <label for="quiz-filter-select" class="filter-label">🏷️ Kategori Soal:</label>
-            <select id="quiz-filter-select" class="dino-select-primary">
-              <option value="all">Semua Soal Latihan & Jumlah Guratan</option>
-              <option value="book-1">Han Yu 1 (Buku 1)</option>
-              <option value="book-2">Han Yu 2 (Buku 2)</option>
-            </select>
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div class="filter-select-item">
+              <label for="quiz-book-select" class="filter-label">📖 Buku:</label>
+              <select id="quiz-book-select" class="dino-select-primary"></select>
+            </div>
+
+            <div class="filter-select-item">
+              <label for="quiz-unit-select" class="filter-label">📑 Unit:</label>
+              <select id="quiz-unit-select" class="dino-select-primary"></select>
+            </div>
           </div>
 
           <button class="dino-btn-outline" id="btn-restart-quiz">
@@ -1932,20 +1938,19 @@ body.student-page .nav-tabs-bar {
     </div>
   </footer>
 
-        <!-- ========================================================================
+              <!-- ========================================================================
        STANDALONE EMBEDDED ENGINE (100% BEBAS DARI MASALAH CACHE & PATH GITHUB)
        ======================================================================== -->
   <script>
 /**
- * Dino Mandarin Adventure - Data Module (Han Yu 1 s/d Han Yu 15)
- * Database Kosakata, Pengaturan Bacaan Cerita Per-Unit (15 Buku x 10 Unit),
- * Gambar Kartu, & Soal Kuis Pilihan Berganda
+ * Dino Mandarin Adventure - Full Curriculum Data (Han Yu 1 s/d 15)
+ * Diadaptasi Penuh Sesuai Buku Pelajaran PDF Resmi Han Yu 1 (15 Pelajaran Lengkap)
  */
 
 const DINO_DATA = {
-  // 1. Metadata Buku Han Yu 1 s/d Han Yu 15
+  // 1. Metadata Buku Han Yu 1 s/d 15
   books: [
-    { id: 1, title: 'Han Yu 1 (汉语 第一册)', desc: 'Angka, Alam Dasar, Anggota Tubuh, Sapaan, Keluarga & Arah' },
+    { id: 1, title: 'Han Yu 1 (汉语 第一册)', desc: '15 Pelajaran Lengkap Sesuai Buku Resmi PDF Han Yu 1' },
     { id: 2, title: 'Han Yu 2 (汉语 第二册)', desc: 'Waktu, Pakaian, Warna, Hewan, Buah-buahan & Sekolah' },
     { id: 3, title: 'Han Yu 3 (汉语 第三册)', desc: 'Ruang Kelas, Kegiatan Harian, Lokasi, Kebun Binatang & Belanja' },
     { id: 4, title: 'Han Yu 4 (汉语 第四册)', desc: 'Olahraga, Cuaca, 4 Musim, Transportasi, Supermarket & Liburan' },
@@ -1962,9 +1967,25 @@ const DINO_DATA = {
     { id: 15, title: 'Han Yu 15 (汉语 第十五册)', desc: 'Kepemimpinan Masa Depan, Harmoni Global & Wawasan Peradaban' }
   ],
 
-  // 2. Metadata Judul Unit Buku Han Yu 1 s/d Han Yu 15 (10 Unit Lengkap per Buku)
+  // 2. Metadata 15 Pelajaran Han Yu 1 (Sesuai Daftar Isi PDF)
   unitTitles: {
-    1: { 1: 'Angka 1-10', 2: 'Alam & Tubuh Dasar', 3: 'Sapaan & Kata Ganti', 4: 'Keluarga', 5: 'Ukuran & Satuan', 6: 'Arah & Posisi', 7: 'Cuaca & Benda Alam', 8: 'Benda Kelas & Rumah', 9: 'Makanan & Minuman', 10: 'Gerakan & Aktivitas' },
+    1: {
+      1: '你好 (Nǐ hǎo)',
+      2: '我爱爸爸妈妈 (Wǒ ài bàba māma)',
+      3: '爸爸是老师 (Bàba shì lǎoshī)',
+      4: '你叫什么名字 (Nǐ jiào shénme míngzi)',
+      5: '我爱我家 (Wǒ ài wǒ jiā)',
+      6: '哥哥去学校 (Gēge qù xuéxiào)',
+      7: '我们上课吧 (Wǒmen shàngkè ba)',
+      8: '我们吃午饭 (Wǒmen chī wǔfàn)',
+      9: '小华打球 (Xiǎohuá dǎ qiú)',
+      10: '我的一天 (Wǒ de yī tiān)',
+      11: '这是我的书 (Zhè shì wǒ de shū)',
+      12: '我有两本书 (Wǒ yǒu liǎng běn shū)',
+      13: '你家有电脑吗 (Nǐ jiā yǒu diànnǎo ma)',
+      14: '书在书架上 (Shū zài shūjià shang)',
+      15: '我的房间 (Wǒ de fángjiān)'
+    },
     2: { 1: 'Waktu & Sekolah', 2: 'Identitas Diri & Sapaan', 3: 'Usia & Kelas', 4: 'Anggota Tubuh', 5: 'Pakaian & Warna', 6: 'Hewan & Dinosaurus', 7: 'Buah & Sayuran', 8: 'Hari & Tempat', 9: 'Aktivitas Sehari-hari', 10: 'Transportasi & Liburan' },
     3: { 1: 'Teman & Kelas', 2: 'Alat Tulis & Ruangan', 3: 'Jam & Waktu', 4: 'Rumah & Kamar Tidur', 5: 'Kebun Binatang', 6: 'Profesi & Pekerjaan', 7: 'Belanja & Uang', 8: 'Cuaca & Suhu', 9: 'Hobi & Musik', 10: 'Restoran & Menu Makanan' },
     4: { 1: 'Olahraga & Permainan Bola', 2: 'Transportasi Kota', 3: 'Empat Musim', 4: 'Supermarket & Belanja', 5: 'Kesehatan & Rumah Sakit', 6: 'Pesta Ulang Tahun & Hadiah', 7: 'Wisata & Liburan', 8: 'Lingkungan Alam & Hutan', 9: 'Surat & Komunikasi', 10: 'Hewan Peliharaan' },
@@ -1981,162 +2002,281 @@ const DINO_DATA = {
     15: { 1: 'Visi Peradaban Dunia 2050', 2: 'Kepemimpinan Berkelanjutan', 3: 'Harmoni Multikulturalisme Global', 4: 'Revolusi Sains Quantum', 5: 'Etika Masa Depan Umat Manusia', 6: 'Kolaborasi Antariksa Internasional', 7: 'Kesejahteraan Holistik & Humaniora', 8: 'Warisan Pemikiran Filsuf Dunia', 9: 'Pidato Kelulusan & Komitmen Sosial', 10: 'Mahakarya Generasi Emas Masa Depan' }
   },
 
-  // 3. Dataset Kosakata Lengkap Per Buku & Unit
+  // 3. Modul 1: Latihan Tulisan Guratan (Setiap Unit 1-15 Han Yu 1)
   vocabList: [
-    // Han Yu 1
-    { id: 1, hanzi: '一', pinyin: 'yī', meaning: 'Satu', strokes: 1, book: 1, unit: 1, strokeSteps: ['1. 横 (héng)'], tip: 'Satu garis mendatar dari kiri ke kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="52" font-weight="900" fill="#2E7D32" text-anchor="middle">1</text></svg>' },
-    { id: 2, hanzi: '二', pinyin: 'èr', meaning: 'Dua', strokes: 2, book: 1, unit: 1, strokeSteps: ['1. 横 (pendek)', '2. 横 (panjang)'], tip: 'Dua garis mendatar, atas pendek, bawah panjang.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="52" font-weight="900" fill="#2E7D32" text-anchor="middle">2</text></svg>' },
-    { id: 3, hanzi: '三', pinyin: 'sān', meaning: 'Tiga', strokes: 3, book: 1, unit: 1, strokeSteps: ['1. 横 (pendek)', '2. 横 (sedang)', '3. 横 (panjang)'], tip: 'Tiga garis mendatar, garis tengah terpendek.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="52" font-weight="900" fill="#2E7D32" text-anchor="middle">3</text></svg>' },
-    { id: 4, hanzi: '四', pinyin: 'sì', meaning: 'Empat', strokes: 5, book: 1, unit: 1, strokeSteps: ['1. 竖', '2. 横折', '3. 撇', '4. 竖弯', '5. 横'], tip: 'Kotak dengan dua goresan di dalam, tutup bawah terakhir.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="52" font-weight="900" fill="#2E7D32" text-anchor="middle">4</text></svg>' },
-    { id: 5, hanzi: '五', pinyin: 'wǔ', meaning: 'Lima', strokes: 4, book: 1, unit: 1, strokeSteps: ['1. 横', '2. 竖', '3. 横折', '4. 横'], tip: 'Tulis garis atas, garis tegak kiri, lalu sudut dan tutup bawah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="52" font-weight="900" fill="#2E7D32" text-anchor="middle">5</text></svg>' },
-    { id: 6, hanzi: '六', pinyin: 'liù', meaning: 'Enam', strokes: 4, book: 1, unit: 1, strokeSteps: ['1. 点', '2. 横', '3. 撇', '4. 点'], tip: 'Titik di atas, garis mendatar, disusul dua kaki.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="52" font-weight="900" fill="#2E7D32" text-anchor="middle">6</text></svg>' },
-    { id: 7, hanzi: '七', pinyin: 'qī', meaning: 'Tujuh', strokes: 2, book: 1, unit: 1, strokeSteps: ['1. 横', '2. 竖弯钩'], tip: 'Garis mendatar agak miring disilang kait melengkung.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="52" font-weight="900" fill="#2E7D32" text-anchor="middle">7</text></svg>' },
-    { id: 8, hanzi: '八', pinyin: 'bā', meaning: 'Delapan', strokes: 2, book: 1, unit: 1, strokeSteps: ['1. 撇', '2. 捺'], tip: 'Dua sapuan saling membuka (kiri pendek, kanan panjang).', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="52" font-weight="900" fill="#2E7D32" text-anchor="middle">8</text></svg>' },
-    { id: 9, hanzi: '九', pinyin: 'jiǔ', meaning: 'Sembilan', strokes: 2, book: 1, unit: 1, strokeSteps: ['1. 撇', '2. 横折弯钩'], tip: 'Sapuan miring kiri dulu, lalu sudut kait melengkung.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="52" font-weight="900" fill="#2E7D32" text-anchor="middle">9</text></svg>' },
-    { id: 10, hanzi: '十', pinyin: 'shí', meaning: 'Sepuluh', strokes: 2, book: 1, unit: 1, strokeSteps: ['1. 横', '2. 竖'], tip: 'Tanda silang tambah: mendatar dulu baru tegak lurus.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="52" font-weight="900" fill="#2E7D32" text-anchor="middle">10</text></svg>' },
-    
-    // Alam & Tubuh (Han Yu 1 Unit 2)
-    { id: 11, hanzi: '山', pinyin: 'shān', meaning: 'Gunung', strokes: 3, book: 1, unit: 2, strokeSteps: ['1. 竖', '2. 竖折', '3. 竖'], tip: 'Puncak tengah tinggi diapit dua puncak samping.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><polygon points="10,80 35,30 60,80" fill="#8D6E63"/><polygon points="40,80 65,20 90,80" fill="#6D4C41"/><polygon points="25,80 50,40 75,80" fill="#A1887F"/></svg>' },
-    { id: 12, hanzi: '水', pinyin: 'shuǐ', meaning: 'Air', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 竖钩', '2. 横撇', '3. 撇', '4. 捺'], tip: 'Garis tegak berujung kait di tengah, lalu sapuan kiri dan kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M20,60 Q50,30 80,60 T100,60" fill="none" stroke="#29B6F6" stroke-width="8" stroke-linecap="round"/><path d="M10,75 Q40,45 70,75 T90,75" fill="none" stroke="#0288D1" stroke-width="6" stroke-linecap="round"/></svg>' },
-    { id: 13, hanzi: '日', pinyin: 'rì', meaning: 'Matahari', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 竖', '2. 横折', '3. 横', '4. 横'], tip: 'Bentuk kotak matahari dengan garis mendatar di dalamnya.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="28" fill="#FFA000"/><path d="M50,12 L50,2 M50,88 L50,98 M12,50 L2,50 M88,50 L98,50" stroke="#FF8F00" stroke-width="6" stroke-linecap="round"/></svg>' },
-    { id: 14, hanzi: '月', pinyin: 'yuè', meaning: 'Bulan', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 竖撇', '2. 横折钩', '3. 横', '4. 横'], tip: 'Bentuk bulan sabit yang anggun dengan dua garis di dalam.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M65,20 A32,32 0 1,0 65,80 A24,24 0 0,1 65,20 Z" fill="#FDD835"/></svg>' },
-    { id: 15, hanzi: '木', pinyin: 'mù', meaning: 'Pohon/Kayu', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 横', '2. 竖', '3. 撇', '4. 捺'], tip: 'Batang pohon tegak dengan cabang dan akar melebar.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><rect x="44" y="55" width="12" height="35" fill="#795548"/><circle cx="50" cy="40" r="28" fill="#43A047"/></svg>' },
-    { id: 16, hanzi: '火', pinyin: 'huǒ', meaning: 'Api', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 点', '2. 撇', '3. 撇', '4. 捺'], tip: 'Titik kiri, sapuan kanan, lalu dua kaki api membara.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M50,15 C55,35 75,45 70,70 C65,85 40,88 35,75 C30,65 40,55 35,45 C45,40 45,25 50,15 Z" fill="#E53935"/></svg>' },
+    // Unit 1: 你好
+    { id: 101, hanzi: '你', pinyin: 'nǐ', meaning: 'Kamu', strokes: 7, book: 1, unit: 1, strokeSteps: ['1. 撇', '2. 竖', '3. 撇', '4. 横撇', '5. 竖钩', '6. 撇', '7. 点'], tip: 'Radikal orang di kiri (亻) + huruf 尔.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">你</text></svg>' },
+    { id: 102, hanzi: '好', pinyin: 'hǎo', meaning: 'Baik / Bagus', strokes: 6, book: 1, unit: 1, strokeSteps: ['1. 撇点', '2. 撇', '3. 提', '4. 横撇', '5. 弯钩', '6. 横'], tip: 'Radikal perempuan (女) di kiri + radikal anak (子) di kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">好</text></svg>' },
+    { id: 103, hanzi: '一', pinyin: 'yī', meaning: 'Satu / 横 (héng)', strokes: 1, book: 1, unit: 1, strokeSteps: ['1. 横 (héng)'], tip: 'Goresan dasar mendatar dari kiri ke kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">一</text></svg>' },
+    { id: 104, hanzi: '上', pinyin: 'shàng', meaning: 'Atas / Naik', strokes: 3, book: 1, unit: 1, strokeSteps: ['1. 竖', '2. 横 (pendek)', '3. 横 (panjang)'], tip: 'Garis tegak lurus, garis pendek samping, lalu alas panjang.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">上</text></svg>' },
+    { id: 105, hanzi: '下', pinyin: 'xià', meaning: 'Bawah / Turun', strokes: 3, book: 1, unit: 1, strokeSteps: ['1. 横', '2. 竖', '3. 点'], tip: 'Garis atap mendatar, garis tegak, lalu titik ke bawah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">下</text></svg>' },
 
-    // Han Yu 2 (Dinosaurus & Sekolah)
-    { id: 17, hanzi: '龙', pinyin: 'lóng', meaning: 'Dinosaurus/Naga', strokes: 5, book: 2, unit: 6, strokeSteps: ['1. 撇', '2. 横', '3. 竖折斜钩', '4. 撇', '5. 点'], tip: 'Karakter naga dan dinosaurus dengan ekor yang gagah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M25,65 C20,50 35,30 55,30 C75,30 85,45 80,65 C75,78 60,82 45,80 Z" fill="#4CAF50"/></svg>' },
-    { id: 18, hanzi: '蛋', pinyin: 'dàn', meaning: 'Telur', strokes: 11, book: 2, unit: 6, strokeSteps: ['1. 横折', '2. 横', '3. 竖', '4. 横', '5. 捺', '6. 竖', '7. 横折', '8. 横', '9. 竖', '10. 提', '11. 点'], tip: 'Telur dino yang siap menetas menjadi bayi dino.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><ellipse cx="50" cy="55" rx="30" ry="38" fill="#FFF9C4" stroke="#FBC02D" stroke-width="4"/><circle cx="42" cy="45" r="5" fill="#81C784"/></svg>' },
-    { id: 19, hanzi: '学', pinyin: 'xué', meaning: 'Belajar', strokes: 8, book: 2, unit: 1, strokeSteps: ['1. 点', '2. 点', '3. 撇', '4. 点', '5. 横撇', '6. 横折', '7. 弯钩', '8. 横'], tip: 'Tiga titik mahkota di atas anak yang rajin belajar.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><rect x="25" y="30" width="50" height="42" rx="4" fill="#1E88E5"/><polygon points="25,30 50,48 75,30" fill="#1565C0"/><line x1="25" y1="72" x2="75" y2="72" stroke="#0D47A1" stroke-width="4"/></svg>' },
-    { id: 20, hanzi: '书', pinyin: 'shū', meaning: 'Buku', strokes: 4, book: 2, unit: 1, strokeSteps: ['1. 横折', '2. 横折钩', '3. 竖', '4. 点'], tip: 'Buku pelajaran Mandarin yang sarat ilmu pengetahuan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M20,25 C35,20 50,30 50,80 C35,75 20,78 20,78 Z" fill="#43A047"/><path d="M80,25 C65,20 50,30 50,80 C65,75 80,78 80,78 Z" fill="#66BB6A"/><line x1="50" y1="30" x2="50" y2="80" stroke="#2E7D32" stroke-width="3"/></svg>' }
+    // Unit 2: 我爱爸爸妈妈
+    { id: 201, hanzi: '我', pinyin: 'wǒ', meaning: 'Saya / Aku', strokes: 7, book: 1, unit: 2, strokeSteps: ['1. 撇', '2. 横', '3. 竖钩', '4. 提', '5. 斜钩', '6. 撇', '7. 点'], tip: 'Sapuan atas, garis mendatar, lalu tegak berkait dan kait miring.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">我</text></svg>' },
+    { id: 202, hanzi: '爱', pinyin: 'ài', meaning: 'Cinta / Sayang', strokes: 10, book: 1, unit: 2, strokeSteps: ['1. 撇', '2. 点', '3. 点', '4. 撇', '5. 点', '6. 横撇', '7. 点', '8. 横撇', '9. 撇', '10. 捺'], tip: 'Mahkota cakar atas, penutup tengah, dan sapuan kaki bawah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">爱</text></svg>' },
+    { id: 203, hanzi: '爸', pinyin: 'bà', meaning: 'Ayah / Papa', strokes: 8, book: 1, unit: 2, strokeSteps: ['1. 撇', '2. 点', '3. 撇', '4. 捺', '5. 横折', '6. 横', '7. 竖弯钩', '8. 竖'], tip: 'Radikal ayah (父) di atas + huruf 巴 di bawah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">爸</text></svg>' },
+    { id: 204, hanzi: '他', pinyin: 'tā', meaning: 'Dia (Laki-laki)', strokes: 5, book: 1, unit: 2, strokeSteps: ['1. 撇', '2. 竖', '3. 横折钩', '4. 竖', '5. 竖弯钩'], tip: 'Radikal orang (亻) di kiri + huruf 也 di kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">他</text></svg>' },
+
+    // Unit 3: 爸爸是老师
+    { id: 301, hanzi: '是', pinyin: 'shì', meaning: 'Adalah / Benar', strokes: 9, book: 1, unit: 3, strokeSteps: ['1. 竖', '2. 横折', '3. 横', '4. 横', '5. 横', '6. 竖', '7. 横', '8. 撇', '9. 捺'], tip: 'Matahari (日) di atas + bentuk 正 di bawah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">是</text></svg>' },
+    { id: 302, hanzi: '不', pinyin: 'bù', meaning: 'Tidak / Bukan', strokes: 4, book: 1, unit: 3, strokeSteps: ['1. 横', '2. 撇', '3. 竖', '4. 点'], tip: 'Garis mendatar atas, sapuan miring kiri, tegak lurus, dan titik kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">不</text></svg>' },
+    { id: 303, hanzi: '学', pinyin: 'xué', meaning: 'Belajar / Murid', strokes: 8, book: 1, unit: 3, strokeSteps: ['1. 点', '2. 点', '3. 撇', '4. 点', '5. 横撇', '6. 横折', '7. 弯钩', '8. 横'], tip: 'Tiga titik mahkota atas + topi atap + huruf 子 di bawah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">学</text></svg>' },
+    { id: 304, hanzi: '弟', pinyin: 'dì', meaning: 'Adik Laki-laki', strokes: 7, book: 1, unit: 3, strokeSteps: ['1. 点', '2. 撇', '3. 横折', '4. 横', '5. 竖折折钩', '6. 竖', '7. 撇'], tip: 'Dua titik tanduk atas disusul lilitan dan tiang tegak lurus.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">弟</text></svg>' },
+
+    // Unit 4: 你叫什么名字
+    { id: 401, hanzi: '小', pinyin: 'xiǎo', meaning: 'Kecil', strokes: 3, book: 1, unit: 4, strokeSteps: ['1. 竖钩', '2. 撇', '3. 点'], tip: 'Garis tegak berkait di tengah dulu, lalu titik kiri dan titik kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">小</text></svg>' },
+    { id: 402, hanzi: '字', pinyin: 'zì', meaning: 'Huruf / Karakter', strokes: 6, book: 1, unit: 4, strokeSteps: ['1. 点', '2. 点', '3. 横撇', '4. 横撇', '5. 弯钩', '6. 横'], tip: 'Radikal atap rumah (宀) di atas + anak (子) di bawah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">字</text></svg>' },
+
+    // Unit 5: 我爱我家
+    { id: 501, hanzi: '家', pinyin: 'jiā', meaning: 'Rumah / Keluarga', strokes: 10, book: 1, unit: 5, strokeSteps: ['1. 点', '2. 点', '3. 横撇', '4. 横', '5. 撇', '6. 弯钩', '7. 撇', '8. 撇', '9. 撇', '10. 捺'], tip: 'Atap rumah (宀) yang menaungi keluarga.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">家</text></svg>' },
+    { id: 502, hanzi: '这', pinyin: 'zhè', meaning: 'Ini', strokes: 7, book: 1, unit: 5, strokeSteps: ['1. 点', '2. 横', '3. 撇', '4. 点', '5. 点', '6. 横折折撇', '7. 捺'], tip: 'Huruf 文 di dalam + radikal berjalan (辶) di luar.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">这</text></svg>' },
+
+    // Unit 6: 哥哥去学校
+    { id: 601, hanzi: '去', pinyin: 'qù', meaning: 'Pergi', strokes: 5, book: 1, unit: 6, strokeSteps: ['1. 横', '2. 竖', '3. 横', '4. 撇折', '5. 点'], tip: 'Bentuk tanah (土) di atas + sudut 厶 di bawah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">去</text></svg>' },
+    { id: 602, hanzi: '教', pinyin: 'jiāo', meaning: 'Mengajar', strokes: 11, book: 1, unit: 6, strokeSteps: ['1. 横', '2. 竖', '3. 横', '4. 撇', '5. 竖弯钩', '6. 横', '7. 提', '8. 撇', '9. 横', '10. 撇', '11. 捺'], tip: 'Mengajari anak ilmu pengetahuan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">教</text></svg>' },
+
+    // Unit 7: 我们上课吧
+    { id: 701, hanzi: '讲', pinyin: 'jiǎng', meaning: 'Berbicara / Menerangkan', strokes: 6, book: 1, unit: 7, strokeSteps: ['1. 点', '2. 横折提', '3. 横', '4. 横', '5. 竖', '6. 竖'], tip: 'Radikal bahasa (讠) di kiri + huruf 井 di kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">讲</text></svg>' },
+    { id: 702, hanzi: '课', pinyin: 'kè', meaning: 'Pelajaran / Kelas', strokes: 10, book: 1, unit: 7, strokeSteps: ['1. 点', '2. 横折提', '3. 竖', '4. 横折', '5. 横', '6. 横', '7. 横', '8. 竖', '9. 撇', '10. 捺'], tip: 'Radikal bahasa (讠) + huruf 果.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">课</text></svg>' },
+
+    // Unit 8: 我们吃午饭
+    { id: 801, hanzi: '饭', pinyin: 'fàn', meaning: 'Nasi / Makanan', strokes: 7, book: 1, unit: 8, strokeSteps: ['1. 撇', '2. 横撇', '3. 竖提', '4. 撇', '5. 撇', '6. 横撇', '7. 捺'], tip: 'Radikal makanan (饣) di kiri + huruf 反 di kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">饭</text></svg>' },
+    { id: 802, hanzi: '吃', pinyin: 'chī', meaning: 'Makan', strokes: 6, book: 1, unit: 8, strokeSteps: ['1. 竖', '2. 横折', '3. 横', '4. 撇', '5. 横', '6. 竖弯钩'], tip: 'Radikal mulut (口) di kiri + huruf 乞 di kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">吃</text></svg>' },
+
+    // Unit 9: 小华打球
+    { id: 901, hanzi: '打', pinyin: 'dǎ', meaning: 'Memukul / Bermain', strokes: 5, book: 1, unit: 9, strokeSteps: ['1. 横', '2. 竖钩', '3. 提', '4. 横', '5. 竖钩'], tip: 'Radikal tangan (扌) di kiri + huruf 丁 di kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">打</text></svg>' },
+    { id: 902, hanzi: '球', pinyin: 'qiú', meaning: 'Bola', strokes: 11, book: 1, unit: 9, strokeSteps: ['1. 横', '2. 横', '3. 竖', '4. 提', '5. 横', '6. 竖钩', '7. 点', '8. 提', '9. 撇', '10. 点', '11. 点'], tip: 'Radikal giok (王) di kiri + 求 di kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">球</text></svg>' },
+
+    // Unit 10: 我的一天
+    { id: 1001, hanzi: '天', pinyin: 'tiān', meaning: 'Hari / Langit', strokes: 4, book: 1, unit: 10, strokeSteps: ['1. 横', '2. 横', '3. 撇', '4. 捺'], tip: 'Dua garis mendatar di atas kepala orang besar.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">天</text></svg>' },
+    { id: 1002, hanzi: '六', pinyin: 'liù', meaning: 'Enam', strokes: 4, book: 1, unit: 10, strokeSteps: ['1. 点', '2. 横', '3. 撇', '4. 点'], tip: 'Titik atas, garis mendatar, lalu dua kaki penyangga.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">六</text></svg>' },
+    { id: 1003, hanzi: '七', pinyin: 'qī', meaning: 'Tujuh', strokes: 2, book: 1, unit: 10, strokeSteps: ['1. 横', '2. 竖弯钩'], tip: 'Garis mendatar disilang kait melengkung.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">七</text></svg>' },
+    { id: 1004, hanzi: '八', pinyin: 'bā', meaning: 'Delapan', strokes: 2, book: 1, unit: 10, strokeSteps: ['1. 撇', '2. 捺'], tip: 'Dua sapuan saling membuka melebar.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">八</text></svg>' },
+    { id: 1005, hanzi: '九', pinyin: 'jiǔ', meaning: 'Sembilan', strokes: 2, book: 1, unit: 10, strokeSteps: ['1. 撇', '2. 横折弯钩'], tip: 'Sapuan miring kiri dulu, lalu sudut kait melengkung.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">九</text></svg>' },
+    { id: 1006, hanzi: '十', pinyin: 'shí', meaning: 'Sepuluh', strokes: 2, book: 1, unit: 10, strokeSteps: ['1. 横', '2. 竖'], tip: 'Tanda silang tambah: mendatar dulu baru tegak.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">十</text></svg>' },
+
+    // Unit 11: 这是我的书
+    { id: 1101, hanzi: '书', pinyin: 'shū', meaning: 'Buku', strokes: 4, book: 1, unit: 11, strokeSteps: ['1. 横折', '2. 横折钩', '3. 竖', '4. 点'], tip: 'Buku bacaan dan ilmu pengetahuan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">书</text></svg>' },
+    { id: 1102, hanzi: '笔', pinyin: 'bǐ', meaning: 'Pena / Pensil', strokes: 10, book: 1, unit: 11, strokeSteps: ['1. 撇', '2. 横', '3. 点', '4. 撇', '5. 横', '6. 点', '7. 撇', '8. 横', '9. 横', '10. 竖弯钩'], tip: 'Radikal bambu (⺮) di atas + bulu (毛) di bawah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">笔</text></svg>' },
+
+    // Unit 12: 我有两本书
+    { id: 1201, hanzi: '有', pinyin: 'yǒu', meaning: 'Punya / Ada', strokes: 6, book: 1, unit: 12, strokeSteps: ['1. 横', '2. 撇', '3. 竖', '4. 横折钩', '5. 横', '6. 横'], tip: 'Tangan memegang bulan (月).', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">有</text></svg>' },
+    { id: 1202, hanzi: '两', pinyin: 'liǎng', meaning: 'Dua (Jumlah/Satuan)', strokes: 7, book: 1, unit: 12, strokeSteps: ['1. 横', '2. 竖', '3. 横折钩', '4. 撇', '5. 点', '6. 撇', '7. 点'], tip: 'Digunakan saat menghitung jumlah dua benda.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">两</text></svg>' },
+
+    // Unit 13: 你家有电脑吗
+    { id: 1301, hanzi: '电', pinyin: 'diàn', meaning: 'Listrik / Elektronik', strokes: 5, book: 1, unit: 13, strokeSteps: ['1. 竖', '2. 横折', '3. 横', '4. 横', '5. 竖弯钩'], tip: 'Bentuk kotak petir dengan ekor melengkung.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">电</text></svg>' },
+    { id: 1302, hanzi: '风', pinyin: 'fēng', meaning: 'Angin', strokes: 4, book: 1, unit: 13, strokeSteps: ['1. 撇', '2. 横折弯钩', '3. 撇', '4. 点'], tip: 'Angin sepoi-sepoi yang bertiup segar.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">风</text></svg>' },
+
+    // Unit 14: 书在书架上
+    { id: 1401, hanzi: '在', pinyin: 'zài', meaning: 'Di / Berada di', strokes: 6, book: 1, unit: 14, strokeSteps: ['1. 横', '2. 撇', '3. 竖', '4. 横', '5. 竖', '6. 横'], tip: 'Menunjukkan posisi atau lokasi suatu benda.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">在</text></svg>' },
+    { id: 1402, hanzi: '心', pinyin: 'xīn', meaning: 'Hati / Pikiran', strokes: 4, book: 1, unit: 14, strokeSteps: ['1. 点', '2. 卧钩', '3. 点', '4. 点'], tip: 'Tiga titik di sekitar lengkungan hati (卧钩).', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">心</text></svg>' },
+
+    // Unit 15: 我的房间
+    { id: 1501, hanzi: '手', pinyin: 'shǒu', meaning: 'Tangan', strokes: 4, book: 1, unit: 15, strokeSteps: ['1. 撇', '2. 横', '3. 横', '4. 竖钩'], tip: 'Sapuan atas, dua garis mendatar, lalu tegak berkait.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">手</text></svg>' },
+    { id: 1502, hanzi: '门', pinyin: 'mén', meaning: 'Pintu', strokes: 3, book: 1, unit: 15, strokeSteps: ['1. 点', '2. 竖', '3. 横折钩'], tip: 'Bentuk kusen pintu ruangan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">门</text></svg>' }
   ],
 
-  // 4. Pengaturan Bacaan Cerita & Teks Per-Unit (15 Buku x 10 Unit = 150 Unit Pembelajaran)
+  // 4. Modul 2: Teks Bacaan Cerita 15 Pelajaran Han Yu 1 (Sesuai PDF Asli)
   unitStories: {
     1: {
       1: {
-        title: '数字歌 (Berhitung 1-10)',
-        pinyin: 'Shùzì Gē',
-        meaning: 'Lagu Berhitung Angka 1 sampai 10 (Han Yu 1 Unit 1)',
-        dinoMascot: '🦖 Rexy Si T-Rex Cilik',
-        summary: 'Rexy belajar berhitung angka satu sampai sepuluh dengan gembira dan mudah.',
+        title: '第一课：你好',
+        pinyin: 'Dì Yī Kè: Nǐ Hǎo',
+        meaning: 'Pelajaran 1: Halo (Han Yu 1 Halaman 1-2)',
+        dinoMascot: '🦖 Rexy Menyapa Sekolah',
+        summary: 'Percakapan ramah saat bertemu guru dan teman di gerbang sekolah (读课文: 小华、小红、小强与老师).',
         sentences: [
-          { hanzi: '一二三四五，上山看老虎。', pinyin: 'Yī èr sān sì wǔ, shàng shān kàn lǎohǔ.', meaning: 'Satu dua tiga empat lima, naik ke gunung melihat harimau.' },
-          { hanzi: '六七八九十，数数真容易。', pinyin: 'Liù qī bā jiǔ shí, shǔshù zhēn róngyì.', meaning: 'Enam tujuh delapan sembilan sepuluh, berhitung sungguh mudah.' },
-          { hanzi: '大家一起数，一二三四五六七八九十！', pinyin: 'Dàjiā yīqǐ shǔ, yī èr sān sì wǔ liù qī bā jiǔ shí!', meaning: 'Mari berhitung bersama: satu dua tiga empat lima enam tujuh delapan sembilan sepuluh!' }
+          { hanzi: '小华：你好！', pinyin: 'Xiǎohuá: Nǐ hǎo!', meaning: 'Xiaohua: Halo!' },
+          { hanzi: '小红：你好！', pinyin: 'Xiǎohóng: Nǐ hǎo!', meaning: 'Xiaohong: Halo!' },
+          { hanzi: '小强、小红：老师好！', pinyin: 'Xiǎoqiáng, Xiǎohóng: Lǎoshī hǎo!', meaning: 'Xiaoqiang, Xiaohong: Halo Guru!' },
+          { hanzi: '老师：同学们好！', pinyin: 'Lǎoshī: Tóngxuémen hǎo!', meaning: 'Guru: Halo anak-anak!' },
+          { hanzi: '小红：谢谢！', pinyin: 'Xiǎohóng: Xièxie!', meaning: 'Xiaohong: Terima kasih!' },
+          { hanzi: '老师：不客气！', pinyin: 'Lǎoshī: Bú kèqi!', meaning: 'Guru: Sama-sama!' },
+          { hanzi: '小华、小红：老师，再见！', pinyin: 'Xiǎohuá, Xiǎohóng: Lǎoshī, zàijiàn!', meaning: 'Xiaohua, Xiaohong: Guru, sampai jumpa!' },
+          { hanzi: '老师：再见！', pinyin: 'Lǎoshī: Zàijiàn!', meaning: 'Guru: Sampai jumpa!' }
         ]
       },
       2: {
-        title: '美丽的大自然 (Alam Semesta)',
-        pinyin: 'Měilì de Dà Zìrán',
-        meaning: 'Keindahan Matahari, Bulan, Gunung & Air (Han Yu 1 Unit 2)',
-        dinoMascot: '🦕 Brachy Si Leher Panjang',
-        summary: 'Melihat matahari dan bulan di langit, serta gunung dan air jernih di bumi.',
+        title: '第二课：我爱爸爸妈妈',
+        pinyin: 'Dì Èr Kè: Wǒ Ài Bàba Māma',
+        meaning: 'Pelajaran 2: Aku Sayang Ayah Ibu (Han Yu 1 Halaman 5-6)',
+        dinoMascot: '🦕 Brachy Bersama Keluarga',
+        summary: 'Perkenalan diri Wang Xiaohua dan ungkapan kasih sayang kepada ayah dan ibu tercinta.',
         sentences: [
-          { hanzi: '天上有太阳和月亮，照亮大地。', pinyin: 'Tiān shang yǒu tàiyáng hé yuèliang, zhàoliàng dàdì.', meaning: 'Di langit ada matahari dan bulan, menyinari daratan bumi.' },
-          { hanzi: '地上有高山和清水，风景真优美。', pinyin: 'Dì shang yǒu gāoshān hé qīngshuǐ, fēngjǐng zhēn yōuměi.', meaning: 'Di bumi ada gunung tinggi dan air jernih, pemandangan sungguh indah.' },
-          { hanzi: '山上有绿树，田里有红火。大自然真奇妙！', pinyin: 'Shān shang yǒu lǜshù, tián lǐ yǒu hónghuǒ. Dà zìrán zhēn qímiào!', meaning: 'Di gunung ada pohon hijau, di ladang ada api merah. Alam semesta sungguh menakjubkan!' }
+          { hanzi: '我是王小华。', pinyin: 'Wǒ shì Wáng Xiǎohuá.', meaning: 'Saya adalah Wang Xiaohua.' },
+          { hanzi: '他是我爸爸。', pinyin: 'Tā shì wǒ bàba.', meaning: 'Dia adalah ayah saya.' },
+          { hanzi: '她是我妈妈。', pinyin: 'Tā shì wǒ māma.', meaning: 'Dia adalah ibu saya.' },
+          { hanzi: '我爱妈妈，妈妈爱我。', pinyin: 'Wǒ ài māma, māma ài wǒ.', meaning: 'Saya sayang ibu, ibu sayang saya.' },
+          { hanzi: '我爱爸爸妈妈。', pinyin: 'Wǒ ài bàba māma.', meaning: 'Saya sayang ayah dan ibu.' }
         ]
       },
       3: {
-        title: '你好与好朋友 (Sapaan)',
-        pinyin: 'Nǐ Hǎo yǔ Hǎo Péngyou',
-        meaning: 'Sapaan Ramah dan Persahabatan (Han Yu 1 Unit 3)',
-        dinoMascot: '🦤 Ptera Si Pterodactyl',
-        summary: 'Menyapa guru dan teman-teman sekolah dengan santun dan ramah.',
+        title: '第三课：爸爸是老师',
+        pinyin: 'Dì Sān Kè: Bàba Shì Lǎoshī',
+        meaning: 'Pelajaran 3: Ayah adalah Guru (Han Yu 1 Halaman 9-10)',
+        dinoMascot: '🦤 Ptera Mengenal Profesi',
+        summary: 'Mengenal berbagai macam profesi anggota keluarga: guru, dokter, polisi, dan siswa.',
         sentences: [
-          { hanzi: '你好！见到你很高兴。', pinyin: 'Nǐ hǎo! Jiàn dào nǐ hěn gāoxìng.', meaning: 'Halo! Senang sekali bertemu denganmu.' },
-          { hanzi: '我是小学生，你是我的好朋友。', pinyin: 'Wǒ shì xiǎoxuéshēng, nǐ shì wǒ de hǎo péngyou.', meaning: 'Saya murid SD, kamu adalah sahabat baik saya.' },
-          { hanzi: '谢谢你！不客气，我们一起快乐学习。', pinyin: 'Xièxie nǐ! Bù kèqi, wǒmen yīqǐ kuàilè xuéxí.', meaning: 'Terima kasih! Sama-sama, mari belajar dengan gembira bersama.' }
+          { hanzi: '爸爸是老师，妈妈是医生，我是学生。', pinyin: 'Bàba shì lǎoshī, māma shì yīshēng, wǒ shì xuésheng.', meaning: 'Ayah adalah guru, ibu adalah dokter, saya adalah murid.' },
+          { hanzi: '叔叔是警察。', pinyin: 'Shūshu shì jǐngchá.', meaning: 'Paman adalah polisi.' },
+          { hanzi: '弟弟、妹妹是学生吗？', pinyin: 'Dìdi, mèimei shì xuésheng ma?', meaning: 'Apakah adik laki-laki dan adik perempuan adalah murid?' },
+          { hanzi: '他们不是学生。', pinyin: 'Tāmen bú shì xuésheng.', meaning: 'Mereka bukan murid.' }
         ]
       },
       4: {
-        title: '我爱我的家 (Keluarga)',
-        pinyin: 'Wǒ Ài Wǒ de Jiā',
-        meaning: 'Kasih Sayang dalam Keluarga (Han Yu 1 Unit 4)',
-        dinoMascot: '🦖 Stego Si Punggung Perisai',
-        summary: 'Keluarga bahagia bersama ayah dan ibu yang penuh kasih sayang.',
+        title: '第四课：你叫什么名字',
+        pinyin: 'Dì Sì Kè: Nǐ Jiào Shénme Míngzi',
+        meaning: 'Pelajaran 4: Siapa Namamu (Han Yu 1 Halaman 13-14)',
+        dinoMascot: '🦖 Stego Berkenalan',
+        summary: 'Belajar menanyakan nama dan marga teman sekelas serta memperkenalkan saudara kandung.',
         sentences: [
-          { hanzi: '我家有爸爸、妈妈和我。', pinyin: 'Wǒ jiā yǒu bàba, māma hé wǒ.', meaning: 'Di rumahku ada ayah, ibu, dan saya.' },
-          { hanzi: '爸爸爱我，妈妈爱我，我也爱爸爸妈妈。', pinyin: 'Bàba ài wǒ, māma ài wǒ, wǒ yě ài bàba māma.', meaning: 'Ayah sayang saya, ibu sayang saya, saya juga sayang ayah dan ibu.' },
-          { hanzi: '我们是幸福快乐的一家人。', pinyin: 'Wǒmen shì xìngfú kuàilè de yī jiā rén.', meaning: 'Kami adalah satu keluarga yang bahagia dan rukun.' }
+          { hanzi: '你姓什么？我姓王。', pinyin: 'Nǐ xìng shénme? Wǒ xìng Wáng.', meaning: 'Apa margamu? Margaku Wang.' },
+          { hanzi: '你叫什么名字？我叫王小明。', pinyin: 'Nǐ jiào shénme míngzi? Wǒ jiào Wáng Xiǎomíng.', meaning: 'Siapa namamu? Namaku Wang Xiaoming.' },
+          { hanzi: '我姓王，叫王小华。', pinyin: 'Wǒ xìng Wáng, jiào Wáng Xiǎohuá.', meaning: 'Margaku Wang, namaku Wang Xiaohua.' },
+          { hanzi: '我弟弟叫王小明，我妹妹叫王小丽。', pinyin: 'Wǒ dìdi jiào Wáng Xiǎomíng, wǒ mèimei jiào Wáng Xiǎolì.', meaning: 'Adik laki-lakiku bernama Wang Xiaoming, adik perempuanku bernama Wang Xiaoli.' }
         ]
       },
       5: {
-        title: '比一比大小 (Ukuran)',
-        pinyin: 'Bǐ Yī Bǐ Dà Xiǎo',
-        meaning: 'Perbandingan Ukuran Besar & Kecil (Han Yu 1 Unit 5)',
-        dinoMascot: '🦕 Tricera Si Tanduk Tiga',
-        summary: 'Membedakan ukuran benda besar, kecil, panjang, dan pendek di sekitar kita.',
+        title: '第五课：我爱我家',
+        pinyin: 'Dì Wǔ Kè: Wǒ Ài Wǒ Jiā',
+        meaning: 'Pelajaran 5: Aku Sayang Rumahku (Han Yu 1 Halaman 17-19)',
+        dinoMascot: '🦕 Tricera di Rumah Hangat',
+        summary: 'Suasana rumah yang penuh cinta dan percakapan ramah saling memaafkan (万事开头难).',
         sentences: [
-          { hanzi: '大象大，小鸟小。', pinyin: 'Dàxiàng dà, xiǎoniǎo xiǎo.', meaning: 'Gajah besar, burung kecil.' },
-          { hanzi: '西瓜大，苹果小，多吃水果身体好。', pinyin: 'Xīguā dà, píngguǒ xiǎo, duō chī shuǐguǒ shēntǐ hǎo.', meaning: 'Semangka besar, apel kecil, banyak makan buah badan sehat.' },
-          { hanzi: '长长的树枝，短短的铅笔。', pinyin: 'Chángcháng de shùzhī, duǎnduǎn de qiānbǐ.', meaning: 'Ranting pohon yang panjang, pensil yang pendek.' }
+          { hanzi: '这是我家。', pinyin: 'Zhè shì wǒ jiā.', meaning: 'Ini adalah rumah / keluargaku.' },
+          { hanzi: '我爱爸爸，我爱妈妈，我爱我家。', pinyin: 'Wǒ ài bàba, wǒ ài māma, wǒ ài wǒ jiā.', meaning: 'Saya sayang ayah, saya sayang ibu, saya sayang rumah / keluargaku.' },
+          { hanzi: '万事开头难。', pinyin: 'Wàn shì kāi tóu nán.', meaning: 'Segala hal terasa sulit di awal permulaan (Peribahasa Tiongkok).' }
         ]
       },
       6: {
-        title: '方向歌 (Arah & Posisi)',
-        pinyin: 'Fāngxiàng Gē',
-        meaning: 'Mengenal Arah Depan, Belakang, Kiri & Kanan (Han Yu 1 Unit 6)',
-        dinoMascot: '🌟 Dino Juara Emas',
-        summary: 'Mengetahui posisi depan, belakang, kiri, kanan, atas, dan bawah.',
+        title: '第六课：哥哥去学校',
+        pinyin: 'Dì Liù Kè: Gēge Qù Xuéxiào',
+        meaning: 'Pelajaran 6: Kakak Pergi ke Sekolah (Han Yu 1 Halaman 21-22)',
+        dinoMascot: '🌟 Dino Berangkat Sekolah',
+        summary: 'Ibu pergi ke rumah sakit, aku ke taman kanak-kanak, kakak pergi ke sekolah, dan kakek ke taman.',
         sentences: [
-          { hanzi: '前面是学校，后面是大山。', pinyin: 'Qiánmian shì xuéxiào, hòumian shì dàshān.', meaning: 'Di depan adalah sekolah, di belakang adalah gunung besar.' },
-          { hanzi: '左边有一棵大树，右边有一条小河。', pinyin: 'Zuǒbian yǒu yī kē dàshù, yòubian yǒu yī tiáo xiǎohé.', meaning: 'Di sebelah kiri ada sebatang pohon rindang, di sebelah kanan ada sungai kecil.' },
-          { hanzi: '抬起头是蓝天，低下头是绿草。', pinyin: 'Tái qǐ tóu shì lántiān, dī xià tóu shì lǜcǎo.', meaning: 'Angkat kepala ada langit biru, tundukkan kepala ada rumput hijau.' }
+          { hanzi: '妈妈是医生，早上她去医院。', pinyin: 'Māma shì yīshēng, zǎoshang tā qù yīyuàn.', meaning: 'Ibu adalah dokter, pagi hari beliau pergi ke rumah sakit.' },
+          { hanzi: '我去幼儿园。', pinyin: 'Wǒ qù yòu\'éryuán.', meaning: 'Saya pergi ke taman kanak-kanak.' },
+          { hanzi: '哥哥去哪儿？他是学生，他去学校。', pinyin: 'Gēge qù nǎr? Tā shì xuésheng, tā qù xuéxiào.', meaning: 'Kakak pergi ke mana? Dia adalah murid, dia pergi ke sekolah.' },
+          { hanzi: '爷爷去公园。', pinyin: 'Yéye qù gōngyuán.', meaning: 'Kakek pergi ke taman.' }
         ]
       },
       7: {
-        title: '晴朗的天空 (Cuaca)',
-        pinyin: 'Qínglǎng de Tiānkōng',
-        meaning: 'Cuaca Cerah dan Awan Putih (Han Yu 1 Unit 7)',
-        dinoMascot: '🦖 Rexy Si T-Rex Cilik',
-        summary: 'Mengamati perubahan cuaca cerah, berawan, hingga hujan pelangi.',
+        title: '第七课：我们上课吧',
+        pinyin: 'Dì Qī Kè: Wǒmen Shàngkè Ba',
+        meaning: 'Pelajaran 7: Mari Kita Belajar di Kelas (Han Yu 1 Halaman 25-26)',
+        dinoMascot: '🦖 Rexy Murid Pintar',
+        summary: 'Kegiatan belajar mengajar di kelas: guru menjelaskan pelajaran dan murid menjawab pertanyaan.',
         sentences: [
-          { hanzi: '今天天气晴朗，微风轻轻吹。', pinyin: 'Jīntiān tiānqì qínglǎng, wēifēng qīngqīng chuī.', meaning: 'Hari ini cuaca cerah, angin sepoi-sepoi bertiup lembut.' },
-          { hanzi: '蓝蓝的天上飘着朵朵白云。', pinyin: 'Lánlán de tiān shang piāo zhe duǒduǒ báiyún.', meaning: 'Di langit biru berarak gumpalan awan putih.' },
-          { hanzi: '下雨过后，天上出现了美丽的彩虹！', pinyin: 'Xià yǔ guòhòu, tiān shang chūxiàn le měilì de cǎihóng!', meaning: 'Setelah hujan reda, di langit muncul pelangi yang indah!' }
+          { hanzi: '上课了，我们进教室吧！', pinyin: 'Shàngkè le, wǒmen jìn jiàoshì ba!', meaning: 'Waktunya pelajaran dimulai, mari kita masuk ke dalam ruang kelas!' },
+          { hanzi: '老师讲课，我们听课。', pinyin: 'Lǎoshī jiǎngkè, wǒmen tīngkè.', meaning: 'Guru menerangkan pelajaran, kita menyimak pelajaran.' },
+          { hanzi: '老师问，我们回答。', pinyin: 'Lǎoshī wèn, wǒmen huídá.', meaning: 'Guru bertanya, kita menjawab pertanyaan.' }
         ]
       },
       8: {
-        title: '我们的教室 (Ruang Kelas)',
-        pinyin: 'Wǒmen de Jiàoshì',
-        meaning: 'Aktivitas Belajar di Ruang Kelas (Han Yu 1 Unit 8)',
-        dinoMascot: '🦕 Brachy Si Leher Panjang',
-        summary: 'Suasana kelas yang rapi dengan buku, meja, kursi, dan belajar bersama.',
+        title: '第八课：我们吃午饭',
+        pinyin: 'Dì Bā Kè: Wǒmen Chī Wǔfàn',
+        meaning: 'Pelajaran 8: Kami Makan Siang (Han Yu 1 Halaman 29-30)',
+        dinoMascot: '🦕 Brachy Makan Siang Bersama',
+        summary: 'Menikmati menu makan siang yang lezat bersama guru dan teman: mie, nasi, dan pangsit jiaozi.',
         sentences: [
-          { hanzi: '教室里明亮又整洁。', pinyin: 'Jiàoshì lǐ míngliàng yòu zhěngjié.', meaning: 'Ruang kelas terang dan rapi.' },
-          { hanzi: '桌子上有课本、练习本和笔袋。', pinyin: 'Zhuōzi shang yǒu kèběn, liànxíběn hé bǐdài.', meaning: 'Di atas meja ada buku pelajaran, buku tulis, dan kotak pensil.' },
-          { hanzi: '老师教我们认字，同学们认真听讲。', pinyin: 'Lǎoshī jiāo wǒmen rèn zì, tóngxuémen rènzhēn tīngjiǎng.', meaning: 'Guru mengajari kami mengenal huruf, teman-teman menyimak dengan sungguh-sungguh.' }
+          { hanzi: '中午，我们吃午饭。', pinyin: 'Zhōngwǔ, wǒmen chī wǔfàn.', meaning: 'Siang hari, kami makan siang bersama.' },
+          { hanzi: '我吃面条。', pinyin: 'Wǒ chī miàntiáo.', meaning: 'Saya makan mie.' },
+          { hanzi: '小红和小强吃米饭。', pinyin: 'Xiǎohóng hé Xiǎoqiáng chī mǐfàn.', meaning: 'Xiaohong dan Xiaoqiang makan nasi.' },
+          { hanzi: '老师吃饺子。', pinyin: 'Lǎoshī chī jiǎozi.', meaning: 'Guru makan pangsit jiaozi.' }
         ]
       },
       9: {
-        title: '美味的食物 (Makanan & Minuman)',
-        pinyin: 'Měiwèi de Shíwù',
-        meaning: 'Makanan Lezat & Minuman Sehat (Han Yu 1 Unit 9)',
-        dinoMascot: '🦤 Ptera Si Pterodactyl',
-        summary: 'Sarapan susu dan roti, makan siang nasi dan sayuran yang bergizi.',
+        title: '第九课：小华打球',
+        pinyin: 'Dì Jiǔ Kè: Xiǎohuá Dǎ Qiú',
+        meaning: 'Pelajaran 9: Xiaohua Bermain Bola (Han Yu 1 Halaman 33-34)',
+        dinoMascot: '🦤 Ptera Juara Olahraga',
+        summary: 'Aktivitas olahraga yang seru saat jam istirahat: main basket, sepak bola, tenis meja, dan lompat tali.',
         sentences: [
-          { hanzi: '早上喝牛奶，吃热热的包子。', pinyin: 'Zǎoshang hē niúnǎi, chī rèrè de bāozi.', meaning: 'Pagi hari minum susu, makan bakpao hangat.' },
-          { hanzi: '中午吃香喷喷的米饭和新鲜蔬菜。', pinyin: 'Zhōngwǔ chī xiāngpēnpēn de mǐfàn hé xīnxiān shūcài.', meaning: 'Siang hari makan nasi harum dan sayuran segar.' },
-          { hanzi: '不挑食，多喝水，身体棒棒的！', pinyin: 'Bù tiāoshí, duō hē shuǐ, shēntǐ bàngbàng de!', meaning: 'Tidak pilih-pilih makanan, banyak minum air, tubuh jadi sehat kuat!' }
+          { hanzi: '下课了，同学们打篮球、踢足球。', pinyin: 'Xiàkè le, tóngxuémen dǎ lánqiú, tī zúqiú.', meaning: 'Jam istirahat tiba, teman-teman bermain basket dan sepak bola.' },
+          { hanzi: '我和小强打乒乓球。', pinyin: 'Wǒ hé Xiǎoqiáng dǎ pīngpāngqiú.', meaning: 'Saya dan Xiaoqiang bermain tenis meja.' },
+          { hanzi: '小红不打球，她跳绳。', pinyin: 'Xiǎohóng bù dǎ qiú, tā tiàoshéng.', meaning: 'Xiaohong tidak bermain bola, dia bermain lompat tali.' }
         ]
       },
       10: {
-        title: '快乐做运动 (Gerakan & Olahraga)',
-        pinyin: 'Kuàilè Zuò Yùndòng',
-        meaning: 'Berolahraga dan Senam Ceria (Han Yu 1 Unit 10)',
-        dinoMascot: '🦖 Stego Si Punggung Perisai',
-        summary: 'Berolahraga lari dan melompat di lapangan agar badan sehat bugar.',
+        title: '第十课：我的一天',
+        pinyin: 'Dì Shí Kè: Wǒ de Yī Tiān',
+        meaning: 'Pelajaran 10: Keseharianku (Han Yu 1 Halaman 37-39)',
+        dinoMascot: '🦖 Stego Menghargai Waktu',
+        summary: 'Rutinitas sehari-hari mulai dari sekolah pagi, bermain saat istirahat, hingga mengerjakan PR (一寸光阴一寸金).',
         sentences: [
-          { hanzi: '拍拍小手，跺跺小脚，大家一起来做操。', pinyin: 'Pāipāi xiǎoshǒu, duòduò xiǎojiǎo, dàjiā yīqǐ lái zuò cāo.', meaning: 'Tepuk tangan kecil, hentakkan kaki kecil, mari senam bersama.' },
-          { hanzi: '操场上跑一跑，跳一跳，笑声真欢畅。', pinyin: 'Cāochǎng shang pǎo yī pǎo, tiào yī tiào, xiàoshēng zhēn huānchàng.', meaning: 'Berlari dan melompat di lapangan, suara tawa sungguh riang gembira.' },
-          { hanzi: '天天坚持锻炼，健康又聪明！', pinyin: 'Tiāntiān jiānchí duànliàn, jiànkāng yòu cōngmíng!', meaning: 'Setiap hari rajin berolahraga, sehat dan cerdas!' }
+          { hanzi: '早上我去学校。', pinyin: 'Zǎoshang wǒ qù xuéxiào.', meaning: 'Pagi hari saya pergi ke sekolah.' },
+          { hanzi: '上课了，老师讲课，我们听课。', pinyin: 'Shàngkè le, lǎoshī jiǎngkè, wǒmen tīngkè.', meaning: 'Saat belajar, guru mengajar, kita mendengarkan dengan baik.' },
+          { hanzi: '下课了，我和同学们做游戏。', pinyin: 'Xiàkè le, wǒ hé tóngxuémen zuò yóuxì.', meaning: 'Jam istirahat, saya dan teman-teman bermain permainan.' },
+          { hanzi: '放学了，我回家做作业。', pinyin: 'Fàngxué le, wǒ huí jiā zuò zuòyè.', meaning: 'Pulang sekolah, saya pulang ke rumah mengerjakan PR.' },
+          { hanzi: '一寸光阴一寸金，寸金难买寸光阴。', pinyin: 'Yí cùn guāngyīn yí cùn jīn, cùn jīn nán mǎi cùn guāngyīn.', meaning: 'Waktu amat berharga laksana emas, emas sebanyak apapun tak dapat membeli waktu.' }
+        ]
+      },
+      11: {
+        title: '第十一课：这是我的书',
+        pinyin: 'Dì Shíyī Kè: Zhè Shì Wǒ de Shū',
+        meaning: 'Pelajaran 11: Ini Adalah Bukuku (Han Yu 1 Halaman 41-42)',
+        dinoMascot: '🦕 Tricera Merawat Buku',
+        summary: 'Mengenal kepemilikan alat-alat sekolah di atas meja bersama teman sebangku.',
+        sentences: [
+          { hanzi: '这是我的书，那是我同桌的书。', pinyin: 'Zhè shì wǒ de shū, nà shì wǒ tóngzhuō de shū.', meaning: 'Ini adalah bukuku, itu adalah buku teman sebangkuku.' },
+          { hanzi: '这是小强的书包。', pinyin: 'Zhè shì Xiǎoqiáng de shūbāo.', meaning: 'Ini adalah tas sekolah Xiaoqiang.' },
+          { hanzi: '那是谁的书包？那是小华的书包。', pinyin: 'Nà shì shéi de shūbāo? Nà shì Xiǎohuá de shūbāo.', meaning: 'Itu tas sekolah siapa? Itu tas sekolah Xiaohua.' }
+        ]
+      },
+      12: {
+        title: '第十二课：我有两本书',
+        pinyin: 'Dì Shí\'èr Kè: Wǒ Yǒu Liǎng Běn Shū',
+        meaning: 'Pelajaran 12: Aku Punya Dua Buku (Han Yu 1 Halaman 45-46)',
+        dinoMascot: '🌟 Dino Berhitung Barang',
+        summary: 'Belajar kata satuan (量词: 本, 支, 个) untuk menghitung isi tas sekolah.',
+        sentences: [
+          { hanzi: '这是我的书包。', pinyin: 'Zhè shì wǒ de shūbāo.', meaning: 'Ini adalah tas sekolahku.' },
+          { hanzi: '我有两本书、四支笔和五个本子。', pinyin: 'Wǒ yǒu liǎng běn shū, sì zhī bǐ hé wǔ gè běnzi.', meaning: 'Saya punya dua buku, empat batang pena, dan lima buku tulis.' },
+          { hanzi: '你有几本书？', pinyin: 'Nǐ yǒu jǐ běn shū?', meaning: 'Kamu punya berapa buku?' }
+        ]
+      },
+      13: {
+        title: '第十三课：你家有电脑吗',
+        pinyin: 'Dì Shísān Kè: Nǐ Jiā Yǒu Diànnǎo Ma',
+        meaning: 'Pelajaran 13: Apakah di Rumahmu Ada Komputer (Han Yu 1 Halaman 49-50)',
+        dinoMascot: '🦖 Rexy Belajar Komputer',
+        summary: 'Menanyakan keberadaan peralatan modern seperti komputer, sepeda, dan foto keluarga.',
+        sentences: [
+          { hanzi: '我家有两台电脑。', pinyin: 'Wǒ jiā yǒu liǎng tái diànnǎo.', meaning: 'Di rumahku ada dua unit komputer.' },
+          { hanzi: '爸爸有一台，哥哥有一台。', pinyin: 'Bàba yǒu yī tái, gēge yǒu yī tái.', meaning: 'Ayah punya satu unit, kakak laki-laki punya satu unit.' },
+          { hanzi: '我没有电脑。你家有电脑吗？', pinyin: 'Wǒ méiyǒu diànnǎo. Nǐ jiā yǒu diànnǎo ma?', meaning: 'Saya tidak punya komputer. Apakah di rumahmu ada komputer?' }
+        ]
+      },
+      14: {
+        title: '第十四课：书在书架上',
+        pinyin: 'Dì Shísì Kè: Shū Zài Shūjià Shang',
+        meaning: 'Pelajaran 14: Buku Ada di Rak Buku (Han Yu 1 Halaman 53-54)',
+        dinoMascot: '🦕 Brachy di Perpustakaan',
+        summary: 'Menunjukkan posisi dan lokasi perpustakaan sekolah serta letak buku di rak.',
+        sentences: [
+          { hanzi: '我们学校有一个图书馆。', pinyin: 'Wǒmen xuéxiào yǒu yī gè túshūguǎn.', meaning: 'Sekolah kita memiliki sebuah perpustakaan.' },
+          { hanzi: '图书馆在教室的右边。', pinyin: 'Túshūguǎn zài jiàoshì de yòubian.', meaning: 'Perpustakaan berada di sebelah kanan ruang kelas.' },
+          { hanzi: '图书馆的书在哪儿？书在书架上。', pinyin: 'Túshūguǎn de shū zài nǎr? Shū zài shūjià shang.', meaning: 'Buku-buku perpustakaan ada di mana? Buku ada di atas rak buku.' }
+        ]
+      },
+      15: {
+        title: '第十五课：我的房间',
+        pinyin: 'Dì Shíwǔ Kè: Wǒ de Fángjiān',
+        meaning: 'Pelajaran 15: Kamarku (Han Yu 1 Halaman 57-59)',
+        dinoMascot: '🦖 Stego Kamar Rapi',
+        summary: 'Menjelaskan perabot di dalam kamar tidur yang rapi dan nyaman (一心不可二用).',
+        sentences: [
+          { hanzi: '这是我的房间。', pinyin: 'Zhè shì wǒ de fángjiān.', meaning: 'Ini adalah kamarku.' },
+          { hanzi: '这儿有一张床、一个书架、一个衣柜、两张桌子和两把椅子。', pinyin: 'Zhèr yǒu yī zhāng chuáng, yī gè shūjià, yī gè yīguì, liǎng zhāng zhuōzi hé liǎng bǎ yǐzi.', meaning: 'Di sini ada sebuah tempat tidur, sebuah rak buku, sebuah lemari pakaian, dua buah meja, dan dua buah kursi.' },
+          { hanzi: '我的电脑在桌子上边，足球在圆桌下边。', pinyin: 'Wǒ de diànnǎo zài zhuōzi shàngbian, zúqiú zài yuánzhuō xiàbian.', meaning: 'Komputeku ada di atas meja, bola sepak ada di bawah meja bundar.' },
+          { hanzi: '一心不可二用。', pinyin: 'Yì xīn bù kě èr yòng.', meaning: 'Harus bersungguh-sungguh dan fokus pada satu tujuan (Peribahasa Tiongkok).' }
         ]
       }
     }
   },
 
-  // 5. Fungsi Pintar Mengambil Bacaan Cerita Berdasarkan Buku & Unit (Han Yu 1 - 15)
+  // 5. Fungsi Pintar Mengambil Bacaan Cerita
   getUnitStory: function(bookId, unitId) {
     const b = parseInt(bookId) || 1;
     const u = parseInt(unitId) || 1;
@@ -2156,7 +2296,7 @@ const DINO_DATA = {
       pinyin: `Hànyǔ Dì ${b} Cè • Dì ${u} Kè`,
       meaning: `Teks Bacaan Han Yu ${b} Unit ${u} (${unitTitle})`,
       dinoMascot: mascot,
-      summary: `Materi bacaan kurikulum Han Yu Buku ${b} Unit ${u} dengan topik ${unitTitle} dan latihan pelafalan intonasi lamban.`,
+      summary: `Materi bacaan kurikulum Han Yu Buku ${b} Unit ${u} dengan topik ${unitTitle}.`,
       sentences: [
         {
           hanzi: `欢迎学习汉语第${b}册第${u}课：${unitTitle}。`,
@@ -2177,115 +2317,393 @@ const DINO_DATA = {
     };
   },
 
-  // 6. Dataset Kartu Game Mencocokkan (Match Game)
+  // 6. Modul 3: Kartu Mencocokkan Kata & Gambar Sesuai Unit Han Yu 1
   matchVocabItems: [
-    { id: 'm1', hanzi: '山', pinyin: 'shān', meaning: 'Gunung', book: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><polygon points="10,80 35,30 60,80" fill="#8D6E63"/><polygon points="40,80 65,20 90,80" fill="#6D4C41"/><polygon points="25,80 50,40 75,80" fill="#A1887F"/></svg>' },
-    { id: 'm2', hanzi: '水', pinyin: 'shuǐ', meaning: 'Air', book: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M20,60 Q50,30 80,60 T100,60" fill="none" stroke="#29B6F6" stroke-width="8" stroke-linecap="round"/><path d="M10,75 Q40,45 70,75 T90,75" fill="none" stroke="#0288D1" stroke-width="6" stroke-linecap="round"/></svg>' },
-    { id: 'm3', hanzi: '日', pinyin: 'rì', meaning: 'Matahari', book: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="28" fill="#FFA000"/><path d="M50,12 L50,2 M50,88 L50,98 M12,50 L2,50 M88,50 L98,50" stroke="#FF8F00" stroke-width="6" stroke-linecap="round"/></svg>' },
-    { id: 'm4', hanzi: '月', pinyin: 'yuè', meaning: 'Bulan', book: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M65,20 A32,32 0 1,0 65,80 A24,24 0 0,1 65,20 Z" fill="#FDD835"/></svg>' },
-    { id: 'm5', hanzi: '木', pinyin: 'mù', meaning: 'Pohon', book: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><rect x="44" y="55" width="12" height="35" fill="#795548"/><circle cx="50" cy="40" r="28" fill="#43A047"/></svg>' },
-    { id: 'm6', hanzi: '火', pinyin: 'huǒ', meaning: 'Api', book: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M50,15 C55,35 75,45 70,70 C65,85 40,88 35,75 C30,65 40,55 35,45 C45,40 45,25 50,15 Z" fill="#E53935"/></svg>' },
-    { id: 'm7', hanzi: '龙', pinyin: 'lóng', meaning: 'Dinosaurus', book: 2, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M25,65 C20,50 35,30 55,30 C75,30 85,45 80,65 C75,78 60,82 45,80 Z" fill="#4CAF50"/></svg>' },
-    { id: 'm8', hanzi: '蛋', pinyin: 'dàn', meaning: 'Telur Dino', book: 2, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><ellipse cx="50" cy="55" rx="30" ry="38" fill="#FFF9C4" stroke="#FBC02D" stroke-width="4"/><circle cx="42" cy="45" r="5" fill="#81C784"/></svg>' }
+    // Unit 1
+    { id: 'm1_1', hanzi: '你好', pinyin: 'nǐ hǎo', meaning: 'Halo', book: 1, unit: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="34" font-weight="900" fill="#2E7D32" text-anchor="middle">你好</text></svg>' },
+    { id: 'm1_2', hanzi: '老师', pinyin: 'lǎoshī', meaning: 'Guru', book: 1, unit: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="34" font-weight="900" fill="#2E7D32" text-anchor="middle">老师</text></svg>' },
+    { id: 'm1_3', hanzi: '谢谢', pinyin: 'xièxie', meaning: 'Terima Kasih', book: 1, unit: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="34" font-weight="900" fill="#2E7D32" text-anchor="middle">谢谢</text></svg>' },
+    { id: 'm1_4', hanzi: '再见', pinyin: 'zàijiàn', meaning: 'Sampai Jumpa', book: 1, unit: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="34" font-weight="900" fill="#2E7D32" text-anchor="middle">再见</text></svg>' },
+
+    // Unit 2
+    { id: 'm2_1', hanzi: '爸爸', pinyin: 'bàba', meaning: 'Ayah', book: 1, unit: 2, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="34" font-weight="900" fill="#2E7D32" text-anchor="middle">爸爸</text></svg>' },
+    { id: 'm2_2', hanzi: '妈妈', pinyin: 'māma', meaning: 'Ibu', book: 1, unit: 2, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="34" font-weight="900" fill="#2E7D32" text-anchor="middle">妈妈</text></svg>' },
+    { id: 'm2_3', hanzi: '爱', pinyin: 'ài', meaning: 'Cinta / Sayang', book: 1, unit: 2, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFEBEE"/><text x="50" y="66" font-size="44" font-weight="900" fill="#C62828" text-anchor="middle">❤️</text></svg>' },
+    { id: 'm2_4', hanzi: '我', pinyin: 'wǒ', meaning: 'Saya', book: 1, unit: 2, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="44" font-weight="900" fill="#2E7D32" text-anchor="middle">我</text></svg>' },
+
+    // Unit 3
+    { id: 'm3_1', hanzi: '医生', pinyin: 'yīshēng', meaning: 'Dokter', book: 1, unit: 3, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E0F7FA"/><text x="50" y="66" font-size="34" font-weight="900" fill="#00838F" text-anchor="middle">🩺</text></svg>' },
+    { id: 'm3_2', hanzi: '警察', pinyin: 'jǐngchá', meaning: 'Polisi', book: 1, unit: 3, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8EAF6"/><text x="50" y="66" font-size="34" font-weight="900" fill="#283593" text-anchor="middle">👮</text></svg>' },
+    { id: 'm3_3', hanzi: '学生', pinyin: 'xuésheng', meaning: 'Murid', book: 1, unit: 3, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFF3E0"/><text x="50" y="66" font-size="34" font-weight="900" fill="#E65100" text-anchor="middle">🎒</text></svg>' },
+    { id: 'm3_4', hanzi: '弟弟', pinyin: 'dìdi', meaning: 'Adik Laki-laki', book: 1, unit: 3, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="34" font-weight="900" fill="#2E7D32" text-anchor="middle">弟弟</text></svg>' },
+
+    // Unit 6
+    { id: 'm6_1', hanzi: '学校', pinyin: 'xuéxiào', meaning: 'Sekolah', book: 1, unit: 6, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFF8E1"/><text x="50" y="66" font-size="34" font-weight="900" fill="#F57F17" text-anchor="middle">🏫</text></svg>' },
+    { id: 'm6_2', hanzi: '医院', pinyin: 'yīyuàn', meaning: 'Rumah Sakit', book: 1, unit: 6, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFEBEE"/><text x="50" y="66" font-size="34" font-weight="900" fill="#C62828" text-anchor="middle">🏥</text></svg>' },
+    { id: 'm6_3', hanzi: '公园', pinyin: 'gōngyuán', meaning: 'Taman', book: 1, unit: 6, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="34" font-weight="900" fill="#2E7D32" text-anchor="middle">🌳</text></svg>' },
+    { id: 'm6_4', hanzi: '教室', pinyin: 'jiàoshì', meaning: 'Ruang Kelas', book: 1, unit: 6, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#EDE7F6"/><text x="50" y="66" font-size="34" font-weight="900" fill="#4527A0" text-anchor="middle">教室</text></svg>' },
+
+    // Unit 8
+    { id: 'm8_1', hanzi: '面条', pinyin: 'miàntiáo', meaning: 'Mie', book: 1, unit: 8, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFF3E0"/><text x="50" y="66" font-size="34" font-weight="900" fill="#E65100" text-anchor="middle">🍜</text></svg>' },
+    { id: 'm8_2', hanzi: '米饭', pinyin: 'mǐfàn', meaning: 'Nasi', book: 1, unit: 8, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#ECEFF1"/><text x="50" y="66" font-size="34" font-weight="900" fill="#37474F" text-anchor="middle">🍚</text></svg>' },
+    { id: 'm8_3', hanzi: '饺子', pinyin: 'jiǎozi', meaning: 'Pangsit Jiaozi', book: 1, unit: 8, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFFDE7"/><text x="50" y="66" font-size="34" font-weight="900" fill="#F57F17" text-anchor="middle">🥟</text></svg>' },
+    { id: 'm8_4', hanzi: '包子', pinyin: 'bāozi', meaning: 'Bakpao', book: 1, unit: 8, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFF9C4"/><text x="50" y="66" font-size="34" font-weight="900" fill="#FBC02D" text-anchor="middle">🥟</text></svg>' },
+
+    // Unit 9
+    { id: 'm9_1', hanzi: '篮球', pinyin: 'lánqiú', meaning: 'Basket', book: 1, unit: 9, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFF3E0"/><text x="50" y="66" font-size="34" font-weight="900" fill="#E65100" text-anchor="middle">🏀</text></svg>' },
+    { id: 'm9_2', hanzi: '足球', pinyin: 'zúqiú', meaning: 'Sepak Bola', book: 1, unit: 9, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#ECEFF1"/><text x="50" y="66" font-size="34" font-weight="900" fill="#263238" text-anchor="middle">⚽</text></svg>' },
+    { id: 'm9_3', hanzi: '乒乓球', pinyin: 'pīngpāngqiú', meaning: 'Tenis Meja', book: 1, unit: 9, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFEBEE"/><text x="50" y="66" font-size="34" font-weight="900" fill="#C62828" text-anchor="middle">🏓</text></svg>' },
+    { id: 'm9_4', hanzi: '跳绳', pinyin: 'tiàoshéng', meaning: 'Lompat Tali', book: 1, unit: 9, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="34" font-weight="900" fill="#2E7D32" text-anchor="middle">跳绳</text></svg>' },
+
+    // Unit 11 & 12
+    { id: 'm11_1', hanzi: '书包', pinyin: 'shūbāo', meaning: 'Tas Sekolah', book: 1, unit: 11, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E3F2FD"/><text x="50" y="66" font-size="34" font-weight="900" fill="#1565C0" text-anchor="middle">🎒</text></svg>' },
+    { id: 'm11_2', hanzi: '笔', pinyin: 'bǐ', meaning: 'Pena / Pensil', book: 1, unit: 11, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFF3E0"/><text x="50" y="66" font-size="34" font-weight="900" fill="#EF6C00" text-anchor="middle">✏️</text></svg>' },
+    { id: 'm11_3', hanzi: '尺子', pinyin: 'chǐzi', meaning: 'Penggaris', book: 1, unit: 11, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFFDE7"/><text x="50" y="66" font-size="34" font-weight="900" fill="#F57F17" text-anchor="middle">📐</text></svg>' },
+    { id: 'm11_4', hanzi: '本子', pinyin: 'běnzi', meaning: 'Buku Tulis', book: 1, unit: 11, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="34" font-weight="900" fill="#2E7D32" text-anchor="middle">📓</text></svg>' },
+
+    // Unit 13, 14 & 15
+    { id: 'm13_1', hanzi: '电脑', pinyin: 'diànnǎo', meaning: 'Komputer', book: 1, unit: 13, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E0F2F1"/><text x="50" y="66" font-size="34" font-weight="900" fill="#00695C" text-anchor="middle">💻</text></svg>' },
+    { id: 'm14_1', hanzi: '图书馆', pinyin: 'túshūguǎn', meaning: 'Perpustakaan', book: 1, unit: 14, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#F3E5F5"/><text x="50" y="66" font-size="34" font-weight="900" fill="#6A1B9A" text-anchor="middle">📚</text></svg>' },
+    { id: 'm15_1', hanzi: '床', pinyin: 'chuáng', meaning: 'Tempat Tidur', book: 1, unit: 15, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#FFF8E1"/><text x="50" y="66" font-size="34" font-weight="900" fill="#FF8F00" text-anchor="middle">🛏️</text></svg>' },
+    { id: 'm15_2', hanzi: '桌子', pinyin: 'zhuōzi', meaning: 'Meja', book: 1, unit: 15, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#EFEBE9"/><text x="50" y="66" font-size="34" font-weight="900" fill="#4E342E" text-anchor="middle">🪑</text></svg>' }
   ],
 
-  // 7. Dataset Soal Kuis Pilihan Berganda
+  // 7. Modul 4: Soal Latihan Kuis Pilihan Berganda (Setiap Unit 1-15 Han Yu 1)
   strokeCountQuestions: [
+    // Unit 1
     {
-      id: 1,
+      id: 101,
       book: 1,
+      unit: 1,
+      type: 'meaning-match',
+      question: 'Apakah arti dari sapaan "你好" (Nǐ hǎo) di Pelajaran 1?',
+      audioText: '你好。请问这句话是什么意思？',
+      hanzi: '你好',
+      pinyin: 'nǐ hǎo',
+      options: [
+        { text: 'Halo / Apa Kabar', isCorrect: true },
+        { text: 'Terima Kasih', isCorrect: false },
+        { text: 'Sampai Jumpa', isCorrect: false },
+        { text: 'Sama-sama', isCorrect: false }
+      ],
+      explanation: '你好 (nǐ hǎo) adalah sapaan ramah dalam bahasa Mandarin yang berarti "Halo".'
+    },
+    {
+      id: 102,
+      book: 1,
+      unit: 1,
       type: 'count-stroke',
-      question: 'Berapakah jumlah guratan dari karakter Hanzi "一" (yī - satu)?',
+      question: 'Berapakah jumlah guratan dari karakter dasar "一" (yī)?',
       audioText: '一。请问这个汉字有几画？',
       hanzi: '一',
       pinyin: 'yī',
       options: [
-        { text: '1 Guratan', isCorrect: true },
+        { text: '1 Guratan (横)', isCorrect: true },
         { text: '2 Guratan', isCorrect: false },
         { text: '3 Guratan', isCorrect: false },
         { text: '4 Guratan', isCorrect: false }
       ],
-      explanation: 'Karakter 一 (yī) hanya terdiri dari 1 guratan mendatar (横 - héng).'
+      explanation: 'Karakter 一 (yī) hanya terdiri dari 1 goresan mendatar (横 - héng).'
+    },
+
+    // Unit 2
+    {
+      id: 201,
+      book: 1,
+      unit: 2,
+      type: 'meaning-match',
+      question: 'Di Pelajaran 2, apakah arti dari kalimat "我爱爸爸妈妈"?',
+      audioText: '我爱爸爸妈妈。请问这句话是什么意思？',
+      hanzi: '我爱爸爸妈妈',
+      pinyin: 'wǒ ài bàba māma',
+      options: [
+        { text: 'Saya sayang ayah dan ibu', isCorrect: true },
+        { text: 'Ayah dan ibu saya adalah guru', isCorrect: false },
+        { text: 'Saya pergi ke sekolah', isCorrect: false },
+        { text: 'Nama saya Wang Xiaohua', isCorrect: false }
+      ],
+      explanation: '我 (saya) + 爱 (sayang/cinta) + 爸爸妈妈 (ayah dan ibu).'
     },
     {
-      id: 2,
+      id: 202,
       book: 1,
+      unit: 2,
       type: 'count-stroke',
-      question: 'Berapakah jumlah guratan dari karakter Hanzi "三" (sān - tiga)?',
-      audioText: '三。请问这个汉字有几画？',
-      hanzi: '三',
-      pinyin: 'sān',
+      question: 'Berapakah jumlah guratan karakter "我" (wǒ - saya)?',
+      audioText: '我。请问这个汉字一共有几画？',
+      hanzi: '我',
+      pinyin: 'wǒ',
       options: [
-        { text: '3 Guratan', isCorrect: true },
-        { text: '2 Guratan', isCorrect: false },
-        { text: '4 Guratan', isCorrect: false },
+        { text: '7 Guratan', isCorrect: true },
+        { text: '6 Guratan', isCorrect: false },
+        { text: '8 Guratan', isCorrect: false },
         { text: '5 Guratan', isCorrect: false }
       ],
-      explanation: 'Karakter 三 (sān) terdiri dari 3 guratan mendatar (横).'
+      explanation: '我 (wǒ) terdiri dari 7 guratan: 撇, 横, 竖钩, 提, 斜钩, 撇, 点.'
     },
+
+    // Unit 3
     {
-      id: 3,
+      id: 301,
       book: 1,
-      type: 'count-stroke',
-      question: 'Berapakah jumlah guratan dari karakter Hanzi "水" (shuǐ - air)?',
-      audioText: '水。请问这个汉字有几画？',
-      hanzi: '水',
-      pinyin: 'shuǐ',
-      options: [
-        { text: '4 Guratan', isCorrect: true },
-        { text: '3 Guratan', isCorrect: false },
-        { text: '5 Guratan', isCorrect: false },
-        { text: '6 Guratan', isCorrect: false }
-      ],
-      explanation: 'Karakter 水 (shuǐ) memiliki 4 guratan: 竖钩 (1), 横撇 (2), 撇 (3), 捺 (4).'
-    },
-    {
-      id: 4,
-      book: 2,
-      type: 'count-stroke',
-      question: 'Berapakah jumlah guratan dari karakter Hanzi "龙" (lóng - dinosaurus/naga)?',
-      audioText: '龙。请问这个汉字有几画？',
-      hanzi: '龙',
-      pinyin: 'lóng',
-      options: [
-        { text: '5 Guratan', isCorrect: true },
-        { text: '4 Guratan', isCorrect: false },
-        { text: '6 Guratan', isCorrect: false },
-        { text: '7 Guratan', isCorrect: false }
-      ],
-      explanation: 'Karakter 龙 (lóng) terdiri dari 5 guratan: 撇, 横, 竖折斜钩, 撇, 点.'
-    },
-    {
-      id: 5,
-      book: 2,
-      type: 'count-stroke',
-      question: 'Berapakah jumlah guratan dari karakter Hanzi "蛋" (dàn - telur dino)?',
-      audioText: '蛋。请问这个汉字有几画？',
-      hanzi: '蛋',
-      pinyin: 'dàn',
-      options: [
-        { text: '11 Guratan', isCorrect: true },
-        { text: '10 Guratan', isCorrect: false },
-        { text: '12 Guratan', isCorrect: false },
-        { text: '9 Guratan', isCorrect: false }
-      ],
-      explanation: 'Karakter 蛋 (dàn) memiliki 11 guratan: radikal 疋 (5) + radikal 虫 (6) = 11 guratan.'
-    },
-    {
-      id: 6,
-      book: 1,
+      unit: 3,
       type: 'meaning-match',
-      question: 'Apakah arti dari karakter Hanzi "山" (shān)?',
-      audioText: '山。请问这个汉字是什么意思？',
-      hanzi: '山',
-      pinyin: 'shān',
+      question: 'Di Pelajaran 3 "爸爸是老师", apakah profesi dari 妈妈 (ibu)?',
+      audioText: '爸爸是老师，妈妈是医生。请问妈妈的职业是什么？',
+      hanzi: '医生',
+      pinyin: 'yīshēng',
       options: [
-        { text: 'Gunung', isCorrect: true },
-        { text: 'Air / Sungai', isCorrect: false },
-        { text: 'Matahari', isCorrect: false },
-        { text: 'Pohon', isCorrect: false }
+        { text: 'Dokter', isCorrect: true },
+        { text: 'Guru', isCorrect: false },
+        { text: 'Polisi', isCorrect: false },
+        { text: 'Siswa', isCorrect: false }
       ],
-      explanation: '山 (shān) melambangkan bentuk 3 puncak gunung yang menjulang tinggi.'
+      explanation: 'Di teks Pelajaran 3: 妈妈是医生 (Ibu adalah dokter).'
+    },
+    {
+      id: 302,
+      book: 1,
+      unit: 3,
+      type: 'meaning-match',
+      question: 'Apakah profesi dari 叔叔 (paman) di Pelajaran 3?',
+      audioText: '叔叔是警察。请问叔叔的职业是什么？',
+      hanzi: '警察',
+      pinyin: 'jǐngchá',
+      options: [
+        { text: 'Polisi', isCorrect: true },
+        { text: 'Dokter', isCorrect: false },
+        { text: 'Guru', isCorrect: false },
+        { text: 'Supir', isCorrect: false }
+      ],
+      explanation: 'Di buku Han Yu 1 hal 9: 叔叔是警察 (Paman adalah polisi).'
+    },
+
+    // Unit 4
+    {
+      id: 401,
+      book: 1,
+      unit: 4,
+      type: 'meaning-match',
+      question: 'Apakah arti dari pertanyaan "你叫什么名字"?',
+      audioText: '你叫什么名字？请问这句话是什么意思？',
+      hanzi: '名字',
+      pinyin: 'míngzi',
+      options: [
+        { text: 'Siapa namamu?', isCorrect: true },
+        { text: 'Berapa umurmu?', isCorrect: false },
+        { text: 'Di mana rumahmu?', isCorrect: false },
+        { text: 'Kamu pergi ke mana?', isCorrect: false }
+      ],
+      explanation: '你 (kamu) + 叫 (bernama/dipanggil) + 什么 (apa) + 名字 (nama).'
+    },
+
+    // Unit 5
+    {
+      id: 501,
+      book: 1,
+      unit: 5,
+      type: 'meaning-match',
+      question: 'Ketika seseorang mengucapkan "对不起" (maaf), kita menjawab dengan:',
+      audioText: '对不起。我们应该怎么回答？',
+      hanzi: '没关系',
+      pinyin: 'méi guānxi',
+      options: [
+        { text: '没关系 (Tidak apa-apa)', isCorrect: true },
+        { text: '不客气 (Sama-sama)', isCorrect: false },
+        { text: '谢谢 (Terima kasih)', isCorrect: false },
+        { text: '再见 (Sampai jumpa)', isCorrect: false }
+      ],
+      explanation: '对不起 (Maaf) dijawab dengan 没关系 (Tidak apa-apa / Sama-sama tidak masalah).'
+    },
+
+    // Unit 6
+    {
+      id: 601,
+      book: 1,
+      unit: 6,
+      type: 'meaning-match',
+      question: 'Di Pelajaran 6 "哥哥去学校", ke manakah 爷爷 (kakek) pergi?',
+      audioText: '爷爷去公园。请问爷爷去哪儿？',
+      hanzi: '公园',
+      pinyin: 'gōngyuán',
+      options: [
+        { text: 'Taman (公园)', isCorrect: true },
+        { text: 'Sekolah (学校)', isCorrect: false },
+        { text: 'Rumah Sakit (医院)', isCorrect: false },
+        { text: 'Taman Kanak-kanak (幼儿园)', isCorrect: false }
+      ],
+      explanation: 'Teks hal 21: 爷爷去公园 (Kakek pergi ke taman).'
+    },
+
+    // Unit 7
+    {
+      id: 701,
+      book: 1,
+      unit: 7,
+      type: 'meaning-match',
+      question: 'Ketika pelajaran dimulai, apakah yang dikatakan di Pelajaran 7?',
+      audioText: '上课了，我们进教室吧！请问是什么意思？',
+      hanzi: '上课',
+      pinyin: 'shàng kè',
+      options: [
+        { text: 'Pelajaran dimulai, mari masuk kelas!', isCorrect: true },
+        { text: 'Pelajaran selesai, mari bermain!', isCorrect: false },
+        { text: 'Waktunya makan siang bersama!', isCorrect: false },
+        { text: 'Mari kita pergi ke lapangan!', isCorrect: false }
+      ],
+      explanation: '上课了 (Pelajaran dimulai) + 我们进教室吧 (Mari kita masuk ke dalam kelas).'
+    },
+
+    // Unit 8
+    {
+      id: 801,
+      book: 1,
+      unit: 8,
+      type: 'meaning-match',
+      question: 'Di Pelajaran 8 "我们吃午饭", apakah makanan yang dimakan oleh 老师 (guru)?',
+      audioText: '老师吃饺子。请问老师吃什么？',
+      hanzi: '饺子',
+      pinyin: 'jiǎozi',
+      options: [
+        { text: 'Pangsit Jiaozi (饺子)', isCorrect: true },
+        { text: 'Mie (面条)', isCorrect: false },
+        { text: 'Nasi (米饭)', isCorrect: false },
+        { text: 'Roti (面包)', isCorrect: false }
+      ],
+      explanation: 'Teks hal 30: 我吃面条，小红和小强吃米饭，老师吃饺子。'
+    },
+
+    // Unit 9
+    {
+      id: 901,
+      book: 1,
+      unit: 9,
+      type: 'meaning-match',
+      question: 'Di Pelajaran 9 "小华打球", aktivitas apakah yang dimainkan oleh 小红 (Xiaohong)?',
+      audioText: '小红不打球，她跳绳。请问小红做什么运动？',
+      hanzi: '跳绳',
+      pinyin: 'tiàoshéng',
+      options: [
+        { text: 'Lompat Tali (跳绳)', isCorrect: true },
+        { text: 'Basket (篮球)', isCorrect: false },
+        { text: 'Sepak Bola (足球)', isCorrect: false },
+        { text: 'Tenis Meja (乒乓球)', isCorrect: false }
+      ],
+      explanation: 'Teks hal 34: 小红不打球，她跳绳 (Xiaohong tidak main bola, dia bermain lompat tali).'
+    },
+
+    // Unit 10
+    {
+      id: 1001,
+      book: 1,
+      unit: 10,
+      type: 'meaning-match',
+      question: 'Apakah peribahasa terkenal tentang menghargai waktu di Pelajaran 10?',
+      audioText: '一寸光阴一寸金，寸金难买寸光阴。',
+      hanzi: '一寸光阴一寸金',
+      pinyin: 'yí cùn guāngyīn yí cùn jīn',
+      options: [
+        { text: 'Waktu laksana emas yang tak ternilai harganya', isCorrect: true },
+        { text: 'Belajar dengan tekun setiap hari', isCorrect: false },
+        { text: 'Mengerjakan PR bersama teman', isCorrect: false },
+        { text: 'Bermain setelah pulang sekolah', isCorrect: false }
+      ],
+      explanation: '一寸光阴一寸金，寸金难买寸光阴 bermakna satu inci waktu bernilai satu inci emas, jangan sia-siakan waktu.'
+    },
+
+    // Unit 11
+    {
+      id: 1101,
+      book: 1,
+      unit: 11,
+      type: 'meaning-match',
+      question: 'Apakah arti dari benda "书包" (shūbāo) di Pelajaran 11?',
+      audioText: '这是小强的书包。请问书包是什么？',
+      hanzi: '书包',
+      pinyin: 'shūbāo',
+      options: [
+        { text: 'Tas Sekolah', isCorrect: true },
+        { text: 'Buku Tulis', isCorrect: false },
+        { text: 'Kotak Pensil', isCorrect: false },
+        { text: 'Penggaris', isCorrect: false }
+      ],
+      explanation: '书 (buku) + 包 (tas/bungkus) = Tas Sekolah.'
+    },
+
+    // Unit 12
+    {
+      id: 1201,
+      book: 1,
+      unit: 12,
+      type: 'meaning-match',
+      question: 'Di Pelajaran 12, berapakah isi buku dan pena yang ada di dalam tas Xiaohua?',
+      audioText: '我有两本书、四支笔和五个本子。',
+      hanzi: '两本书',
+      pinyin: 'liǎng běn shū',
+      options: [
+        { text: '2 Buku dan 4 Pena', isCorrect: true },
+        { text: '3 Buku dan 5 Pena', isCorrect: false },
+        { text: '1 Buku dan 2 Pena', isCorrect: false },
+        { text: '5 Buku dan 4 Pena', isCorrect: false }
+      ],
+      explanation: 'Teks hal 46: 我有两本书、四支笔和五个本子。'
+    },
+
+    // Unit 13
+    {
+      id: 1301,
+      book: 1,
+      unit: 13,
+      type: 'meaning-match',
+      question: 'Apakah kata satuan (量词) yang tepat untuk komputer "电脑"?',
+      audioText: '我家有两台电脑。请问电脑的量词是什么？',
+      hanzi: '台',
+      pinyin: 'tái',
+      options: [
+        { text: '台 (tái)', isCorrect: true },
+        { text: '本 (běn)', isCorrect: false },
+        { text: '支 (zhī)', isCorrect: false },
+        { text: '张 (zhāng)', isCorrect: false }
+      ],
+      explanation: 'Untuk alat elektronik dan mesin seperti komputer digunakan kata satuan 台 (tái).'
+    },
+
+    // Unit 14
+    {
+      id: 1401,
+      book: 1,
+      unit: 14,
+      type: 'meaning-match',
+      question: 'Di Pelajaran 14, di manakah letak buku-buku perpustakaan berada?',
+      audioText: '图书馆的书在哪儿？书在书架上。',
+      hanzi: '书架上',
+      pinyin: 'shūjià shang',
+      options: [
+        { text: 'Di atas rak buku (书架上)', isCorrect: true },
+        { text: 'Di dalam tas sekolah (书包里)', isCorrect: false },
+        { text: 'Di bawah meja (桌子下)', isCorrect: false },
+        { text: 'Di atas kursi (椅子上)', isCorrect: false }
+      ],
+      explanation: 'Teks hal 54: 图书馆的书在哪儿？书在书架上。'
+    },
+
+    // Unit 15
+    {
+      id: 1501,
+      book: 1,
+      unit: 15,
+      type: 'meaning-match',
+      question: 'Di Pelajaran 15 "我的房间", di manakah letak 足球 (bola sepak)?',
+      audioText: '足球在圆桌下边。请问足球在哪儿？',
+      hanzi: '圆桌下边',
+      pinyin: 'yuánzhuō xiàbian',
+      options: [
+        { text: 'Di bawah meja bundar (圆桌下边)', isCorrect: true },
+        { text: 'Di atas tempat tidur (床上边)', isCorrect: false },
+        { text: 'Di dalam lemari (衣柜里)', isCorrect: false },
+        { text: 'Di atas meja (桌子上边)', isCorrect: false }
+      ],
+      explanation: 'Teks hal 57: 我的电脑在桌子上边，足球在圆桌下边。'
     }
   ]
 };
@@ -2296,7 +2714,6 @@ DINO_DATA.strokeQuizQuestions = DINO_DATA.strokeCountQuestions;
 if (typeof window !== 'undefined') {
   window.DINO_DATA = DINO_DATA;
 }
-
   </script>
   <script>
 /**
@@ -2766,10 +3183,17 @@ class DinoStrokeWriter {
     // Update unit dropdown titles
     if (this.unitSelect) {
       const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[this.currentBookId]) || {};
+      const unitKeys = Object.keys(unitMap);
       let html = '';
-      for (let u = 1; u <= 10; u++) {
-        const title = unitMap[u] || `Unit ${u}`;
-        html += `<option value="${u}" ${u === this.currentUnitId ? 'selected' : ''}>Unit ${u} (${title})</option>`;
+      if (unitKeys.length > 0) {
+        unitKeys.forEach(u => {
+          const title = unitMap[u] || `Unit ${u}`;
+          html += `<option value="${u}" ${parseInt(u) === this.currentUnitId ? 'selected' : ''}>Pelajaran ${u} (${title})</option>`;
+        });
+      } else {
+        for (let u = 1; u <= 10; u++) {
+          html += `<option value="${u}" ${u === this.currentUnitId ? 'selected' : ''}>Pelajaran ${u}</option>`;
+        }
       }
       this.unitSelect.innerHTML = html;
       this.unitSelect.value = this.currentUnitId;
@@ -3150,10 +3574,17 @@ class DinoStoryReader {
     // Update dropdown unit
     if (this.unitSelect) {
       const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[this.currentBookId]) || {};
+      const unitKeys = Object.keys(unitMap);
       let html = '';
-      for (let u = 1; u <= 10; u++) {
-        const title = unitMap[u] || `Unit ${u}`;
-        html += `<option value="${u}" ${u === this.currentUnitId ? 'selected' : ''}>Unit ${u} (${title})</option>`;
+      if (unitKeys.length > 0) {
+        unitKeys.forEach(u => {
+          const title = unitMap[u] || `Unit ${u}`;
+          html += `<option value="${u}" ${parseInt(u) === this.currentUnitId ? 'selected' : ''}>Pelajaran ${u} (${title})</option>`;
+        });
+      } else {
+        for (let u = 1; u <= 10; u++) {
+          html += `<option value="${u}" ${u === this.currentUnitId ? 'selected' : ''}>Pelajaran ${u}</option>`;
+        }
       }
       this.unitSelect.innerHTML = html;
       this.unitSelect.value = this.currentUnitId;
@@ -3290,7 +3721,7 @@ if (typeof window !== 'undefined') {
   <script>
 /**
  * Dino Mandarin Adventure - Match Game Module (Han Yu 1 s/d Han Yu 15)
- * Permainan Kartu Mencocokkan Kata Hanzi & Gambar Berwarna
+ * Permainan Kartu Mencocokkan Kata Hanzi & Gambar Berwarna Per-Unit Pelajaran
  */
 
 class DinoMatchGame {
@@ -3301,7 +3732,8 @@ class DinoMatchGame {
     this.totalPairs = 4;
     this.score = 0;
     this.moves = 0;
-    this.selectedBook = 'all';
+    this.currentBookId = 1;
+    this.currentUnitId = 'all';
     this.isLocked = false;
 
     this.init();
@@ -3309,15 +3741,22 @@ class DinoMatchGame {
 
   init() {
     this.cacheDom();
+    this.populateDropdowns();
     this.bindEvents();
 
     const params = new URLSearchParams(window.location.search);
     const mod = params.get('mod') || params.get('module');
-    const book = params.get('book') || 'all';
+    const book = parseInt(params.get('book')) || 1;
+    const unit = params.get('unit') || 'all';
     const pairs = parseInt(params.get('pairs')) || 4;
 
-    this.selectedBook = book;
+    this.currentBookId = book;
+    this.currentUnitId = unit;
     this.totalPairs = pairs;
+
+    if (this.bookSelect) this.bookSelect.value = this.currentBookId;
+    this.updateUnitDropdown();
+    if (this.unitSelect) this.unitSelect.value = this.currentUnitId;
 
     if (mod === 'match') {
       this.startNewGame();
@@ -3329,15 +3768,49 @@ class DinoMatchGame {
     this.scoreEl = document.getElementById('match-score');
     this.movesEl = document.getElementById('match-moves');
     this.bookSelect = document.getElementById('match-book-select');
+    this.unitSelect = document.getElementById('match-unit-select');
     this.btnRestart = document.getElementById('btn-match-restart');
     this.diffBtns = document.querySelectorAll('.diff-btn');
     this.winModal = document.getElementById('match-win-modal');
   }
 
+  populateDropdowns() {
+    if (this.bookSelect && window.DINO_DATA && window.DINO_DATA.books) {
+      this.bookSelect.innerHTML = window.DINO_DATA.books.map(b => `
+        <option value="${b.id}">${b.title}</option>
+      `).join('');
+    }
+    this.updateUnitDropdown();
+  }
+
+  updateUnitDropdown() {
+    if (!this.unitSelect) return;
+    const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[this.currentBookId]) || {};
+    const unitKeys = Object.keys(unitMap);
+
+    let html = '<option value="all">Semua Pelajaran (Acak)</option>';
+    if (unitKeys.length > 0) {
+      unitKeys.forEach(u => {
+        const title = unitMap[u] || `Unit ${u}`;
+        html += `<option value="${u}">Pelajaran ${u} (${title})</option>`;
+      });
+    }
+    this.unitSelect.innerHTML = html;
+  }
+
   bindEvents() {
     if (this.bookSelect) {
       this.bookSelect.addEventListener('change', (e) => {
-        this.selectedBook = e.target.value;
+        this.currentBookId = parseInt(e.target.value) || 1;
+        this.currentUnitId = 'all';
+        this.updateUnitDropdown();
+        this.startNewGame();
+      });
+    }
+
+    if (this.unitSelect) {
+      this.unitSelect.addEventListener('change', (e) => {
+        this.currentUnitId = e.target.value;
         this.startNewGame();
       });
     }
@@ -3371,84 +3844,105 @@ class DinoMatchGame {
     if (!window.DINO_DATA || !window.DINO_DATA.matchVocabItems) return;
 
     let pool = window.DINO_DATA.matchVocabItems;
-    if (this.selectedBook !== 'all') {
-      const bId = parseInt(this.selectedBook);
-      const filtered = pool.filter(item => item.book === bId);
-      if (filtered.length >= this.totalPairs) pool = filtered;
+    
+    // Filter by book
+    let filtered = pool.filter(item => item.book === this.currentBookId);
+    if (filtered.length === 0) filtered = pool;
+
+    // Filter by unit if not 'all'
+    if (this.currentUnitId !== 'all') {
+      const uId = parseInt(this.currentUnitId);
+      const unitFiltered = filtered.filter(item => item.unit === uId);
+      if (unitFiltered.length >= 2) {
+        filtered = unitFiltered;
+      }
     }
 
-    // Acak pool dan ambil sebanyak totalPairs
-    const shuffledPool = [...pool].sort(() => Math.random() - 0.5);
-    const chosenItems = shuffledPool.slice(0, this.totalPairs);
+    // Tentukan jumlah pasang yang dimainkan
+    const availablePairs = Math.min(this.totalPairs, filtered.length);
+    const chosenItems = [...filtered].sort(() => Math.random() - 0.5).slice(0, availablePairs);
 
-    // Gandakan menjadi 2 kartu: Kartu Gambar & Kartu Teks Hanzi
+    // Gandakan menjadi 2 kartu: Gambar & Teks Hanzi
     const deck = [];
     chosenItems.forEach(item => {
       deck.push({
         id: `${item.id}-img`,
         pairId: item.id,
         type: 'image',
-        item: item
+        hanzi: item.hanzi,
+        pinyin: item.pinyin,
+        meaning: item.meaning,
+        svg: item.svg,
+        isFlipped: false,
+        isMatched: false
       });
       deck.push({
         id: `${item.id}-txt`,
         pairId: item.id,
         type: 'text',
-        item: item
+        hanzi: item.hanzi,
+        pinyin: item.pinyin,
+        meaning: item.meaning,
+        svg: item.svg,
+        isFlipped: false,
+        isMatched: false
       });
     });
 
-    // Acak posisi kartu di papan
     this.cards = deck.sort(() => Math.random() - 0.5);
+    this.actualTotalPairs = chosenItems.length;
     this.renderBoard();
   }
 
   renderBoard() {
     if (!this.boardEl) return;
+
     this.boardEl.className = `match-board-grid grid-pairs-${this.totalPairs}`;
-    
-    this.boardEl.innerHTML = this.cards.map((c, idx) => `
-      <div class="dino-card" data-index="${idx}" id="card-${idx}">
-        <div class="dino-card-inner">
-          <div class="dino-card-front">
-            <span class="card-pattern-icon">🦖</span>
+    this.boardEl.innerHTML = this.cards.map((card, idx) => `
+      <div class="match-card-item" data-index="${idx}">
+        <div class="match-card-inner">
+          <div class="match-card-face match-card-front">
+            <div class="dino-egg-back-icon">🦖</div>
+            <span style="font-size: 0.75rem; font-weight: 800; color: #558b2f;">Buka</span>
           </div>
-          <div class="dino-card-back">
-            ${c.type === 'image' ? `
-              <div class="card-svg-wrap">${c.item.svg}</div>
-              <div style="font-size: 0.82rem; font-weight: 700; color: #555; margin-top: 4px;">${c.item.meaning}</div>
+          <div class="match-card-face match-card-back ${card.type}">
+            ${card.type === 'image' ? `
+              <div class="card-img-wrap">${card.svg}</div>
+              <div class="card-meaning-text">${card.meaning}</div>
             ` : `
-              <div class="card-text-content">
-                <div class="card-hanzi">${c.item.hanzi}</div>
-                <div class="card-pinyin">${c.item.pinyin}</div>
-              </div>
+              <div class="card-hanzi-text">${card.hanzi}</div>
+              <div class="card-pinyin-text">${card.pinyin}</div>
+              <div class="card-meaning-text">${card.meaning}</div>
             `}
           </div>
         </div>
       </div>
     `).join('');
 
-    const cardEls = this.boardEl.querySelectorAll('.dino-card');
-    cardEls.forEach(card => {
-      card.addEventListener('click', () => {
-        const idx = parseInt(card.getAttribute('data-index'));
-        this.flipCard(idx);
+    const cardDoms = this.boardEl.querySelectorAll('.match-card-item');
+    cardDoms.forEach(dom => {
+      dom.addEventListener('click', () => {
+        const idx = parseInt(dom.getAttribute('data-index'));
+        this.flipCard(idx, dom);
       });
     });
   }
 
-  flipCard(index) {
+  flipCard(idx, domEl) {
     if (this.isLocked) return;
-    const card = this.cards[index];
-    const cardEl = document.getElementById(`card-${index}`);
+    const card = this.cards[idx];
+    if (card.isFlipped || card.isMatched) return;
 
-    if (!cardEl || cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+    card.isFlipped = true;
+    domEl.classList.add('flipped');
+    this.flippedCards.push({ card, domEl });
 
-    // Flip card
-    cardEl.classList.add('flipped');
-    this.flippedCards.push({ index, card, el: cardEl });
-
-    if (window.dinoAudio) window.dinoAudio.playPop();
+    if (window.dinoAudio) {
+      window.dinoAudio.playEggCrack();
+      if (card.type === 'text' || card.type === 'image') {
+        window.dinoAudio.speakMandarin(card.hanzi);
+      }
+    }
 
     if (this.flippedCards.length === 2) {
       this.moves++;
@@ -3462,40 +3956,46 @@ class DinoMatchGame {
     const [c1, c2] = this.flippedCards;
 
     if (c1.card.pairId === c2.card.pairId) {
-      // COCOK!
+      // Cocok!
       setTimeout(() => {
-        c1.el.classList.add('matched');
-        c2.el.classList.add('matched');
+        c1.card.isMatched = true;
+        c2.card.isMatched = true;
+        c1.domEl.classList.add('matched');
+        c2.domEl.classList.add('matched');
+
         this.matchedPairs++;
-        this.score += 100;
+        this.score += 25;
         this.updateStats();
 
-        // Audio: Tepuk tangan + lafalkan kata
-        if (window.dinoAudio) {
-          window.dinoAudio.playApplause();
-          window.dinoAudio.speakMandarinSlow(c1.card.item.hanzi);
-        }
+        if (window.dinoAudio) window.dinoAudio.playApplause();
 
         this.flippedCards = [];
         this.isLocked = false;
 
-        if (this.matchedPairs >= this.totalPairs) {
-          this.handleWin();
+        if (this.matchedPairs >= this.actualTotalPairs) {
+          setTimeout(() => {
+            this.handleGameWon();
+          }, 600);
         }
       }, 500);
     } else {
-      // TIDAK COCOK
+      // Tidak Cocok
       setTimeout(() => {
-        c1.el.classList.remove('flipped');
-        c2.el.classList.remove('flipped');
+        if (window.dinoAudio) window.dinoAudio.playDinoRoar();
 
-        if (window.dinoAudio) {
-          window.dinoAudio.playDinoRoar();
-        }
+        c1.domEl.classList.add('shake-wrong');
+        c2.domEl.classList.add('shake-wrong');
 
-        this.flippedCards = [];
-        this.isLocked = false;
-      }, 1000);
+        setTimeout(() => {
+          c1.card.isFlipped = false;
+          c2.card.isFlipped = false;
+          c1.domEl.classList.remove('flipped', 'shake-wrong');
+          c2.domEl.classList.remove('flipped', 'shake-wrong');
+
+          this.flippedCards = [];
+          this.isLocked = false;
+        }, 600);
+      }, 700);
     }
   }
 
@@ -3504,25 +4004,32 @@ class DinoMatchGame {
     if (this.movesEl) this.movesEl.textContent = this.moves;
   }
 
-  handleWin() {
-    if (window.dinoAudio) {
-      window.dinoAudio.playFanfare();
-    }
+  handleGameWon() {
+    if (window.dinoAudio) window.dinoAudio.playFanfare();
 
-    const modal = document.getElementById('match-win-modal');
-    if (modal) {
-      const finalScore = document.getElementById('win-final-score');
-      const finalMoves = document.getElementById('win-final-moves');
-      if (finalScore) finalScore.textContent = this.score;
-      if (finalMoves) finalMoves.textContent = this.moves;
+    if (this.winModal) {
+      this.winModal.classList.add('show');
+      this.winModal.style.display = 'flex';
+      const scoreEl = document.getElementById('win-score-display');
+      const movesEl = document.getElementById('win-moves-display');
+      if (scoreEl) scoreEl.textContent = this.score;
+      if (movesEl) movesEl.textContent = this.moves;
 
-      modal.classList.add('show');
-      modal.style.display = 'flex';
+      const btnPlayAgain = document.getElementById('btn-play-again-match');
+      if (btnPlayAgain) {
+        btnPlayAgain.onclick = () => {
+          this.winModal.classList.remove('show');
+          this.winModal.style.display = 'none';
+          this.startNewGame();
+        };
+      }
+    } else {
+      alert(`🎉 Selamat! Kamu berhasil mencocokkan semua kartu!\nSkor: ${this.score} • Langkah: ${this.moves}`);
     }
   }
 }
 
-// Global window exposure
+// Global exposure
 if (typeof window !== 'undefined') {
   window.DinoMatchGame = DinoMatchGame;
 }
@@ -3531,7 +4038,8 @@ if (typeof window !== 'undefined') {
   <script>
 /**
  * Dino Mandarin Adventure - Multiple Choice Quiz Module (Han Yu 1 s/d Han Yu 15)
- * Kuis Pilihan Berganda Ber-Audio Mandarin + Piala Emas & Tepuk Tangan Meriah
+ * Kuis Pilihan Berganda Ber-Audio Mandarin Sesuai Unit Pembelajaran
+ * Dielengkapi Audio Bacaan Soal, Tepuk Tangan & Piala Emas Juara 🏆
  */
 
 class DinoQuiz {
@@ -3540,7 +4048,8 @@ class DinoQuiz {
     this.currentIndex = 0;
     this.score = 0;
     this.correctAnswersCount = 0;
-    this.filterType = 'all';
+    this.currentBookId = 1;
+    this.currentUnitId = 'all';
     this.userAnswers = [];
     this.isAnswered = false;
 
@@ -3549,15 +4058,20 @@ class DinoQuiz {
 
   init() {
     this.cacheDom();
+    this.populateDropdowns();
     this.bindEvents();
 
     const params = new URLSearchParams(window.location.search);
     const mod = params.get('mod') || params.get('module');
-    const book = params.get('book') || 'all';
+    const book = parseInt(params.get('book')) || 1;
+    const unit = params.get('unit') || 'all';
 
-    if (book !== 'all') {
-      this.filterType = `book-${book}`;
-    }
+    this.currentBookId = book;
+    this.currentUnitId = unit;
+
+    if (this.bookSelect) this.bookSelect.value = this.currentBookId;
+    this.updateUnitDropdown();
+    if (this.unitSelect) this.unitSelect.value = this.currentUnitId;
 
     if (mod === 'quiz') {
       this.startQuiz();
@@ -3566,16 +4080,50 @@ class DinoQuiz {
 
   cacheDom() {
     this.wrapperEl = document.getElementById('quiz-wrapper-card');
-    this.filterSelect = document.getElementById('quiz-filter-select');
+    this.bookSelect = document.getElementById('quiz-book-select');
+    this.unitSelect = document.getElementById('quiz-unit-select');
     this.btnRestart = document.getElementById('btn-restart-quiz');
     this.resultCard = document.getElementById('quiz-result-card');
     this.questionCard = document.getElementById('quiz-question-box');
   }
 
+  populateDropdowns() {
+    if (this.bookSelect && window.DINO_DATA && window.DINO_DATA.books) {
+      this.bookSelect.innerHTML = window.DINO_DATA.books.map(b => `
+        <option value="${b.id}">${b.title}</option>
+      `).join('');
+    }
+    this.updateUnitDropdown();
+  }
+
+  updateUnitDropdown() {
+    if (!this.unitSelect) return;
+    const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[this.currentBookId]) || {};
+    const unitKeys = Object.keys(unitMap);
+
+    let html = '<option value="all">Semua Pelajaran (Kuis Lengkap)</option>';
+    if (unitKeys.length > 0) {
+      unitKeys.forEach(u => {
+        const title = unitMap[u] || `Unit ${u}`;
+        html += `<option value="${u}">Pelajaran ${u} (${title})</option>`;
+      });
+    }
+    this.unitSelect.innerHTML = html;
+  }
+
   bindEvents() {
-    if (this.filterSelect) {
-      this.filterSelect.addEventListener('change', (e) => {
-        this.filterType = e.target.value;
+    if (this.bookSelect) {
+      this.bookSelect.addEventListener('change', (e) => {
+        this.currentBookId = parseInt(e.target.value) || 1;
+        this.currentUnitId = 'all';
+        this.updateUnitDropdown();
+        this.startQuiz();
+      });
+    }
+
+    if (this.unitSelect) {
+      this.unitSelect.addEventListener('change', (e) => {
+        this.currentUnitId = e.target.value;
         this.startQuiz();
       });
     }
@@ -3601,13 +4149,20 @@ class DinoQuiz {
 
     let pool = window.DINO_DATA.strokeCountQuestions;
 
-    if (this.filterType.startsWith('book-')) {
-      const bId = parseInt(this.filterType.replace('book-', ''));
-      const filtered = pool.filter(q => q.book === bId);
-      if (filtered.length > 0) pool = filtered;
+    // Filter by Book
+    let filtered = pool.filter(q => q.book === this.currentBookId);
+    if (filtered.length === 0) filtered = pool;
+
+    // Filter by Unit
+    if (this.currentUnitId !== 'all') {
+      const uId = parseInt(this.currentUnitId);
+      const unitFiltered = filtered.filter(q => q.unit === uId);
+      if (unitFiltered.length > 0) {
+        filtered = unitFiltered;
+      }
     }
 
-    this.questions = [...pool].sort(() => Math.random() - 0.5);
+    this.questions = [...filtered].sort(() => Math.random() - 0.5);
     this.renderCurrentQuestion();
   }
 
@@ -3628,129 +4183,212 @@ class DinoQuiz {
       <div class="quiz-question-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <span style="font-weight: 800; color: var(--dino-green-deep); font-size: 0.95rem;">
-            Soal ${this.currentIndex + 1} dari ${this.questions.length}
+            Soal ${this.currentIndex + 1} dari ${this.questions.length} (Buku ${q.book} • Pelajaran ${q.unit || 1})
           </span>
-          <span style="font-weight: 700; color: var(--dino-amber-deep); background: var(--dino-amber-soft); padding: 4px 12px; border-radius: var(--radius-pill);">
-            Buku Han Yu ${q.book || 1}
-          </span>
+          <span class="quiz-badge-type">Pilihan Berganda</span>
         </div>
 
-        <div class="quiz-audio-prompt-row">
-          <button class="dino-btn-audio-pill" id="btn-play-quiz-audio" title="Dengarkan Soal Hanzi">
-            🔊 Dengarkan Soal Hanzi
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px;">
+          <h3 class="quiz-question-text">${q.question}</h3>
+          <button class="dino-btn-audio-circle" id="btn-speak-question" title="Dengarkan Soal dalam Bahasa Mandarin">
+            🔊
           </button>
         </div>
 
-        <div class="quiz-question-text">${q.question}</div>
-
         ${q.hanzi ? `
-          <div class="quiz-char-large-display">${q.hanzi}</div>
-          <div style="text-align: center; font-size: 1.1rem; color: var(--dino-blue); font-weight: 700; margin-bottom: 14px;">
-            ${q.pinyin || ''}
+          <div style="text-align: center; margin-bottom: 16px; background: #fafafa; padding: 14px; border-radius: var(--radius-md); border: 1.5px solid #eee;">
+            <div style="font-size: 2.4rem; font-weight: 900; font-family: var(--font-chinese); color: var(--dino-green-deep);">${q.hanzi}</div>
+            <div style="font-size: 1.1rem; color: #d84315; font-weight: 700; font-family: var(--font-pinyin);">${q.pinyin || ''}</div>
           </div>
         ` : ''}
 
-        <div class="quiz-options-grid">
+        <div class="quiz-options-list">
           ${q.options.map((opt, i) => `
-            <button class="quiz-option-btn" data-index="${i}">
-              <span class="opt-badge">${optLetters[i]}</span>
-              <span class="opt-text">${opt.text}</span>
+            <button class="quiz-opt-btn" data-index="${i}">
+              <span class="quiz-opt-letter">${optLetters[i]}</span>
+              <span class="quiz-opt-text">${opt.text}</span>
             </button>
           `).join('')}
+        </div>
+
+        <div id="quiz-feedback-box" class="quiz-feedback" style="display: none;"></div>
+
+        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+          <button class="dino-btn-primary" id="btn-next-question" style="display: none;">
+            Soal Selanjutnya ➡️
+          </button>
         </div>
       </div>
     `;
 
-    // Bind Audio Button
-    const btnAudio = this.questionCard.querySelector('#btn-play-quiz-audio');
-    if (btnAudio) {
-      btnAudio.addEventListener('click', () => {
-        const textToRead = q.audioText || q.hanzi || q.question;
-        if (window.dinoAudio) window.dinoAudio.speakMandarinSlow(textToRead);
+    // Speak question audio
+    const btnSpeak = this.questionCard.querySelector('#btn-speak-question');
+    if (btnSpeak) {
+      btnSpeak.addEventListener('click', () => {
+        if (window.dinoAudio) {
+          window.dinoAudio.speakMandarin(q.audioText || q.hanzi || q.question);
+        }
       });
+      // Auto speak first time gently
+      if (window.dinoAudio && window.dinoAudio.voiceEnabled) {
+        setTimeout(() => {
+          window.dinoAudio.speakMandarin(q.audioText || q.hanzi || q.question);
+        }, 300);
+      }
     }
 
-    // Bind Option Clicks
-    const optBtns = this.questionCard.querySelectorAll('.quiz-option-btn');
+    // Option clicks
+    const optBtns = this.questionCard.querySelectorAll('.quiz-opt-btn');
     optBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         if (this.isAnswered) return;
-        const idx = parseInt(btn.getAttribute('data-index'));
-        this.handleSelectOption(idx, optBtns);
+        const optIdx = parseInt(btn.getAttribute('data-index'));
+        this.handleAnswer(optIdx, btn, optBtns);
       });
     });
   }
 
-  handleSelectOption(selectedIndex, optBtns) {
+  handleAnswer(chosenIdx, chosenBtn, allOptBtns) {
     this.isAnswered = true;
     const q = this.questions[this.currentIndex];
-    const selectedOpt = q.options[selectedIndex];
-    const isCorrect = selectedOpt.isCorrect;
+    const isCorrect = q.options[chosenIdx].isCorrect;
 
-    optBtns.forEach((btn, i) => {
-      if (q.options[i].isCorrect) {
+    const feedbackBox = this.questionCard.querySelector('#quiz-feedback-box');
+    const btnNext = this.questionCard.querySelector('#btn-next-question');
+
+    allOptBtns.forEach((btn, idx) => {
+      btn.disabled = true;
+      if (q.options[idx].isCorrect) {
         btn.classList.add('correct');
-      } else if (i === selectedIndex) {
-        btn.classList.add('incorrect');
       }
     });
 
     if (isCorrect) {
+      chosenBtn.classList.add('correct');
       this.score += Math.round(100 / this.questions.length);
       this.correctAnswersCount++;
-      if (window.dinoAudio) {
-        window.dinoAudio.playApplause();
+      if (window.dinoAudio) window.dinoAudio.playApplause();
+
+      if (feedbackBox) {
+        feedbackBox.className = 'quiz-feedback correct';
+        feedbackBox.style.display = 'block';
+        feedbackBox.innerHTML = `
+          <strong>👏 Jawaban Kamu Benar Sekali!</strong><br>
+          ${q.explanation || ''}
+        `;
       }
     } else {
-      if (window.dinoAudio) {
-        window.dinoAudio.playDinoRoar();
+      chosenBtn.classList.add('incorrect');
+      if (window.dinoAudio) window.dinoAudio.playDinoRoar();
+
+      if (feedbackBox) {
+        feedbackBox.className = 'quiz-feedback incorrect';
+        feedbackBox.style.display = 'block';
+        feedbackBox.innerHTML = `
+          <strong>🦖 Oops, Jawaban Kurang Tepat!</strong><br>
+          ${q.explanation || ''}
+        `;
       }
     }
 
-    // Lanjut ke soal berikutnya setelah jeda 1.2 detik
-    setTimeout(() => {
-      this.currentIndex++;
-      this.renderCurrentQuestion();
-    }, 1300);
+    if (btnNext) {
+      btnNext.style.display = 'inline-flex';
+      btnNext.onclick = () => {
+        this.currentIndex++;
+        this.renderCurrentQuestion();
+      };
+    }
   }
 
   showFinalResult() {
-    if (this.questionCard) this.questionCard.style.display = 'none';
-    if (!this.resultCard) return;
+    if (!this.resultCard || !this.questionCard) return;
 
+    this.questionCard.style.display = 'none';
     this.resultCard.style.display = 'block';
 
-    const isPerfect = this.correctAnswersCount === this.questions.length;
-    const finalScoreValue = isPerfect ? 100 : Math.min(100, Math.round((this.correctAnswersCount / this.questions.length) * 100));
+    const finalScore = Math.min(100, Math.round((this.correctAnswersCount / this.questions.length) * 100));
+    const scoreValEl = document.getElementById('quiz-final-score');
+    const scoreMsgEl = document.getElementById('quiz-final-message');
+    const btnCert = document.getElementById('btn-show-certificate');
 
-    // Perayaan Khusus jika 100% Benar: Fanfare + Tepuk Tangan Meriah + Piala Emas
-    if (isPerfect) {
+    if (scoreValEl) scoreValEl.textContent = `${finalScore} / 100`;
+
+    if (finalScore === 100) {
       if (window.dinoAudio) {
         window.dinoAudio.playFanfare();
+        setTimeout(() => { if (window.dinoAudio) window.dinoAudio.playApplause(); }, 1200);
       }
-    } else if (finalScoreValue >= 70) {
-      if (window.dinoAudio) {
-        window.dinoAudio.playApplause();
+      if (scoreMsgEl) {
+        scoreMsgEl.innerHTML = `
+          <span style="color: #2e7d32; font-weight: 800; font-size: 1.2rem;">
+            🏆 LUAR BIASA SEMPURNA! SELURUH JAWABAN BENAR 100%!
+          </span><br>
+          Kamu mendapatkan Piala Emas Dinosaurus Juara Mandarin!
+        `;
       }
+      if (btnCert) btnCert.style.display = 'inline-flex';
+    } else if (finalScore >= 70) {
+      if (window.dinoAudio) window.dinoAudio.playApplause();
+      if (scoreMsgEl) {
+        scoreMsgEl.innerHTML = `
+          <span style="color: #ef6c00; font-weight: 800;">
+            🌟 Hebat! Kamu Menjawab ${this.correctAnswersCount} dari ${this.questions.length} Soal dengan Benar!
+          </span><br>
+          Ayo ulangi lagi untuk meraih nilai 100 dan Piala Emas!
+        `;
+      }
+      if (btnCert) btnCert.style.display = 'none';
+    } else {
+      if (window.dinoAudio) window.dinoAudio.playDinoRoar();
+      if (scoreMsgEl) {
+        scoreMsgEl.innerHTML = `
+          <span style="color: #c62828; font-weight: 800;">
+            🦖 Terus Berlatih! Kamu Menjawab ${this.correctAnswersCount} dari ${this.questions.length} Soal.
+          </span><br>
+          Dengarkan audio Mandarin lagi dan coba kembali!
+        `;
+      }
+      if (btnCert) btnCert.style.display = 'none';
     }
 
-    const scoreHighlight = document.getElementById('quiz-final-score');
-    if (scoreHighlight) {
-      scoreHighlight.textContent = `${finalScoreValue} / 100`;
+    if (btnCert) {
+      btnCert.onclick = () => {
+        this.openCertificateModal(finalScore);
+      };
+    }
+  }
+
+  openCertificateModal(score) {
+    const modal = document.getElementById('quiz-cert-modal');
+    if (!modal) return;
+
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+
+    const certDate = document.getElementById('cert-date-text');
+    if (certDate) {
+      const now = new Date();
+      certDate.textContent = now.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
-    const detailText = document.getElementById('quiz-final-detail');
-    if (detailText) {
-      if (isPerfect) {
-        detailText.innerHTML = `🏆 <strong>Sempurna!</strong> Kamu berhasil menjawab SEMUA ${this.questions.length} soal dengan benar! Kamu berhak mendapatkan Piala Dinosaurus Emas!`;
-      } else {
-        detailText.textContent = `Bagus! Kamu berhasil menjawab ${this.correctAnswersCount} dari ${this.questions.length} soal dengan benar. Teruslah berlatih!`;
-      }
+    const btnCloseCert = document.getElementById('btn-close-cert-modal');
+    if (btnCloseCert) {
+      btnCloseCert.onclick = () => {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+      };
+    }
+
+    const btnPrint = document.getElementById('btn-print-certificate');
+    if (btnPrint) {
+      btnPrint.onclick = () => {
+        window.print();
+      };
     }
   }
 }
 
-// Global window exposure
+// Global exposure
 if (typeof window !== 'undefined') {
   window.DinoQuiz = DinoQuiz;
 }
@@ -3892,8 +4530,24 @@ function parseStudentUrlParams() {
       }
     } else if (mod === 'match') {
       switchTab('module-match');
+      if (window.dinoMatch) {
+        window.dinoMatch.currentBookId = book;
+        window.dinoMatch.currentUnitId = unit.toString();
+        if (window.dinoMatch.bookSelect) window.dinoMatch.bookSelect.value = book;
+        window.dinoMatch.updateUnitDropdown();
+        if (window.dinoMatch.unitSelect) window.dinoMatch.unitSelect.value = unit.toString();
+        window.dinoMatch.startNewGame();
+      }
     } else if (mod === 'quiz') {
       switchTab('module-quiz');
+      if (window.dinoQuiz) {
+        window.dinoQuiz.currentBookId = book;
+        window.dinoQuiz.currentUnitId = unit.toString();
+        if (window.dinoQuiz.bookSelect) window.dinoQuiz.bookSelect.value = book;
+        window.dinoQuiz.updateUnitDropdown();
+        if (window.dinoQuiz.unitSelect) window.dinoQuiz.unitSelect.value = unit.toString();
+        window.dinoQuiz.startQuiz();
+      }
     }
   }
 }
@@ -3999,11 +4653,18 @@ function updateTeacherUnits() {
 
   const bookId = parseInt(bookSelect.value) || 1;
   const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[bookId]) || {};
+  const unitKeys = Object.keys(unitMap);
 
   let html = '';
-  for (let u = 1; u <= 10; u++) {
-    const title = unitMap[u] || `Unit ${u}`;
-    html += `<option value="${u}">Unit ${u} (${title})</option>`;
+  if (unitKeys.length > 0) {
+    unitKeys.forEach(u => {
+      const title = unitMap[u] || `Unit ${u}`;
+      html += `<option value="${u}">Pelajaran ${u} (${title})</option>`;
+    });
+  } else {
+    for (let u = 1; u <= 10; u++) {
+      html += `<option value="${u}">Pelajaran ${u}</option>`;
+    }
   }
   unitSelect.innerHTML = html;
 }
