@@ -355,8 +355,8 @@ class DinoMuridController {
   // 5. Modul PDF
   renderPdfModule(container) {
     const bookData = (window.DINO_DATA && window.DINO_DATA.books && window.DINO_DATA.books.find(b => b.id === this.bookId)) || { title: `Han Yu ${this.bookId}`, pdfFile: `HAN YU ${this.bookId}.pdf` };
-    const isInSubfolder = window.location.pathname.includes('dino-mandarin-github');
-    const pdfPath = isInSubfolder ? `../${bookData.pdfFile}` : bookData.pdfFile;
+    const pdfFilename = bookData.pdfFile || `HAN YU ${this.bookId}.pdf`;
+    const pdfPath = `./${encodeURIComponent(pdfFilename).replace(/%2F/g, '/')}`;
 
     container.innerHTML = `
       <div class="pdf-viewer-card">
@@ -369,11 +369,10 @@ class DinoMuridController {
             <button class="dino-btn-action" onclick="window.open('${pdfPath}', '_blank')">↗️ Buka Penuh</button>
           </div>
         </div>
-        <div class="pdf-embed-wrapper">
-          <iframe src="${pdfPath}#toolbar=1" class="pdf-embed-frame" title="PDF Viewer"></iframe>
+        <div class="pdf-embed-wrapper" style="width: 100%; height: 750px; border: 2px solid var(--dino-slate-border); border-radius: var(--radius-md); overflow: hidden;">
+          <iframe src="${pdfPath}#toolbar=1" class="pdf-embed-frame" style="width: 100%; height: 100%; border: none;" title="PDF Viewer"></iframe>
         </div>
       </div>
-    `;
   }
 }
 

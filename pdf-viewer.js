@@ -40,8 +40,7 @@ class DinoPdfViewer {
 
   getPdfPath(bookData) {
     const filename = bookData.pdfFile || `HAN YU ${bookData.id || 1}.pdf`;
-    const isInSubfolder = window.location.pathname.includes('dino-mandarin-github');
-    return isInSubfolder ? `../${filename}` : filename;
+    return `./${encodeURIComponent(filename).replace(/%2F/g, '/')}`;
   }
 
   bindEvents() {
