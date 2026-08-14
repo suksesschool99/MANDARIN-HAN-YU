@@ -482,21 +482,27 @@
         <div>
           <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 4px;">Target Repetisi Guratan:</label>
           <select id="task-reps-select" class="dino-select-primary" style="width: 100%;">
-            <option value="3">3 Kali Repetisi</option>
+            <option value="3">3 Kali Repetisi (Standar)</option>
             <option value="4">4 Kali Repetisi</option>
             <option value="5">5 Kali Repetisi</option>
-            <option value="6">6 Kali Repetisi</option>
+            <option value="6">6 Kali Repetisi (Juara Dino)</option>
           </select>
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 4px;">Nama Siswa (Opsional):</label>
+          <input type="text" id="task-student-name-input" placeholder="Contoh: Budi / Ani..." style="width: 100%; padding: 8px 12px; border-radius: var(--radius-md); border: 2px solid var(--dino-slate-border); font-family: var(--font-main); font-size: 0.92rem;">
         </div>
       </div>
 
       <button class="dino-btn-action" id="btn-generate-task-link" style="width: 100%; margin-bottom: 14px;">
-        ✨ Generate Tautan Tugas
+        ✨ Generate Tautan Halaman Murid
       </button>
 
-      <div style="display: flex; gap: 8px;">
-        <input type="text" id="task-generated-url" readonly placeholder="Klik Generate Tautan..." style="flex: 1; padding: 10px 14px; border-radius: var(--radius-md); border: 2px solid var(--dino-slate-border); font-size: 0.88rem;">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <input type="text" id="task-generated-url" readonly placeholder="Klik Generate Tautan..." style="flex: 1; min-width: 200px; padding: 10px 14px; border-radius: var(--radius-md); border: 2px solid var(--dino-slate-border); font-size: 0.88rem;">
         <button class="dino-btn-outline" id="btn-copy-task-link" style="white-space: nowrap;">📋 Salin Link</button>
+        <button class="dino-btn-action" id="btn-test-task-link" style="white-space: nowrap; display: none;">🚀 Buka Halaman Murid</button>
       </div>
     </div>
   </div>

@@ -120,6 +120,7 @@ class DinoApp {
     const btnGenerateLink = document.getElementById('btn-generate-task-link');
     const generatedInput = document.getElementById('task-generated-url');
     const btnCopyLink = document.getElementById('btn-copy-task-link');
+    const btnTestLink = document.getElementById('btn-test-task-link');
 
     if (btnOpenModal && modal) {
       btnOpenModal.addEventListener('click', () => {
@@ -140,18 +141,41 @@ class DinoApp {
         const book = document.getElementById('task-book-select').value;
         const unit = document.getElementById('task-unit-select').value;
         const reps = document.getElementById('task-reps-select').value;
+        const studentNameInput = document.getElementById('task-student-name-input');
+        const student = studentNameInput ? encodeURIComponent(studentNameInput.value.trim()) : '';
 
-        const baseUrl = window.location.origin + window.location.pathname.replace('tugas.html', 'index.html');
-        const finalUrl = `${baseUrl}?mod=${mod}&book=${book}&unit=${unit}&reps=${reps}`;
+        // Tentukan URL langsung ke murid.html
+        let path = window.location.pathname;
+        if (path.endsWith('index.html') || path.endsWith('tugas.html') || path.endsWith('murid.html')) {
+          path = path.substring(0, path.lastIndexOf('/') + 1) + 'murid.html';
+        } else if (path.endsWith('/')) {
+          path = path + 'murid.html';
+        } else {
+          path = path.substring(0, path.lastIndexOf('/') + 1) + 'murid.html';
+        }
+
+        const origin = window.location.origin && window.location.origin !== 'null' ? window.location.origin : '';
+        let finalUrl = `${origin}${path}?mod=${mod}&book=${book}&unit=${unit}&reps=${reps}`;
+        if (student) {
+          finalUrl += `&student=${student}`;
+        }
 
         if (generatedInput) {
           generatedInput.value = finalUrl;
+        }
+
+        if (btnTestLink) {
+          btnTestLink.style.display = 'inline-flex';
+          btnTestLink.onclick = () => window.open(finalUrl, '_blank');
         }
       });
     }
 
     if (btnCopyLink && generatedInput) {
       btnCopyLink.addEventListener('click', () => {
+        if (!generatedInput.value) {
+          if (btnGenerateLink) btnGenerateLink.click();
+        }
         generatedInput.select();
         document.execCommand('copy');
         btnCopyLink.textContent = '✅ Berhasil Disalin!';
