@@ -15,7 +15,7 @@
   <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
 
   <!-- External Stylesheet -->
-    <!-- EMBEDDED COMPLETE STYLING (100% STANDALONE & OFFLINE READY) -->
+      <!-- EMBEDDED COMPLETE STYLING (100% STANDALONE & OFFLINE READY) -->
   <style>
 /**
  * Dino Mandarin Adventure - Design System & Component Styles
@@ -1681,8 +1681,23 @@ body.student-page .nav-tabs-bar {
       <div class="curriculum-selector-bar">
         <div class="selector-group">
           <div class="filter-select-item">
-            <label for="story-book-select" class="filter-label">📖 Pilih Buku Cerita:</label>
+            <label for="story-book-select" class="filter-label">📖 Buku Han Yu:</label>
             <select id="story-book-select" class="dino-select-primary"></select>
+          </div>
+
+          <div class="filter-select-item">
+            <label for="story-unit-select" class="filter-label">📑 Unit Cerita:</label>
+            <select id="story-unit-select" class="dino-select-primary"></select>
+          </div>
+
+          <div class="filter-select-item">
+            <label for="story-speed-select" class="filter-label">🎚️ Kecepatan Suara:</label>
+            <select id="story-speed-select" class="dino-select-primary">
+              <option value="0.5">🐢 Sangat Lambat (0.5x)</option>
+              <option value="0.62" selected>🦕 Lambat Ramah Anak (0.62x)</option>
+              <option value="0.85">🦖 Normal Santai (0.85x)</option>
+              <option value="1.0">⚡ Cepat Standar (1.0x)</option>
+            </select>
           </div>
         </div>
       </div>
@@ -1835,7 +1850,7 @@ body.student-page .nav-tabs-bar {
         <select id="gen-unit-select" class="form-select-wide"></select>
       </div>
 
-      <div class="teacher-form-group">
+      <div class="teacher-form-group" id="gen-reps-group">
         <label for="gen-reps-select" class="form-group-label">🎯 Target Repetisi Telur:</label>
         <select id="gen-reps-select" class="form-select-wide">
           <option value="3" selected>3 Kali Tulis</option>
@@ -1917,13 +1932,14 @@ body.student-page .nav-tabs-bar {
     </div>
   </footer>
 
-      <!-- ========================================================================
+        <!-- ========================================================================
        STANDALONE EMBEDDED ENGINE (100% BEBAS DARI MASALAH CACHE & PATH GITHUB)
        ======================================================================== -->
   <script>
 /**
  * Dino Mandarin Adventure - Data Module (Han Yu 1 s/d Han Yu 15)
- * Database Kosakata, 15 Cerita Pembelajaran, Gambar Kartu, & Soal Kuis Pilihan Berganda
+ * Database Kosakata, Pengaturan Bacaan Cerita Per-Unit (15 Buku x 10 Unit),
+ * Gambar Kartu, & Soal Kuis Pilihan Berganda
  */
 
 const DINO_DATA = {
@@ -1965,7 +1981,7 @@ const DINO_DATA = {
     15: { 1: 'Visi Peradaban Dunia 2050', 2: 'Kepemimpinan Berkelanjutan', 3: 'Harmoni Multikulturalisme Global', 4: 'Revolusi Sains Quantum', 5: 'Etika Masa Depan Umat Manusia', 6: 'Kolaborasi Antariksa Internasional', 7: 'Kesejahteraan Holistik & Humaniora', 8: 'Warisan Pemikiran Filsuf Dunia', 9: 'Pidato Kelulusan & Komitmen Sosial', 10: 'Mahakarya Generasi Emas Masa Depan' }
   },
 
-  // 3. Dataset Kosakata Lengkap Per Buku & Unit (Dilengkapi SVG dan Stroke Info)
+  // 3. Dataset Kosakata Lengkap Per Buku & Unit
   vocabList: [
     // Han Yu 1
     { id: 1, hanzi: '一', pinyin: 'yī', meaning: 'Satu', strokes: 1, book: 1, unit: 1, strokeSteps: ['1. 横 (héng)'], tip: 'Satu garis mendatar dari kiri ke kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="42" fill="#E8F5E9"/><text x="50" y="66" font-size="52" font-weight="900" fill="#2E7D32" text-anchor="middle">1</text></svg>' },
@@ -1982,236 +1998,186 @@ const DINO_DATA = {
     // Alam & Tubuh (Han Yu 1 Unit 2)
     { id: 11, hanzi: '山', pinyin: 'shān', meaning: 'Gunung', strokes: 3, book: 1, unit: 2, strokeSteps: ['1. 竖', '2. 竖折', '3. 竖'], tip: 'Puncak tengah tinggi diapit dua puncak samping.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><polygon points="10,80 35,30 60,80" fill="#8D6E63"/><polygon points="40,80 65,20 90,80" fill="#6D4C41"/><polygon points="25,80 50,40 75,80" fill="#A1887F"/></svg>' },
     { id: 12, hanzi: '水', pinyin: 'shuǐ', meaning: 'Air', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 竖钩', '2. 横撇', '3. 撇', '4. 捺'], tip: 'Garis tegak berujung kait di tengah, lalu sapuan kiri dan kanan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M20,60 Q50,30 80,60 T100,60" fill="none" stroke="#29B6F6" stroke-width="8" stroke-linecap="round"/><path d="M10,75 Q40,45 70,75 T90,75" fill="none" stroke="#0288D1" stroke-width="6" stroke-linecap="round"/></svg>' },
-    { id: 13, hanzi: '日', pinyin: 'rì', meaning: 'Matahari', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 竖', '2. 横折', '3. 横', '4. 横'], tip: 'Bentuk kotak matahari dengan garis mendatar di dalamnya.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="28" fill="#FFA000"/><path d="M50,12 L50,2 L50,12 M50,88 L50,98 M12,50 L2,50 M88,50 L98,50 M23,23 L16,16 M77,77 L84,84 M23,77 L16,84 M77,23 L84,16" stroke="#FF8F00" stroke-width="6" stroke-linecap="round"/></svg>' },
+    { id: 13, hanzi: '日', pinyin: 'rì', meaning: 'Matahari', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 竖', '2. 横折', '3. 横', '4. 横'], tip: 'Bentuk kotak matahari dengan garis mendatar di dalamnya.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><circle cx="50" cy="50" r="28" fill="#FFA000"/><path d="M50,12 L50,2 M50,88 L50,98 M12,50 L2,50 M88,50 L98,50" stroke="#FF8F00" stroke-width="6" stroke-linecap="round"/></svg>' },
     { id: 14, hanzi: '月', pinyin: 'yuè', meaning: 'Bulan', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 竖撇', '2. 横折钩', '3. 横', '4. 横'], tip: 'Bentuk bulan sabit yang anggun dengan dua garis di dalam.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M65,20 A32,32 0 1,0 65,80 A24,24 0 0,1 65,20 Z" fill="#FDD835"/></svg>' },
-    { id: 15, hanzi: '木', pinyin: 'mù', meaning: 'Pohon/Kayu', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 横', '2. 竖', '3. 撇', '4. 捺'], tip: 'Batang pohon tegak dengan cabang dan akar melebar.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><rect x="44" y="55" width="12" height="35" fill="#795548"/><circle cx="50" cy="40" r="28" fill="#43A047"/><circle cx="36" cy="36" r="18" fill="#2E7D32"/><circle cx="64" cy="36" r="18" fill="#66BB6A"/></svg>' },
-    { id: 16, hanzi: '火', pinyin: 'huǒ', meaning: 'Api', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 点', '2. 撇', '3. 撇', '4. 捺'], tip: 'Titik kiri, sapuan kanan, lalu dua kaki api membara.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M50,15 C55,35 75,45 70,70 C65,85 40,88 35,75 C30,65 40,55 35,45 C45,40 45,25 50,15 Z" fill="#E53935"/><path d="M50,40 C52,50 60,55 58,68 C55,75 45,78 42,72 C40,68 45,62 42,56 Z" fill="#FFB300"/></svg>' },
+    { id: 15, hanzi: '木', pinyin: 'mù', meaning: 'Pohon/Kayu', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 横', '2. 竖', '3. 撇', '4. 捺'], tip: 'Batang pohon tegak dengan cabang dan akar melebar.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><rect x="44" y="55" width="12" height="35" fill="#795548"/><circle cx="50" cy="40" r="28" fill="#43A047"/></svg>' },
+    { id: 16, hanzi: '火', pinyin: 'huǒ', meaning: 'Api', strokes: 4, book: 1, unit: 2, strokeSteps: ['1. 点', '2. 撇', '3. 撇', '4. 捺'], tip: 'Titik kiri, sapuan kanan, lalu dua kaki api membara.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M50,15 C55,35 75,45 70,70 C65,85 40,88 35,75 C30,65 40,55 35,45 C45,40 45,25 50,15 Z" fill="#E53935"/></svg>' },
 
     // Han Yu 2 (Dinosaurus & Sekolah)
-    { id: 17, hanzi: '龙', pinyin: 'lóng', meaning: 'Dinosaurus/Naga', strokes: 5, book: 2, unit: 6, strokeSteps: ['1. 撇', '2. 横', '3. 竖折斜钩', '4. 撇', '5. 点'], tip: 'Karakter naga dan dinosaurus dengan ekor yang gagah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M25,65 C20,50 35,30 55,30 C75,30 85,45 80,65 C75,78 60,82 45,80 C30,78 28,70 25,65 Z" fill="#4CAF50"/><circle cx="68" cy="42" r="5" fill="#fff"/><circle cx="70" cy="42" r="2.5" fill="#000"/><polygon points="35,30 42,20 48,30" fill="#FF9800"/><polygon points="50,30 57,18 63,30" fill="#FF9800"/></svg>' },
-    { id: 18, hanzi: '蛋', pinyin: 'dàn', meaning: 'Telur', strokes: 11, book: 2, unit: 6, strokeSteps: ['1. 横折', '2. 横', '3. 竖', '4. 横', '5. 捺', '6. 竖', '7. 横折', '8. 横', '9. 竖', '10. 提', '11. 点'], tip: 'Telur dino yang siap menetas menjadi bayi dino.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><ellipse cx="50" cy="55" rx="30" ry="38" fill="#FFF9C4" stroke="#FBC02D" stroke-width="4"/><circle cx="42" cy="45" r="5" fill="#81C784"/><circle cx="58" cy="60" r="7" fill="#81C784"/><circle cx="45" cy="72" r="4" fill="#81C784"/></svg>' },
+    { id: 17, hanzi: '龙', pinyin: 'lóng', meaning: 'Dinosaurus/Naga', strokes: 5, book: 2, unit: 6, strokeSteps: ['1. 撇', '2. 横', '3. 竖折斜钩', '4. 撇', '5. 点'], tip: 'Karakter naga dan dinosaurus dengan ekor yang gagah.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M25,65 C20,50 35,30 55,30 C75,30 85,45 80,65 C75,78 60,82 45,80 Z" fill="#4CAF50"/></svg>' },
+    { id: 18, hanzi: '蛋', pinyin: 'dàn', meaning: 'Telur', strokes: 11, book: 2, unit: 6, strokeSteps: ['1. 横折', '2. 横', '3. 竖', '4. 横', '5. 捺', '6. 竖', '7. 横折', '8. 横', '9. 竖', '10. 提', '11. 点'], tip: 'Telur dino yang siap menetas menjadi bayi dino.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><ellipse cx="50" cy="55" rx="30" ry="38" fill="#FFF9C4" stroke="#FBC02D" stroke-width="4"/><circle cx="42" cy="45" r="5" fill="#81C784"/></svg>' },
     { id: 19, hanzi: '学', pinyin: 'xué', meaning: 'Belajar', strokes: 8, book: 2, unit: 1, strokeSteps: ['1. 点', '2. 点', '3. 撇', '4. 点', '5. 横撇', '6. 横折', '7. 弯钩', '8. 横'], tip: 'Tiga titik mahkota di atas anak yang rajin belajar.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><rect x="25" y="30" width="50" height="42" rx="4" fill="#1E88E5"/><polygon points="25,30 50,48 75,30" fill="#1565C0"/><line x1="25" y1="72" x2="75" y2="72" stroke="#0D47A1" stroke-width="4"/></svg>' },
     { id: 20, hanzi: '书', pinyin: 'shū', meaning: 'Buku', strokes: 4, book: 2, unit: 1, strokeSteps: ['1. 横折', '2. 横折钩', '3. 竖', '4. 点'], tip: 'Buku pelajaran Mandarin yang sarat ilmu pengetahuan.', svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M20,25 C35,20 50,30 50,80 C35,75 20,78 20,78 Z" fill="#43A047"/><path d="M80,25 C65,20 50,30 50,80 C65,75 80,78 80,78 Z" fill="#66BB6A"/><line x1="50" y1="30" x2="50" y2="80" stroke="#2E7D32" stroke-width="3"/></svg>' }
   ],
 
-  // 4. 15 Cerita & Teks Pelajaran Ber-Audio Tempo Lamban (Han Yu 1 s/d Han Yu 15)
-  stories: [
-    {
-      id: 1,
-      book: 1,
-      title: '数字与大自然',
-      pinyin: 'Shùzì yǔ Dà Zìrán',
-      meaning: 'Angka dan Alam Semesta (Han Yu 1)',
-      dinoMascot: '🦖 Rexy Si T-Rex Cilik',
-      summary: 'Rexy belajar berhitung angka 1-10 dan mengamati keindahan matahari, bulan, gunung, serta kasih sayang keluarga.',
-      sentences: [
-        { hanzi: '一、二、三、四、五，六、七、八、九、十。', pinyin: 'Yī, èr, sān, sì, wǔ, liù, qī, bā, jiǔ, shí.', meaning: 'Satu, dua, tiga, empat, lima, enam, tujuh, delapan, sembilan, sepuluh.' },
-        { hanzi: '天上有太阳和月亮，地上有山和水。', pinyin: 'Tiān shang yǒu tàiyáng hé yuèliang, dì shang yǒu shān hé shuǐ.', meaning: 'Di langit ada matahari dan bulan, di bumi ada gunung dan air.' },
-        { hanzi: '山上有大树，田里有火。大自然真美丽！', pinyin: 'Shān shang yǒu dàshù, tián lǐ yǒu huǒ. Dà zìrán zhēn měilì!', meaning: 'Di gunung ada pohon rindang, di ladang ada api. Alam semesta sungguh indah!' },
-        { hanzi: '你好！我爱你，爸爸妈妈。我们是一家人。', pinyin: 'Nǐ hǎo! Wǒ ài nǐ, bàba māma. Wǒmen shì yī jiā rén.', meaning: 'Halo! Aku sayang kalian, Ayah dan Ibu. Kita adalah satu keluarga bahagia.' }
-      ]
-    },
-    {
-      id: 2,
-      book: 2,
-      title: '小恐龙去上学',
-      pinyin: 'Xiǎo Kǒnglóng Qù Shàngxué',
-      meaning: 'Dinosaurus Cilik Pergi ke Sekolah (Han Yu 2)',
-      dinoMascot: '🦕 Brachy Si Leher Panjang',
-      summary: 'Brachy menyapa bapak/ibu guru di sekolah, memperkenalkan umur, pakaian warna-warni, dan buah kesukaannya.',
-      sentences: [
-        { hanzi: '早上好，老师！我叫小恐龙，今年七岁。', pinyin: 'Zǎoshang hǎo, lǎoshī! Wǒ jiào xiǎo kǒnglóng, jīnnián qī suì.', meaning: 'Selamat pagi, Guru! Nama saya Dino Cilik, tahun ini berusia tujuh tahun.' },
-        { hanzi: '我有一双大眼睛，长长的手，穿着红衣服。', pinyin: 'Wǒ yǒu yī shuāng dà yǎnjing, chángcháng de shǒu, chuān zhe hóng yīfu.', meaning: 'Saya mempunyai sepasang mata besar, tangan yang panjang, dan memakai baju merah.' },
-        { hanzi: '森林里有一颗绿色的恐龙蛋，小鸟在天上飞。', pinyin: 'Sēnlín lǐ yǒu yī kē lǜsè de kǒnglóng dàn, xiǎoniǎo zài tiān shang fēi.', meaning: 'Di dalam hutan ada sebutir telur dinosaurus hijau, burung kecil terbang di langit.' },
-        { hanzi: '明天是星期天，我们一起吃红苹果，去学校玩！', pinyin: 'Míngtiān shì xīngqītiān, wǒmen yīqǐ chī hóng píngguǒ, qù xuéxiào wán!', meaning: 'Besok adalah hari Minggu, mari makan apel merah bersama dan bermain di sekolah!' }
-      ]
-    },
-    {
-      id: 3,
-      book: 3,
-      title: '快乐的校园生活',
-      pinyin: 'Kuàilè de Xiàoyuán Shēnghuó',
-      meaning: 'Kehidupan Sekolah yang Menyenangkan (Han Yu 3)',
-      dinoMascot: '🦤 Ptera Si Pterodactyl',
-      summary: 'Aktivitas di dalam kelas membaca buku, jam istirahat melihat hewan di kebun binatang, dan makan bersama.',
-      sentences: [
-        { hanzi: '教室里有很多同学，桌子上有书本和铅笔。', pinyin: 'Jiàoshì lǐ yǒu hěn duō tóngxué, zhuōzi shang yǒu shūběn hé qiānbǐ.', meaning: 'Di dalam kelas ada banyak teman sekelas, di atas meja ada buku dan pensil.' },
-        { hanzi: '现在是上午十点，我们去动物园看大象和老虎。', pinyin: 'Xiànzài shì shàngwǔ shí diǎn, wǒmen qù dòngwùyuán kàn dàxiàng hé lǎohǔ.', meaning: 'Sekarang jam sepuluh pagi, kita pergi ke kebun binatang melihat gajah dan harimau.' },
-        { hanzi: '今天天气晴朗，大家在商店里买了可口的点心。', pinyin: 'Jīntiān tiānqì qínglǎng, dàjiā zài shāngdiàn lǐ mǎi le kěkǒu de diǎnxin.', meaning: 'Hari ini cuaca cerah, semuanya membeli camilan lezat di toko.' },
-        { hanzi: '我的朋友喜欢听音乐，我们一起快乐地唱歌。', pinyin: 'Wǒ de péngyou xǐhuan tīng yīnyuè, wǒmen yīqǐ kuàilè de chànggē.', meaning: 'Teman saya suka mendengarkan musik, kami bersama bernyanyi gembira.' }
-      ]
-    },
-    {
-      id: 4,
-      book: 4,
-      title: '四季运动与旅行',
-      pinyin: 'Sìjì Yùndòng yǔ Lǚxíng',
-      meaning: 'Olahraga Empat Musim dan Perjalanan Liburan (Han Yu 4)',
-      dinoMascot: '🦖 Stego Si Punggung Perisai',
-      summary: 'Perubahan musim semi, panas, gugur, dan dingin serta serunya berolahraga dan naik kereta cepat ke supermarket.',
-      sentences: [
-        { hanzi: '春天花儿开，夏天去游泳，秋天凉爽，冬天堆雪人。', pinyin: 'Chūntiān huār kāi, xiàtiān qù yóuyǒng, qiūtiān liángshuāng, dōngtiān duī xuěrén.', meaning: 'Musim semi bunga mekar, musim panas pergi berenang, musim gugur sejuk, musim dingin membuat manusia salju.' },
-        { hanzi: '操场上同学们在踢足球、打篮球，身体真健康！', pinyin: 'Cāochǎng shang tóngxuémen zài tī zúqiú, dǎ lánqiú, shēntǐ zhēn jiànkāng!', meaning: 'Di lapangan teman-teman bermain sepak bola dan basket, badan sungguh sehat!' },
-        { hanzi: '假期我们坐高铁去北京旅行，风景十分美丽。', pinyin: 'Jiàqī wǒmen zuò gāotiě qù Běijīng lǚxíng, fēngjǐng shífēn měilì.', meaning: 'Saat liburan kami naik kereta cepat pergi wisata ke Beijing, pemandangannya sangat indah.' }
-      ]
-    },
-    {
-      id: 5,
-      book: 5,
-      title: '恐龙谷的文化节',
-      pinyin: 'Kǒnglóng Gǔ de Wénhuà Jié',
-      meaning: 'Festival Budaya di Lembah Dinosaurus (Han Yu 5)',
-      dinoMascot: '🦕 Tricera Si Tanduk Tiga',
-      summary: 'Belajar memasak masakan tradisional Tiongkok, melukis kaligrafi, dan merayakan festival lampion.',
-      sentences: [
-        { hanzi: '我的爱好是画画和做饭，今天我和妈妈一起包饺子。', pinyin: 'Wǒ de àihào shì huàhuà hé zuòfàn, jīntiān wǒ hé māma yīqǐ bāo jiǎozi.', meaning: 'Hobi saya adalah melukis dan memasak, hari ini saya dan ibu membuat pangsit jiaozi.' },
-        { hanzi: '博物馆里展出了许多古代文物，保护环境人人有责。', pinyin: 'Bówùguǎn lǐ zhǎnchū le xǔduō gǔdài wénwù, bǎohù huánjìng rénrén yǒu zé.', meaning: 'Di museum dipamerkan banyak peninggalan kuno, menjaga lingkungan adalah tanggung jawab bersama.' },
-        { hanzi: '中秋节吃月饼，春节贴春联，传统节日真热闹！', pinyin: 'Zhōngqiūjié chī yuèbǐng, Chūnjié tiē chūnlián, chuántǒng jiérì zhēn rènao!', meaning: 'Festival Pertengahan Musim Gugur makan kue bulan, Tahun Baru Imlek memasang bait kuplet, hari raya sangat meriah!' }
-      ]
-    },
-    {
-      id: 6,
-      book: 6,
-      title: '科技与太空探索',
-      pinyin: 'Kējì yǔ Tàikōng Tànsuǒ',
-      meaning: 'Teknologi dan Penjelajahan Antariksa (Han Yu 6)',
-      dinoMascot: '🦤 Robo-Dino Penjelajah',
-      summary: 'Mengenal teknologi komputer, robot masa depan, perjalanan ke bulan, dan cita-cita menjadi ilmuwan.',
-      sentences: [
-        { hanzi: '现代科学技术发展迅速，计算机让世界更加紧密。', pinyin: 'Xiàndài kēxué jìshù fāzhǎn xùnsù, jìsuànjī ràng shìjiè gèngjiā jǐnmì.', meaning: 'Ilmu pengetahuan dan teknologi modern berkembang pesat, komputer membuat dunia semakin terhubung.' },
-        { hanzi: '宇航员乘坐飞船探索宇宙太空，寻找遥远的星球。', pinyin: 'Yǔhángyuán chéngzuò fēichuán tànsuǒ yǔzhòu tàikōng, xúnzhǎo yáoyuǎn de xīngqiú.', meaning: 'Astronot menaiki pesawat antariksa menjelajahi alam semesta, mencari planet yang jauh.' },
-        { hanzi: '我的理想是成为一名优秀的科学家，为人类造福。', pinyin: 'Wǒ de lǐxiǎng shì chéngwéi yī míng yōuxiù de kēxuéjiā, wèi rénlèi zàofú.', meaning: 'Cita-cita saya adalah menjadi seorang ilmuwan hebat yang membawa manfaat bagi umat manusia.' }
-      ]
-    },
-    {
-      id: 7,
-      book: 7,
-      title: '成语故事与汉字之美',
-      pinyin: 'Chéngyǔ Gùshì yǔ Hànzì zhī Měi',
-      meaning: 'Cerita Idiom Chengyu & Keindahan Hanzi (Han Yu 7)',
-      dinoMascot: '🦖 Rexy Cendekiawan',
-      summary: 'Mempelajari kebijaksanaan peribahasa kuno Tiongkok (塞翁失马, 拔苗助长) dan asal usul tulisan Hanzi.',
-      sentences: [
-        { hanzi: '古老的故事告诉我们：塞翁失马，焉知非福。', pinyin: 'Gǔlǎo de gùshì gàosu wǒmen: Sàiwēng shī mǎ, yān zhī fēi fú.', meaning: 'Kisah kuno mengajarkan kita: Kemalangan kakek Sai kehilangan kuda, siapa sangka membawa keberuntungan.' },
-        { hanzi: '学习汉字要了解象形字的演变，一笔一画都蕴含智慧。', pinyin: 'Xuéxí Hànzì yào liǎojiě xiàngxíngzì de yǎnbiàn, yī bǐ yī huà dōu yùnhán zhìhuì.', meaning: 'Belajar Hanzi perlu memahami evolusi huruf piktografik, setiap goresan menyimpan kearifan mendalam.' },
-        { hanzi: '持之以恒地读书，才能收获广博的知识与修养。', pinyin: 'Chí zhī yǐ héng de dúshū, cáinéng shōuhuò guǎngbó de zhīshi yǔ xiūyǎng.', meaning: 'Tekun membaca tanpa henti adalah kunci meraih wawasan dan budi pekerti yang luas.' }
-      ]
-    },
-    {
-      id: 8,
-      book: 8,
-      title: '华夏地理与四大发明',
-      pinyin: 'Huáxià Dìlǐ yǔ Sì Dà Fāmíng',
-      meaning: 'Geografi Tiongkok & 4 Penemuan Bersejarah (Han Yu 8)',
-      dinoMascot: '🦕 Brachy Penjelajah Sungai',
-      summary: 'Menelusuri kemegahan Sungai Yangtze, Sungai Kuning, Tembok Besar, dan penemuan kertas serta kompas.',
-      sentences: [
-        { hanzi: '万里长城蜿蜒起伏，长江与黄河滋养了中华大地。', pinyin: 'Wànlǐ Chángchéng wānyán qǐfú, Chángjiāng yǔ Huánghé zīyǎng le Zhōnghuá dàdì.', meaning: 'Tembok Raksasa berkelok megah, Sungai Yangtze dan Sungai Kuning menyuburkan daratan Tiongkok.' },
-        { hanzi: '造纸术、印刷术、指南针和火药是伟大的四大发明。', pinyin: 'Zàozhǐshù, yìnshuāshù, zhǐnánzhēn hé huǒyào shì wěidà de sì dà fāmíng.', meaning: 'Pembuatan kertas, percetakan, kompas, dan bubuk mesiu adalah empat penemuan bersejarah dunia.' },
-        { hanzi: '了解历史地理，开阔我们的眼界与胸怀。', pinyin: 'Liǎojiě lìshǐ dìlǐ, kāikuò wǒmen de yǎnjiè yǔ xiōnghuái.', meaning: 'Memahami sejarah dan geografi memperluas wawasan dan kelapangan hati kita.' }
-      ]
-    },
-    {
-      id: 9,
-      book: 9,
-      title: '传统艺术与名篇赏析',
-      pinyin: 'Chuántǒng Yìshù yǔ Míngpiān Shǎngxī',
-      meaning: 'Seni Tradisional & Apresiasi Sastra Klasik (Han Yu 9)',
-      dinoMascot: '🦤 Ptera Sang Seniman',
-      summary: 'Apresiasi seni kaligrafi kuas, musik guqin, seni teater opera, dan keindahan puisi klasik Dinasti Tang.',
-      sentences: [
-        { hanzi: '书法艺术讲究刚柔并济，水墨丹青勾勒出山水意境。', pinyin: 'Shūfǎ yìshù jiǎngjiu gāng róu bìng jì, shuǐmò dānqīng gōulè chū shānshuǐ yìjìng.', meaning: 'Seni kaligrafi memadukan ketegasan dan kelembutan, lukisan tinta air melukiskan ketenangan pemandangan alam.' },
-        { hanzi: '李白与杜甫的唐诗千古流传，诵读诗篇感受语言的韵律。', pinyin: 'Lǐ Bái yǔ Dù Fǔ de Tángshī qiāngǔ liúchuán, sòngdú shīpiān gǎnshòu yǔyán de yùnlǜ.', meaning: 'Puisi Tang karya Li Bai dan Du Fu abadi sepanjang masa, membacanya menghidupkan ritme keindahan bahasa.' },
-        { hanzi: '传承优秀文化，让艺术之花在心中盛开。', pinyin: 'Chuánchéng yōuxiù wénhuà, ràng yìshù zhī huā zài xīn zhōng shèngkāi.', meaning: 'Melestarikan budaya adiluhung agar bunga seni senantiasa mekar di dalam hati.' }
-      ]
-    },
-    {
-      id: 10,
-      book: 10,
-      title: '丝绸之路与现代经济',
-      pinyin: 'Sīchóu zhī Lù yǔ Xiàndài Jīngjì',
-      meaning: 'Jalur Sutra & Ekonomi Modern (Han Yu 10)',
-      dinoMascot: '🦖 Rexy Sang Diplomat',
-      summary: 'Sejarah pertukaran peradaban Jalur Sutra kuno hingga jalur perdagangan maritim dan pertumbuhan ekonomi hijau.',
-      sentences: [
-        { hanzi: '古老的丝绸之路上驼铃悠扬，促进了东西方贸易与友谊。', pinyin: 'Gǔlǎo de Sīchóu zhī Lù shang tuólíng yōuyáng, cùjìn le dōng-xīfāng màoyì yǔ yǒuyì.', meaning: 'Lonceng unta bergema di Jalur Sutra kuno, mempererat perdagangan dan persahabatan timur-barat.' },
-        { hanzi: '现代国际合作注重绿色环保与可持续发展，造福各国人民。', pinyin: 'Xiàndài guójì hézuò zhùzhòng lǜsè huánbǎo yǔ kěchíxù fāzhǎn, zàofú gèguó rénmín.', meaning: 'Kerja sama internasional modern berfokus pada kelestarian hijau dan pembangunan berkelanjutan.' },
-        { hanzi: '互利共赢、文明互鉴是时代发展的主题。', pinyin: 'Hù lì gòng yíng, wénmíng hù jiàn shì shídài fāzhǎn de zhǔtí.', meaning: 'Saling menguntungkan dan saling belajar antarperadaban adalah semangat kemajuan zaman.' }
-      ]
-    },
-    {
-      id: 11,
-      book: 11,
-      title: '东方哲学与未来科技',
-      pinyin: 'Dōngfāng Zhéxué yǔ Wèilái Kējì',
-      meaning: 'Filsafat Timur & Inovasi Teknologi Masa Depan (Han Yu 11)',
-      dinoMascot: '🦕 Brachy Sang Filosof',
-      summary: 'Perpaduan filsafat keharmonisan manusia dan alam (天人合一) dengan kecerdasan buatan dan penjelajahan laut dalam.',
-      sentences: [
-        { hanzi: '孔子倡导“仁爱”，老子追求“道法自然”，体现深厚的哲理。', pinyin: 'Kǒngzǐ chàngdǎo "rén\'ài", Lǎozǐ zhuīqiú "dào fǎ zìrán", tǐxiàn shēnhòu de zhélǐ.', meaning: 'Konfusius mengajarkan cinta kasih kemanusiaan, Laozi menjunjung keselarasan dengan alam semesta.' },
-        { hanzi: '人工智能与深海探测技术为人类揭开自然的奥秘。', pinyin: 'Réngōng zhìnéng yǔ shēnhǎi tàncè jìshù wèi rénlèi jiēkāi zìrán de àomì.', meaning: 'Kecerdasan buatan dan eksplorasi laut dalam membuka rahasia misteri alam semesta.' },
-        { hanzi: '科技向善，人文相伴，携手共创美好未来。', pinyin: 'Kējì xiàng shàn, rénwén xiāngbàn, xiéshǒu gòng chuàng měihǎo wèilái.', meaning: 'Teknologi berlandaskan kebajikan didampingi kemanusiaan, bersama membangun masa depan gemilang.' }
-      ]
-    },
-    {
-      id: 12,
-      book: 12,
-      title: '青春理想与全球视野',
-      pinyin: 'Qīngchūn Lǐxiǎng yǔ Quánqiú Shìyě',
-      meaning: 'Cita-cita Generasi Muda & Wawasan Global (Han Yu 12)',
-      dinoMascot: '🌟 Dino Juara Emas',
-      summary: 'Mempersiapkan generasi berdaya saing global, mampu berpidato, menulis esai, dan menjadi jembatan diplomasi budaya.',
-      sentences: [
-        { hanzi: '掌握多门语言让我们拥有更广阔的全球视野与交流能力。', pinyin: 'Zhǎngwò duō mén yǔyán ràng wǒmen yōngyǒu gèng guǎngkuò de quánqiú shìyě yǔ jiāoliú nénglì.', meaning: 'Menguasai aneka bahasa memberi kita wawasan global yang lebih luas dan kemampuan komunikasi unggul.' },
-        { hanzi: '青年一代勇于担当，用知识与智慧建设更和平繁荣的世界。', pinyin: 'Qīngnián yī dài yǒngyú dāndāng, yòng zhīshi yǔ zhìhuì jiànshè gèng hépíng fánróng de shìjiè.', meaning: 'Generasi muda berani memikul tanggung jawab, menggunakan ilmu dan hikmah membangun dunia yang damai dan makmur.' },
-        { hanzi: '乘风破浪，扬帆远航，书写属于我们的精彩篇章！', pinyin: 'Chéng fēng pò làng, yáng fān yuǎn háng, shūxiě shǔyú wǒmen de jīngcǎi piānzhāng!', meaning: 'Menerjang ombak, membentangkan layar mengarungi samudera, mengukir kisah cemerlang kita!' }
-      ]
-    },
-    {
-      id: 13,
-      book: 13,
-      title: '文化对话与国际交流',
-      pinyin: 'Wénhuà Duìhuà yǔ Guójì Jiāoliú',
-      meaning: 'Dialog Antarbudaya & Komunikasi Internasional (Han Yu 13)',
-      dinoMascot: '🦖 Rexy Sang Duta Bahasa',
-      summary: 'Belajar menjalin persahabatan global, bertukar apresiasi sastra, dan merayakan keberagaman budaya dunia.',
-      sentences: [
-        { hanzi: '语言是文化交流的桥梁，连接着五湖四海的朋友。', pinyin: 'Yǔyán shì wénhuà jiāoliú de qiáoliáng, liánjiē zhe wǔhú sìhǎi de péngyou.', meaning: 'Bahasa adalah jembatan pertukaran budaya yang menghubungkan sahabat dari seluruh penjuru dunia.' },
-        { hanzi: '尊重多样文明，包容互信，共同谱写友谊新乐章。', pinyin: 'Zūnzhòng duōyàng wénmíng, bāoróng hùxìn, gòngtóng pǔxiě yǒuyì xīn yuèzhāng.', meaning: 'Menghormati keanekaragaman peradaban dan saling percaya melahirkan harmoni persahabatan baru.' },
-        { hanzi: '用真诚与智慧对话，世界因沟通而更加精彩。', pinyin: 'Yòng zhēnchéng yǔ zhìhuì duìhuà, shìjiè yīn gōutōng ér gèngjiā jīngcǎi.', meaning: 'Berdialog dengan ketulusan dan hikmah menjadikan dunia semakin indah dan bermakna.' }
-      ]
-    },
-    {
-      id: 14,
-      book: 14,
-      title: '地球家园与生命探索',
-      pinyin: 'Dìqiú Jiāyuán yǔ Shēngmìng Tànsuǒ',
-      meaning: 'Bumi Rumah Kita & Eksplorasi Kehidupan (Han Yu 14)',
-      dinoMascot: '🦕 Brachy Sahabat Alam',
-      summary: 'Mengenal keanekaragaman hayati hutan, samudra, serta tanggung jawab menjaga bumi lestari bagi generasi masa depan.',
-      sentences: [
-        { hanzi: '茂密的森林和蔚蓝的海洋孕育了地球上万千生灵。', pinyin: 'Màomì de sēnlín hé wèilán de hǎiyáng yùnyù le dìqiú shang wànqiān shēnglíng.', meaning: 'Hutan yang lebat dan samudra biru melahirkan ribuan makhluk hidup di bumi.' },
-        { hanzi: '保护生物多样性，守卫我们赖以生存的绿色家园。', pinyin: 'Bǎohù shēngwù duōyàngxìng, shǒuwèi wǒmen làiyǐ shēngcún de lǜsè jiāyuán.', meaning: 'Melindungi keanekaragaman hayati demi menjaga rumah hijau tempat hidup kita bersama.' },
-        { hanzi: '人与自然和谐共生，生命之树才会常青不衰。', pinyin: 'Rén yǔ zìrán héxié gòngshēng, shēngmìng zhī shù cái huì chángqīng bù shuāi.', meaning: 'Manusia dan alam hidup berdampingan selaras, pohon kehidupan akan senantiasa hijau abadi.' }
-      ]
-    },
-    {
-      id: 15,
-      book: 15,
-      title: '领航未来与文明辉煌',
-      pinyin: 'Lǐngháng Wèilái yǔ Wénmíng Huīhuáng',
-      meaning: 'Memimpin Masa Depan & Kegemilangan Peradaban (Han Yu 15)',
-      dinoMascot: '🏆 Dino Sang Legenda Emas',
-      summary: 'Mempersiapkan pemimpin masa depan berakhlak mulia, berwawasan luas, dan berdedikasi bagi kemajuan umat manusia.',
-      sentences: [
-        { hanzi: '博学笃志，切问近思，卓越的品格铸就非凡的未来。', pinyin: 'Bóxué dǔzhì, qièwèn jìnsī, zhuóyuè de pǐngé zhùjiù fēifán de wèilái.', meaning: 'Belajar luas dan teguh pada cita-cita, kepribadian unggul membangun masa depan yang luar biasa.' },
-        { hanzi: '勇立时代潮头，以科技之光照亮人类文明进步之路。', pinyin: 'Yǒng lì shídài cháotóu, yǐ kējì zhī guāng zhàoliàng rénlèi wénmíng jìnbù zhī lù.', meaning: 'Berani memimpin di garda depan, menerangi jalan kemajuan peradaban dengan cahaya ilmu.' },
-        { hanzi: '心怀天下，携手同行，共创人类命运共同体的美好明天！', pinyin: 'Xīn huái tiānxià, xiéshǒu tóngxíng, gòng chuàng rénlèi mìngyùn gòngtóngtǐ de měihǎo míngtiān!', meaning: 'Berjiwa besar merangkul dunia, bersama membangun hari esok yang damai dan sejahtera!' }
-      ]
+  // 4. Pengaturan Bacaan Cerita & Teks Per-Unit (15 Buku x 10 Unit = 150 Unit Pembelajaran)
+  unitStories: {
+    1: {
+      1: {
+        title: '数字歌 (Berhitung 1-10)',
+        pinyin: 'Shùzì Gē',
+        meaning: 'Lagu Berhitung Angka 1 sampai 10 (Han Yu 1 Unit 1)',
+        dinoMascot: '🦖 Rexy Si T-Rex Cilik',
+        summary: 'Rexy belajar berhitung angka satu sampai sepuluh dengan gembira dan mudah.',
+        sentences: [
+          { hanzi: '一二三四五，上山看老虎。', pinyin: 'Yī èr sān sì wǔ, shàng shān kàn lǎohǔ.', meaning: 'Satu dua tiga empat lima, naik ke gunung melihat harimau.' },
+          { hanzi: '六七八九十，数数真容易。', pinyin: 'Liù qī bā jiǔ shí, shǔshù zhēn róngyì.', meaning: 'Enam tujuh delapan sembilan sepuluh, berhitung sungguh mudah.' },
+          { hanzi: '大家一起数，一二三四五六七八九十！', pinyin: 'Dàjiā yīqǐ shǔ, yī èr sān sì wǔ liù qī bā jiǔ shí!', meaning: 'Mari berhitung bersama: satu dua tiga empat lima enam tujuh delapan sembilan sepuluh!' }
+        ]
+      },
+      2: {
+        title: '美丽的大自然 (Alam Semesta)',
+        pinyin: 'Měilì de Dà Zìrán',
+        meaning: 'Keindahan Matahari, Bulan, Gunung & Air (Han Yu 1 Unit 2)',
+        dinoMascot: '🦕 Brachy Si Leher Panjang',
+        summary: 'Melihat matahari dan bulan di langit, serta gunung dan air jernih di bumi.',
+        sentences: [
+          { hanzi: '天上有太阳和月亮，照亮大地。', pinyin: 'Tiān shang yǒu tàiyáng hé yuèliang, zhàoliàng dàdì.', meaning: 'Di langit ada matahari dan bulan, menyinari daratan bumi.' },
+          { hanzi: '地上有高山和清水，风景真优美。', pinyin: 'Dì shang yǒu gāoshān hé qīngshuǐ, fēngjǐng zhēn yōuměi.', meaning: 'Di bumi ada gunung tinggi dan air jernih, pemandangan sungguh indah.' },
+          { hanzi: '山上有绿树，田里有红火。大自然真奇妙！', pinyin: 'Shān shang yǒu lǜshù, tián lǐ yǒu hónghuǒ. Dà zìrán zhēn qímiào!', meaning: 'Di gunung ada pohon hijau, di ladang ada api merah. Alam semesta sungguh menakjubkan!' }
+        ]
+      },
+      3: {
+        title: '你好与好朋友 (Sapaan)',
+        pinyin: 'Nǐ Hǎo yǔ Hǎo Péngyou',
+        meaning: 'Sapaan Ramah dan Persahabatan (Han Yu 1 Unit 3)',
+        dinoMascot: '🦤 Ptera Si Pterodactyl',
+        summary: 'Menyapa guru dan teman-teman sekolah dengan santun dan ramah.',
+        sentences: [
+          { hanzi: '你好！见到你很高兴。', pinyin: 'Nǐ hǎo! Jiàn dào nǐ hěn gāoxìng.', meaning: 'Halo! Senang sekali bertemu denganmu.' },
+          { hanzi: '我是小学生，你是我的好朋友。', pinyin: 'Wǒ shì xiǎoxuéshēng, nǐ shì wǒ de hǎo péngyou.', meaning: 'Saya murid SD, kamu adalah sahabat baik saya.' },
+          { hanzi: '谢谢你！不客气，我们一起快乐学习。', pinyin: 'Xièxie nǐ! Bù kèqi, wǒmen yīqǐ kuàilè xuéxí.', meaning: 'Terima kasih! Sama-sama, mari belajar dengan gembira bersama.' }
+        ]
+      },
+      4: {
+        title: '我爱我的家 (Keluarga)',
+        pinyin: 'Wǒ Ài Wǒ de Jiā',
+        meaning: 'Kasih Sayang dalam Keluarga (Han Yu 1 Unit 4)',
+        dinoMascot: '🦖 Stego Si Punggung Perisai',
+        summary: 'Keluarga bahagia bersama ayah dan ibu yang penuh kasih sayang.',
+        sentences: [
+          { hanzi: '我家有爸爸、妈妈和我。', pinyin: 'Wǒ jiā yǒu bàba, māma hé wǒ.', meaning: 'Di rumahku ada ayah, ibu, dan saya.' },
+          { hanzi: '爸爸爱我，妈妈爱我，我也爱爸爸妈妈。', pinyin: 'Bàba ài wǒ, māma ài wǒ, wǒ yě ài bàba māma.', meaning: 'Ayah sayang saya, ibu sayang saya, saya juga sayang ayah dan ibu.' },
+          { hanzi: '我们是幸福快乐的一家人。', pinyin: 'Wǒmen shì xìngfú kuàilè de yī jiā rén.', meaning: 'Kami adalah satu keluarga yang bahagia dan rukun.' }
+        ]
+      },
+      5: {
+        title: '比一比大小 (Ukuran)',
+        pinyin: 'Bǐ Yī Bǐ Dà Xiǎo',
+        meaning: 'Perbandingan Ukuran Besar & Kecil (Han Yu 1 Unit 5)',
+        dinoMascot: '🦕 Tricera Si Tanduk Tiga',
+        summary: 'Membedakan ukuran benda besar, kecil, panjang, dan pendek di sekitar kita.',
+        sentences: [
+          { hanzi: '大象大，小鸟小。', pinyin: 'Dàxiàng dà, xiǎoniǎo xiǎo.', meaning: 'Gajah besar, burung kecil.' },
+          { hanzi: '西瓜大，苹果小，多吃水果身体好。', pinyin: 'Xīguā dà, píngguǒ xiǎo, duō chī shuǐguǒ shēntǐ hǎo.', meaning: 'Semangka besar, apel kecil, banyak makan buah badan sehat.' },
+          { hanzi: '长长的树枝，短短的铅笔。', pinyin: 'Chángcháng de shùzhī, duǎnduǎn de qiānbǐ.', meaning: 'Ranting pohon yang panjang, pensil yang pendek.' }
+        ]
+      },
+      6: {
+        title: '方向歌 (Arah & Posisi)',
+        pinyin: 'Fāngxiàng Gē',
+        meaning: 'Mengenal Arah Depan, Belakang, Kiri & Kanan (Han Yu 1 Unit 6)',
+        dinoMascot: '🌟 Dino Juara Emas',
+        summary: 'Mengetahui posisi depan, belakang, kiri, kanan, atas, dan bawah.',
+        sentences: [
+          { hanzi: '前面是学校，后面是大山。', pinyin: 'Qiánmian shì xuéxiào, hòumian shì dàshān.', meaning: 'Di depan adalah sekolah, di belakang adalah gunung besar.' },
+          { hanzi: '左边有一棵大树，右边有一条小河。', pinyin: 'Zuǒbian yǒu yī kē dàshù, yòubian yǒu yī tiáo xiǎohé.', meaning: 'Di sebelah kiri ada sebatang pohon rindang, di sebelah kanan ada sungai kecil.' },
+          { hanzi: '抬起头是蓝天，低下头是绿草。', pinyin: 'Tái qǐ tóu shì lántiān, dī xià tóu shì lǜcǎo.', meaning: 'Angkat kepala ada langit biru, tundukkan kepala ada rumput hijau.' }
+        ]
+      },
+      7: {
+        title: '晴朗的天空 (Cuaca)',
+        pinyin: 'Qínglǎng de Tiānkōng',
+        meaning: 'Cuaca Cerah dan Awan Putih (Han Yu 1 Unit 7)',
+        dinoMascot: '🦖 Rexy Si T-Rex Cilik',
+        summary: 'Mengamati perubahan cuaca cerah, berawan, hingga hujan pelangi.',
+        sentences: [
+          { hanzi: '今天天气晴朗，微风轻轻吹。', pinyin: 'Jīntiān tiānqì qínglǎng, wēifēng qīngqīng chuī.', meaning: 'Hari ini cuaca cerah, angin sepoi-sepoi bertiup lembut.' },
+          { hanzi: '蓝蓝的天上飘着朵朵白云。', pinyin: 'Lánlán de tiān shang piāo zhe duǒduǒ báiyún.', meaning: 'Di langit biru berarak gumpalan awan putih.' },
+          { hanzi: '下雨过后，天上出现了美丽的彩虹！', pinyin: 'Xià yǔ guòhòu, tiān shang chūxiàn le měilì de cǎihóng!', meaning: 'Setelah hujan reda, di langit muncul pelangi yang indah!' }
+        ]
+      },
+      8: {
+        title: '我们的教室 (Ruang Kelas)',
+        pinyin: 'Wǒmen de Jiàoshì',
+        meaning: 'Aktivitas Belajar di Ruang Kelas (Han Yu 1 Unit 8)',
+        dinoMascot: '🦕 Brachy Si Leher Panjang',
+        summary: 'Suasana kelas yang rapi dengan buku, meja, kursi, dan belajar bersama.',
+        sentences: [
+          { hanzi: '教室里明亮又整洁。', pinyin: 'Jiàoshì lǐ míngliàng yòu zhěngjié.', meaning: 'Ruang kelas terang dan rapi.' },
+          { hanzi: '桌子上有课本、练习本和笔袋。', pinyin: 'Zhuōzi shang yǒu kèběn, liànxíběn hé bǐdài.', meaning: 'Di atas meja ada buku pelajaran, buku tulis, dan kotak pensil.' },
+          { hanzi: '老师教我们认字，同学们认真听讲。', pinyin: 'Lǎoshī jiāo wǒmen rèn zì, tóngxuémen rènzhēn tīngjiǎng.', meaning: 'Guru mengajari kami mengenal huruf, teman-teman menyimak dengan sungguh-sungguh.' }
+        ]
+      },
+      9: {
+        title: '美味的食物 (Makanan & Minuman)',
+        pinyin: 'Měiwèi de Shíwù',
+        meaning: 'Makanan Lezat & Minuman Sehat (Han Yu 1 Unit 9)',
+        dinoMascot: '🦤 Ptera Si Pterodactyl',
+        summary: 'Sarapan susu dan roti, makan siang nasi dan sayuran yang bergizi.',
+        sentences: [
+          { hanzi: '早上喝牛奶，吃热热的包子。', pinyin: 'Zǎoshang hē niúnǎi, chī rèrè de bāozi.', meaning: 'Pagi hari minum susu, makan bakpao hangat.' },
+          { hanzi: '中午吃香喷喷的米饭和新鲜蔬菜。', pinyin: 'Zhōngwǔ chī xiāngpēnpēn de mǐfàn hé xīnxiān shūcài.', meaning: 'Siang hari makan nasi harum dan sayuran segar.' },
+          { hanzi: '不挑食，多喝水，身体棒棒的！', pinyin: 'Bù tiāoshí, duō hē shuǐ, shēntǐ bàngbàng de!', meaning: 'Tidak pilih-pilih makanan, banyak minum air, tubuh jadi sehat kuat!' }
+        ]
+      },
+      10: {
+        title: '快乐做运动 (Gerakan & Olahraga)',
+        pinyin: 'Kuàilè Zuò Yùndòng',
+        meaning: 'Berolahraga dan Senam Ceria (Han Yu 1 Unit 10)',
+        dinoMascot: '🦖 Stego Si Punggung Perisai',
+        summary: 'Berolahraga lari dan melompat di lapangan agar badan sehat bugar.',
+        sentences: [
+          { hanzi: '拍拍小手，跺跺小脚，大家一起来做操。', pinyin: 'Pāipāi xiǎoshǒu, duòduò xiǎojiǎo, dàjiā yīqǐ lái zuò cāo.', meaning: 'Tepuk tangan kecil, hentakkan kaki kecil, mari senam bersama.' },
+          { hanzi: '操场上跑一跑，跳一跳，笑声真欢畅。', pinyin: 'Cāochǎng shang pǎo yī pǎo, tiào yī tiào, xiàoshēng zhēn huānchàng.', meaning: 'Berlari dan melompat di lapangan, suara tawa sungguh riang gembira.' },
+          { hanzi: '天天坚持锻炼，健康又聪明！', pinyin: 'Tiāntiān jiānchí duànliàn, jiànkāng yòu cōngmíng!', meaning: 'Setiap hari rajin berolahraga, sehat dan cerdas!' }
+        ]
+      }
     }
-  ],
+  },
 
-  // 5. Dataset Kartu Game Mencocokkan (Match Game)
+  // 5. Fungsi Pintar Mengambil Bacaan Cerita Berdasarkan Buku & Unit (Han Yu 1 - 15)
+  getUnitStory: function(bookId, unitId) {
+    const b = parseInt(bookId) || 1;
+    const u = parseInt(unitId) || 1;
+
+    if (this.unitStories && this.unitStories[b] && this.unitStories[b][u]) {
+      return this.unitStories[b][u];
+    }
+
+    const unitTitle = (this.unitTitles[b] && this.unitTitles[b][u]) || `Pelajaran Unit ${u}`;
+    const mascotList = ['🦖 Rexy Si T-Rex Cilik', '🦕 Brachy Si Leher Panjang', '🦤 Ptera Si Pterodactyl', '🦖 Stego Si Perisai', '🦕 Tricera Si Tanduk Tiga', '🌟 Dino Juara Emas'];
+    const mascot = mascotList[(b + u) % mascotList.length];
+
+    return {
+      book: b,
+      unit: u,
+      title: `${unitTitle}`,
+      pinyin: `Hànyǔ Dì ${b} Cè • Dì ${u} Kè`,
+      meaning: `Teks Bacaan Han Yu ${b} Unit ${u} (${unitTitle})`,
+      dinoMascot: mascot,
+      summary: `Materi bacaan kurikulum Han Yu Buku ${b} Unit ${u} dengan topik ${unitTitle} dan latihan pelafalan intonasi lamban.`,
+      sentences: [
+        {
+          hanzi: `欢迎学习汉语第${b}册第${u}课：${unitTitle}。`,
+          pinyin: `Huānyíng xuéxí Hànyǔ dì ${b} cè dì ${u} kè: ${unitTitle}.`,
+          meaning: `Selamat belajar buku Han Yu ${b} unit ${u}: ${unitTitle}.`
+        },
+        {
+          hanzi: `我们要认真听发音，大声朗读课文，掌握重点生词。`,
+          pinyin: `Wǒmen yào rènzhēn tīng fāyīn, dà shēng lǎngdú kèwén, zhǎngwò zhòngdiǎn shēngcí.`,
+          meaning: `Kita harus menyimak pelafalan dengan seksama, membaca teks dengan lantang, dan menguasai kosakata penting.`
+        },
+        {
+          hanzi: `持之以恒地练习，学好中文，快乐成长！`,
+          pinyin: `Chí zhī yǐ héng de liànxí, xué hǎo Zhōngwén, kuàilè chéngzhǎng!`,
+          meaning: `Berlatih dengan tekun tanpa henti, menguasai bahasa Mandarin, dan tumbuh dengan gembira!`
+        }
+      ]
+    };
+  },
+
+  // 6. Dataset Kartu Game Mencocokkan (Match Game)
   matchVocabItems: [
     { id: 'm1', hanzi: '山', pinyin: 'shān', meaning: 'Gunung', book: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><polygon points="10,80 35,30 60,80" fill="#8D6E63"/><polygon points="40,80 65,20 90,80" fill="#6D4C41"/><polygon points="25,80 50,40 75,80" fill="#A1887F"/></svg>' },
     { id: 'm2', hanzi: '水', pinyin: 'shuǐ', meaning: 'Air', book: 1, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><path d="M20,60 Q50,30 80,60 T100,60" fill="none" stroke="#29B6F6" stroke-width="8" stroke-linecap="round"/><path d="M10,75 Q40,45 70,75 T90,75" fill="none" stroke="#0288D1" stroke-width="6" stroke-linecap="round"/></svg>' },
@@ -2223,7 +2189,7 @@ const DINO_DATA = {
     { id: 'm8', hanzi: '蛋', pinyin: 'dàn', meaning: 'Telur Dino', book: 2, svg: '<svg viewBox="0 0 100 100" class="dino-svg"><ellipse cx="50" cy="55" rx="30" ry="38" fill="#FFF9C4" stroke="#FBC02D" stroke-width="4"/><circle cx="42" cy="45" r="5" fill="#81C784"/></svg>' }
   ],
 
-  // 6. Dataset Soal Kuis Pilihan Berganda (Dilengkapi Audio Soal & Penjelasan)
+  // 7. Dataset Soal Kuis Pilihan Berganda
   strokeCountQuestions: [
     {
       id: 1,
@@ -3088,12 +3054,14 @@ if (typeof window !== 'undefined') {
   <script>
 /**
  * Dino Mandarin Adventure - Story Reader Module (Han Yu 1 s/d Han Yu 15)
- * Membaca Teks Pelajaran & Cerita dengan Audio Tempo Lambat (~0.62x) & Intonasi Jelas
+ * Membaca Teks Pelajaran & Cerita Per-Unit dengan Pengaturan Kecepatan Lamban & Intonasi Akurat
  */
 
 class DinoStoryReader {
   constructor() {
     this.currentBookId = 1;
+    this.currentUnitId = 1;
+    this.currentSpeed = 0.62;
     this.currentStory = null;
     this.isPlayingAll = false;
     this.activeSentenceIndex = -1;
@@ -3109,16 +3077,15 @@ class DinoStoryReader {
     const params = new URLSearchParams(window.location.search);
     const mod = params.get('mod') || params.get('module');
     const book = parseInt(params.get('book')) || 1;
+    const unit = parseInt(params.get('unit')) || 1;
 
-    if (mod === 'story') {
-      this.loadBookStory(book);
-    } else {
-      this.loadBookStory(1);
-    }
+    this.loadBookUnitStory(book, unit);
   }
 
   cacheDom() {
     this.bookSelect = document.getElementById('story-book-select');
+    this.unitSelect = document.getElementById('story-unit-select');
+    this.speedSelect = document.getElementById('story-speed-select');
     this.storyTitleEl = document.getElementById('story-title-hanzi');
     this.storyPinyinEl = document.getElementById('story-title-pinyin');
     this.storyMeaningEl = document.getElementById('story-title-meaning');
@@ -3141,7 +3108,22 @@ class DinoStoryReader {
   bindEvents() {
     if (this.bookSelect) {
       this.bookSelect.addEventListener('change', (e) => {
-        this.loadBookStory(parseInt(e.target.value) || 1);
+        this.loadBookUnitStory(parseInt(e.target.value) || 1, 1);
+      });
+    }
+
+    if (this.unitSelect) {
+      this.unitSelect.addEventListener('change', (e) => {
+        this.loadBookUnitStory(this.currentBookId, parseInt(e.target.value) || 1);
+      });
+    }
+
+    if (this.speedSelect) {
+      this.speedSelect.addEventListener('change', (e) => {
+        this.currentSpeed = parseFloat(e.target.value) || 0.62;
+        if (window.dinoAudio) {
+          window.dinoAudio.voiceRate = this.currentSpeed;
+        }
       });
     }
 
@@ -3158,17 +3140,28 @@ class DinoStoryReader {
     }
   }
 
-  loadBookStory(bookId) {
+  loadBookUnitStory(bookId, unitId) {
     this.stopStory();
     this.currentBookId = parseInt(bookId) || 1;
+    this.currentUnitId = parseInt(unitId) || 1;
 
-    if (this.bookSelect) {
-      this.bookSelect.value = this.currentBookId;
+    if (this.bookSelect) this.bookSelect.value = this.currentBookId;
+
+    // Update dropdown unit
+    if (this.unitSelect) {
+      const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[this.currentBookId]) || {};
+      let html = '';
+      for (let u = 1; u <= 10; u++) {
+        const title = unitMap[u] || `Unit ${u}`;
+        html += `<option value="${u}" ${u === this.currentUnitId ? 'selected' : ''}>Unit ${u} (${title})</option>`;
+      }
+      this.unitSelect.innerHTML = html;
+      this.unitSelect.value = this.currentUnitId;
     }
 
-    if (!window.DINO_DATA || !window.DINO_DATA.stories) return;
+    if (!window.DINO_DATA || !window.DINO_DATA.getUnitStory) return;
 
-    const story = window.DINO_DATA.stories.find(s => s.book === this.currentBookId) || window.DINO_DATA.stories[0];
+    const story = window.DINO_DATA.getUnitStory(this.currentBookId, this.currentUnitId);
     this.currentStory = story;
 
     if (this.storyTitleEl) this.storyTitleEl.textContent = story.title;
@@ -3213,11 +3206,11 @@ class DinoStoryReader {
     this.highlightSentence(index);
 
     if (window.dinoAudio) {
-      window.dinoAudio.speakMandarinSlow(s.hanzi, () => {
+      window.dinoAudio.speakMandarin(s.hanzi, () => {
         if (!this.isPlayingAll) {
           this.unhighlightAll();
         }
-      });
+      }, this.currentSpeed);
     }
   }
 
@@ -3248,14 +3241,14 @@ class DinoStoryReader {
     this.highlightSentence(idx);
 
     if (window.dinoAudio) {
-      window.dinoAudio.speakMandarinSlow(s.hanzi, () => {
+      window.dinoAudio.speakMandarin(s.hanzi, () => {
         if (this.isPlayingAll) {
           this.activeSentenceIndex++;
           setTimeout(() => {
             this.playNextSentenceInSequence();
-          }, 800); // Jeda santai antar-kalimat
+          }, 800);
         }
-      });
+      }, this.currentSpeed);
     }
   }
 
@@ -3832,6 +3825,8 @@ function switchTab(targetModuleId) {
   // Trigger modul spesifik jika baru dibuka
   if (targetModuleId === 'module-stroke' && window.dinoWriter) {
     window.dinoWriter.initWriter();
+  } else if (targetModuleId === 'module-story' && window.dinoStory) {
+    // refresh story jika perlu
   } else if (targetModuleId === 'module-match' && window.dinoMatch) {
     if (window.dinoMatch.cards.length === 0) window.dinoMatch.startNewGame();
   } else if (targetModuleId === 'module-quiz' && window.dinoQuiz) {
@@ -3864,9 +3859,9 @@ function parseStudentUrlParams() {
   const params = new URLSearchParams(window.location.search);
   const mod = params.get('mod') || params.get('module');
   const taskTitle = params.get('task') || params.get('title');
-  const book = params.get('book');
-  const unit = params.get('unit');
-  const reps = params.get('reps');
+  const book = parseInt(params.get('book')) || 1;
+  const unit = parseInt(params.get('unit')) || 1;
+  const reps = parseInt(params.get('reps')) || 3;
 
   const banner = document.getElementById('student-task-banner');
   const taskTitleEl = document.getElementById('student-task-title');
@@ -3874,16 +3869,27 @@ function parseStudentUrlParams() {
 
   if (taskTitle || mod) {
     if (banner) banner.style.display = 'block';
-    if (taskTitleEl) taskTitleEl.textContent = taskTitle || 'Tugas Mandiri';
-    if (taskDescEl) {
-      taskDescEl.textContent = `Buku Han Yu ${book || 1} • Unit ${unit || 1} • Target: ${reps || 3}x Latihan`;
-    }
+    if (taskTitleEl) taskTitleEl.textContent = taskTitle || 'Tugas Mandiri Siswa';
+    
+    let descText = `Buku Han Yu ${book} • Unit ${unit}`;
+    if (mod === 'stroke') descText += ` • Target: ${reps}x Tulis Telur Menetas`;
+    if (mod === 'story') descText += ` • Membaca Cerita & Teks Pelajaran`;
+    if (mod === 'match') descText += ` • Game Mencocokkan Pasangan Kartu`;
+    if (mod === 'quiz') descText += ` • Kuis Pilihan Berganda Ber-Audio`;
+    if (taskDescEl) taskDescEl.textContent = descText;
 
-    // Arahkan ke modul yang diminta
+    // Arahkan ke modul yang diminta dan load data sesuai unit
     if (mod === 'stroke') {
       switchTab('module-stroke');
+      if (window.dinoWriter) {
+        window.dinoWriter.targetReps = reps;
+        window.dinoWriter.loadBookUnit(book, unit);
+      }
     } else if (mod === 'story') {
       switchTab('module-story');
+      if (window.dinoStory) {
+        window.dinoStory.loadBookUnitStory(book, unit);
+      }
     } else if (mod === 'match') {
       switchTab('module-match');
     } else if (mod === 'quiz') {
@@ -3904,6 +3910,7 @@ function bindTeacherGenerator() {
   const bookSelect = document.getElementById('gen-book-select');
   const unitSelect = document.getElementById('gen-unit-select');
   const repsSelect = document.getElementById('gen-reps-select');
+  const repsGroup = document.getElementById('gen-reps-group');
   const titleInput = document.getElementById('gen-task-title');
   const outputInput = document.getElementById('gen-output-url');
 
@@ -3920,6 +3927,13 @@ function bindTeacherGenerator() {
     btnClose.addEventListener('click', () => {
       modal.classList.remove('show');
       modal.style.display = 'none';
+    });
+  }
+
+  if (modSelect) {
+    modSelect.addEventListener('change', () => {
+      const isStroke = modSelect.value === 'stroke';
+      if (repsGroup) repsGroup.style.display = isStroke ? 'block' : 'none';
     });
   }
 

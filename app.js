@@ -66,6 +66,8 @@ function switchTab(targetModuleId) {
   // Trigger modul spesifik jika baru dibuka
   if (targetModuleId === 'module-stroke' && window.dinoWriter) {
     window.dinoWriter.initWriter();
+  } else if (targetModuleId === 'module-story' && window.dinoStory) {
+    // refresh story jika perlu
   } else if (targetModuleId === 'module-match' && window.dinoMatch) {
     if (window.dinoMatch.cards.length === 0) window.dinoMatch.startNewGame();
   } else if (targetModuleId === 'module-quiz' && window.dinoQuiz) {
@@ -98,9 +100,9 @@ function parseStudentUrlParams() {
   const params = new URLSearchParams(window.location.search);
   const mod = params.get('mod') || params.get('module');
   const taskTitle = params.get('task') || params.get('title');
-  const book = params.get('book');
-  const unit = params.get('unit');
-  const reps = params.get('reps');
+  const book = parseInt(params.get('book')) || 1;
+  const unit = parseInt(params.get('unit')) || 1;
+  const reps = parseInt(params.get('reps')) || 3;
 
   const banner = document.getElementById('student-task-banner');
   const taskTitleEl = document.getElementById('student-task-title');
@@ -108,16 +110,27 @@ function parseStudentUrlParams() {
 
   if (taskTitle || mod) {
     if (banner) banner.style.display = 'block';
-    if (taskTitleEl) taskTitleEl.textContent = taskTitle || 'Tugas Mandiri';
-    if (taskDescEl) {
-      taskDescEl.textContent = `Buku Han Yu ${book || 1} • Unit ${unit || 1} • Target: ${reps || 3}x Latihan`;
-    }
+    if (taskTitleEl) taskTitleEl.textContent = taskTitle || 'Tugas Mandiri Siswa';
+    
+    let descText = `Buku Han Yu ${book} • Unit ${unit}`;
+    if (mod === 'stroke') descText += ` • Target: ${reps}x Tulis Telur Menetas`;
+    if (mod === 'story') descText += ` • Membaca Cerita & Teks Pelajaran`;
+    if (mod === 'match') descText += ` • Game Mencocokkan Pasangan Kartu`;
+    if (mod === 'quiz') descText += ` • Kuis Pilihan Berganda Ber-Audio`;
+    if (taskDescEl) taskDescEl.textContent = descText;
 
-    // Arahkan ke modul yang diminta
+    // Arahkan ke modul yang diminta dan load data sesuai unit
     if (mod === 'stroke') {
       switchTab('module-stroke');
+      if (window.dinoWriter) {
+        window.dinoWriter.targetReps = reps;
+        window.dinoWriter.loadBookUnit(book, unit);
+      }
     } else if (mod === 'story') {
       switchTab('module-story');
+      if (window.dinoStory) {
+        window.dinoStory.loadBookUnitStory(book, unit);
+      }
     } else if (mod === 'match') {
       switchTab('module-match');
     } else if (mod === 'quiz') {
@@ -138,6 +151,7 @@ function bindTeacherGenerator() {
   const bookSelect = document.getElementById('gen-book-select');
   const unitSelect = document.getElementById('gen-unit-select');
   const repsSelect = document.getElementById('gen-reps-select');
+  const repsGroup = document.getElementById('gen-reps-group');
   const titleInput = document.getElementById('gen-task-title');
   const outputInput = document.getElementById('gen-output-url');
 
@@ -154,6 +168,13 @@ function bindTeacherGenerator() {
     btnClose.addEventListener('click', () => {
       modal.classList.remove('show');
       modal.style.display = 'none';
+    });
+  }
+
+  if (modSelect) {
+    modSelect.addEventListener('change', () => {
+      const isStroke = modSelect.value === 'stroke';
+      if (repsGroup) repsGroup.style.display = isStroke ? 'block' : 'none';
     });
   }
 

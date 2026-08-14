@@ -1,11 +1,13 @@
 /**
  * Dino Mandarin Adventure - Story Reader Module (Han Yu 1 s/d Han Yu 15)
- * Membaca Teks Pelajaran & Cerita dengan Audio Tempo Lambat (~0.62x) & Intonasi Jelas
+ * Membaca Teks Pelajaran & Cerita Per-Unit dengan Pengaturan Kecepatan Lamban & Intonasi Akurat
  */
 
 class DinoStoryReader {
   constructor() {
     this.currentBookId = 1;
+    this.currentUnitId = 1;
+    this.currentSpeed = 0.62;
     this.currentStory = null;
     this.isPlayingAll = false;
     this.activeSentenceIndex = -1;
@@ -21,16 +23,15 @@ class DinoStoryReader {
     const params = new URLSearchParams(window.location.search);
     const mod = params.get('mod') || params.get('module');
     const book = parseInt(params.get('book')) || 1;
+    const unit = parseInt(params.get('unit')) || 1;
 
-    if (mod === 'story') {
-      this.loadBookStory(book);
-    } else {
-      this.loadBookStory(1);
-    }
+    this.loadBookUnitStory(book, unit);
   }
 
   cacheDom() {
     this.bookSelect = document.getElementById('story-book-select');
+    this.unitSelect = document.getElementById('story-unit-select');
+    this.speedSelect = document.getElementById('story-speed-select');
     this.storyTitleEl = document.getElementById('story-title-hanzi');
     this.storyPinyinEl = document.getElementById('story-title-pinyin');
     this.storyMeaningEl = document.getElementById('story-title-meaning');
@@ -53,7 +54,22 @@ class DinoStoryReader {
   bindEvents() {
     if (this.bookSelect) {
       this.bookSelect.addEventListener('change', (e) => {
-        this.loadBookStory(parseInt(e.target.value) || 1);
+        this.loadBookUnitStory(parseInt(e.target.value) || 1, 1);
+      });
+    }
+
+    if (this.unitSelect) {
+      this.unitSelect.addEventListener('change', (e) => {
+        this.loadBookUnitStory(this.currentBookId, parseInt(e.target.value) || 1);
+      });
+    }
+
+    if (this.speedSelect) {
+      this.speedSelect.addEventListener('change', (e) => {
+        this.currentSpeed = parseFloat(e.target.value) || 0.62;
+        if (window.dinoAudio) {
+          window.dinoAudio.voiceRate = this.currentSpeed;
+        }
       });
     }
 
@@ -70,17 +86,28 @@ class DinoStoryReader {
     }
   }
 
-  loadBookStory(bookId) {
+  loadBookUnitStory(bookId, unitId) {
     this.stopStory();
     this.currentBookId = parseInt(bookId) || 1;
+    this.currentUnitId = parseInt(unitId) || 1;
 
-    if (this.bookSelect) {
-      this.bookSelect.value = this.currentBookId;
+    if (this.bookSelect) this.bookSelect.value = this.currentBookId;
+
+    // Update dropdown unit
+    if (this.unitSelect) {
+      const unitMap = (window.DINO_DATA && window.DINO_DATA.unitTitles && window.DINO_DATA.unitTitles[this.currentBookId]) || {};
+      let html = '';
+      for (let u = 1; u <= 10; u++) {
+        const title = unitMap[u] || `Unit ${u}`;
+        html += `<option value="${u}" ${u === this.currentUnitId ? 'selected' : ''}>Unit ${u} (${title})</option>`;
+      }
+      this.unitSelect.innerHTML = html;
+      this.unitSelect.value = this.currentUnitId;
     }
 
-    if (!window.DINO_DATA || !window.DINO_DATA.stories) return;
+    if (!window.DINO_DATA || !window.DINO_DATA.getUnitStory) return;
 
-    const story = window.DINO_DATA.stories.find(s => s.book === this.currentBookId) || window.DINO_DATA.stories[0];
+    const story = window.DINO_DATA.getUnitStory(this.currentBookId, this.currentUnitId);
     this.currentStory = story;
 
     if (this.storyTitleEl) this.storyTitleEl.textContent = story.title;
@@ -125,11 +152,11 @@ class DinoStoryReader {
     this.highlightSentence(index);
 
     if (window.dinoAudio) {
-      window.dinoAudio.speakMandarinSlow(s.hanzi, () => {
+      window.dinoAudio.speakMandarin(s.hanzi, () => {
         if (!this.isPlayingAll) {
           this.unhighlightAll();
         }
-      });
+      }, this.currentSpeed);
     }
   }
 
@@ -160,14 +187,14 @@ class DinoStoryReader {
     this.highlightSentence(idx);
 
     if (window.dinoAudio) {
-      window.dinoAudio.speakMandarinSlow(s.hanzi, () => {
+      window.dinoAudio.speakMandarin(s.hanzi, () => {
         if (this.isPlayingAll) {
           this.activeSentenceIndex++;
           setTimeout(() => {
             this.playNextSentenceInSequence();
-          }, 800); // Jeda santai antar-kalimat
+          }, 800);
         }
-      });
+      }, this.currentSpeed);
     }
   }
 
