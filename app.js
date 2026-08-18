@@ -786,7 +786,21 @@ class DinoHanYuApp {
   }
 }
 
-// Instantiate App when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  window.dinoApp = new DinoHanYuApp();
-});
+// Safe Initialization of DinoHanYuApp
+function initDinoApp() {
+  if (!window.dinoApp) {
+    try {
+      window.dinoApp = new DinoHanYuApp();
+    } catch (e) {
+      console.error("Failed to initialize DinoHanYuApp:", e);
+    }
+  }
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDinoApp);
+  } else {
+    initDinoApp();
+  }
+}

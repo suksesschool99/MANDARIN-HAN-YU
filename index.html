@@ -4,17 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dino Han Yu - Belajar Bahasa Mandarin Han Yu 1 - 12</title>
-  <meta name="description" content="Website pembelajaran interaktif Bahasa Mandarin Han Yu 1 sampai Han Yu 12 bertema petualangan Dinosaurus. Dilengkapi panduan cara membaca, cara menulis goresan Hanzi, dan game mencocokkan kata dengan gambar.">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="assets/dino/rexy.jpg" type="image/jpeg">
+  <meta name="description" content="Website pembelajaran interaktif Bahasa Mandarin Han Yu 1 sampai Han Yu 12 bertema petualangan Dinosaurus. Dilengkapi panduan cara membaca cerita dengan audio pelan 0.65x, cara menulis goresan Hanzi, dan game mencocokkan kata dengan gambar.">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="icon" href="./assets/dino/rexy.jpg" type="image/jpeg">
+  <style>
+    /* Immediate Fallback Styling for Fast First Paint */
+    :root {
+      --primary-green: #10B981;
+      --primary-dark: #065F46;
+      --bg-cream: #F8FAF7;
+      --font-ui: system-ui, -apple-system, sans-serif;
+    }
+    body {
+      font-family: var(--font-ui);
+      background-color: var(--bg-cream);
+      margin: 0;
+      padding: 0;
+      color: #1E293B;
+    }
+  </style>
 </head>
 <body>
 
   <!-- HEADER SITUS -->
   <header class="site-header">
     <div class="header-container">
-      <a href="#" class="brand-logo-wrap" onclick="window.dinoApp.setActiveNavTab('reading'); return false;">
-        <img src="assets/dino/rexy.jpg" alt="Dino Paleontolog Rexy" onerror="this.src='assets/dino/egg.jpg'">
+      <a href="#" class="brand-logo-wrap" onclick="if(window.dinoApp) window.dinoApp.setActiveNavTab('reading'); return false;">
+        <img src="./assets/dino/rexy.jpg" alt="Dino Paleontolog Rexy" onerror="this.style.display='none'">
         <div class="brand-title-group">
           <h1>🦖 Dino Han Yu <span>(汉语)</span></h1>
           <p>Petualangan Belajar Mandarin Buku 1 - 12</p>
@@ -42,7 +58,7 @@
     <div class="book-selector-container">
       <span class="selector-label">📚 Pilih Level Buku:</span>
       <div class="book-scroll-wrapper" id="bookListGrid">
-        <!-- Akan dirender dinamis oleh js/app.js (Han Yu 1 sampai 12) -->
+        <!-- Dirender dinamis oleh js/app.js (Han Yu 1 sampai 12) -->
       </div>
     </div>
   </section>
@@ -68,14 +84,14 @@
   <!-- SUB-BAR NAVIGASI UNIT PEMBELAJARAN -->
   <section class="unit-nav-bar" aria-label="Pemilih Unit Pembelajaran">
     <div class="unit-nav-container" id="unitTabsContainer">
-      <!-- Akan dirender dinamis berdasarkan buku yang dipilih -->
+      <!-- Dirender dinamis berdasarkan buku yang dipilih -->
     </div>
   </section>
 
   <!-- AREA KONTEN UTAMA APLIKASI -->
   <main class="app-main-layout">
     <div id="mainContentArea">
-      <!-- Konten dinamis akan dimuat oleh js/app.js -->
+      <!-- Konten dinamis dimuat oleh js/app.js -->
     </div>
   </main>
 
@@ -88,10 +104,10 @@
   </footer>
 
   <!-- SCRIPT LOGIKA APLIKASI -->
-  <script src="js/curriculum-data.js"></script>
-  <script src="js/audio-speech.js"></script>
-  <script src="js/stroke-engine.js"></script>
-  <script src="js/matching-game.js"></script>
-  <script src="js/app.js"></script>
+  <script src="./js/curriculum-data.js"></script>
+  <script src="./js/audio-speech.js"></script>
+  <script src="./js/stroke-engine.js"></script>
+  <script src="./js/matching-game.js"></script>
+  <script src="./js/app.js"></script>
 </body>
 </html>

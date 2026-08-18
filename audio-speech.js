@@ -202,5 +202,17 @@ class DinoAudioManager {
   }
 }
 
-// Instantiate global audio instance
-window.dinoAudio = new DinoAudioManager();
+// Instantiate global audio instance safely
+if (typeof window !== 'undefined') {
+  try {
+    window.dinoAudio = new DinoAudioManager();
+  } catch (err) {
+    console.warn("Audio initialization warning:", err);
+    window.dinoAudio = {
+      speak: (t, s, e) => { if (e) e(); },
+      stop: () => {},
+      playSfx: () => {},
+      setRate: () => {}
+    };
+  }
+}
