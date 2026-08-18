@@ -8,19 +8,195 @@
   <link rel="stylesheet" href="./css/style.css">
   <link rel="icon" href="./assets/dino/rexy.jpg" type="image/jpeg">
   <style>
-    /* Immediate Fallback Styling for Fast First Paint */
+    /* Immediate Fallback Styling for 100% Reliable Render */
     :root {
       --primary-green: #10B981;
       --primary-dark: #065F46;
       --bg-cream: #F8FAF7;
-      --font-ui: system-ui, -apple-system, sans-serif;
+      --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
+    * { box-sizing: border-box; }
     body {
       font-family: var(--font-ui);
       background-color: var(--bg-cream);
       margin: 0;
       padding: 0;
       color: #1E293B;
+      min-height: 100vh;
+    }
+    .site-header {
+      background: linear-gradient(135deg, #065F46 0%, #10B981 100%);
+      color: white;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+    .brand-logo-wrap img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    .brand-title-group h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+    .brand-title-group p {
+      margin: 0;
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+    .header-stats-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.4rem 0.8rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: white;
+    }
+    .tone-guide-btn {
+      background: #F59E0B;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.9rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .book-selector-section {
+      background: #E6F4EA;
+      padding: 0.75rem 1.5rem;
+      border-bottom: 1px solid #D1E7DD;
+    }
+    .book-selector-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      overflow-x: auto;
+    }
+    .selector-label {
+      font-weight: 700;
+      color: #065F46;
+      white-space: nowrap;
+      font-size: 0.95rem;
+    }
+    .book-scroll-wrapper {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 0.25rem 0;
+    }
+    .book-chip-btn {
+      background: white;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 8px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .book-chip-btn.active {
+      background: #10B981;
+      color: white;
+      border-color: #059669;
+    }
+    .main-nav-bar {
+      background: white;
+      border-bottom: 1px solid #E2E8F0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .nav-tabs-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      overflow-x: auto;
+    }
+    .main-nav-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.85rem 1rem;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #64748B;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .main-nav-btn.active {
+      color: #10B981;
+      border-bottom-color: #10B981;
+      background: #F0FDF4;
+    }
+    .unit-nav-bar {
+      background: #F1F5F9;
+      border-bottom: 1px solid #E2E8F0;
+      padding: 0.5rem 1.5rem;
+    }
+    .unit-nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+    }
+    .unit-tab-btn {
+      background: white;
+      border: 1px solid #CBD5E1;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .unit-tab-btn.active {
+      background: #0D9488;
+      color: white;
+      border-color: #0F766E;
+    }
+    .app-main-layout {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+    .site-footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: #1E293B;
+      color: #94A3B8;
+      font-size: 0.85rem;
+      margin-top: 3rem;
     }
   </style>
 </head>
@@ -104,10 +280,18 @@
   </footer>
 
   <!-- SCRIPT LOGIKA APLIKASI -->
-  <script src="./js/curriculum-data.js"></script>
-  <script src="./js/audio-speech.js"></script>
-  <script src="./js/stroke-engine.js"></script>
-  <script src="./js/matching-game.js"></script>
-  <script src="./js/app.js"></script>
+  <script src="./js/curriculum-data.js" charset="UTF-8"></script>
+  <script src="./js/audio-speech.js" charset="UTF-8"></script>
+  <script src="./js/stroke-engine.js" charset="UTF-8"></script>
+  <script src="./js/matching-game.js" charset="UTF-8"></script>
+  <script src="./js/app.js" charset="UTF-8"></script>
+  <script>
+    // Immediate fallback trigger if DOMContentLoaded has already passed
+    if (typeof initDinoApp === 'function') {
+      initDinoApp();
+    } else if (typeof DinoHanYuApp !== 'undefined' && !window.dinoApp) {
+      window.dinoApp = new DinoHanYuApp();
+    }
+  </script>
 </body>
 </html>
